@@ -120,16 +120,11 @@ lvl1.prototype.setup = function(){
 lvl1.prototype.step = function(){
 	var lio = this;
 	
-	if(this.goalTouch){
-		//console.log(this.goalTouch);
-		
+	if(this.goalTouch){		
 		if(this.goalTouch.GetBody() != selectedBody){
-			
-		
 			this.goalEffect.radius = this.goalTouchTime;
 			this.goalTouchTime++;
 		}else{
-		
 			this.goalEffect.radius = 0;
 			this.goalTouchTime = 0; 
 		}
@@ -140,15 +135,8 @@ lvl1.prototype.step = function(){
 	}
 	listener.BeginContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
-		
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
-			//console.log(contact.GetFixtureA());		
-			//console.log(contact.GetFixtureB());
-			//FUNCTION TO STORE LAST TOUCHING
-				//REMOVE LAST TOUCH ON EXIT
-				
-			//lio.goalTimer(contact.GetFixtureA().GetBody(),selectedBody);
 		}
 	}
 	
@@ -159,16 +147,8 @@ lvl1.prototype.step = function(){
 				lio.goalTouch = undefined;
 				lio.goalEffect.radius = 0;
 			}
-
-	
 		}
 	}
-	
-	listener.PreSolve = function(contact){
-
-	}
-}
-lvl1.prototype.goalTimer = function(bodyA,bodyB){
 }
 
 lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
