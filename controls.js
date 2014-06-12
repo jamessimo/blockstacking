@@ -76,7 +76,7 @@ function GameControl(io) {
 
 	//Debugging 
 	scaleX = scaleY = 1;
-	//PIXEL_RATIO = 1;
+	PIXEL_RATIO = 1;
 	
 	hiDPICanvas(720, 1280);
 	
