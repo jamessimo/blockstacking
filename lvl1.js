@@ -119,7 +119,7 @@ lvl1.prototype.setup = function(){
 
 lvl1.prototype.step = function(){
 	var lio = this;
-	
+	/*
 	if(this.goalTouch){		
 		if(this.goalTouch.GetBody() != selectedBody){
 			this.goalEffect.radius = this.goalTouchTime;
@@ -149,6 +149,7 @@ lvl1.prototype.step = function(){
 			}
 		}
 	}
+	*/
 }
 
 lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
