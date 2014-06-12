@@ -8,6 +8,12 @@ function lvl1(io){
 	this.imgPath = 'img/';
 	this.loadResources = 0;
 	this.totalResources = 5;
+	
+	this.goal = undefined;
+	this.goalTouch = undefined;
+	this.goalTime = 250;
+	this.goalTouchTime = 0;
+	this.goalEffect = undefined;
 	   
 }; iio.lvl1 = lvl1;
 
@@ -23,7 +29,6 @@ lvl1.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_staticBody;
 	
 	
-	
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(10,true));
@@ -33,13 +38,13 @@ lvl1.prototype.setup = function(){
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(0+10,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
+	bodyDef.position.Set(pxConv(0,true),pxConv(this.cHeight - 125,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(this.cWidth - 10,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
+	bodyDef.position.Set(pxConv(this.cWidth,true),pxConv(this.cHeight - 125,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	
@@ -50,27 +55,40 @@ lvl1.prototype.setup = function(){
 	this.prepShape(bodyDef, fixDef).setFillStyle('green');
 	
 	
+	//GOAL
+	fixDef.isSensor = true;
+	fixDef.userData = 'goal';
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(123/2,true),pxConv(117/2,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(150,true));
+	bodyDef.type = 'notHit';
+	
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(150),0).setFillStyle('rgba(255,255,255,0.2)'));
+	
+	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
+	
 	
 	//SHAPES!
-	
+	fixDef.isSensor = false;
 	fixDef = new b2FixtureDef;
+	fixDef.userData = 'block';
+	
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
 	bodyDef.type = b2Body.b2_dynamicBody;
+	
 	fixDef.shape = new b2PolygonShape;
 	
-		//bodyDef.angle=1;
-	
-	
-	fixDef.shape.SetAsBox(pxConv(30,true),pxConv(30,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 30,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
+	//bodyDef.angle=1;
 	
 	fixDef.shape.SetAsBox(pxConv(30,true),pxConv(30,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 30,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
+	fixDef.shape.SetAsBox(pxConv(30,true),pxConv(30,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 30,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(60,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (60),true));
@@ -80,13 +98,9 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 + 60,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
-	
 	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 60,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
-	
-	
-	
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
@@ -96,27 +110,77 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('darkred');
 		
-		fixDef.shape.SetAsBox(pxConv(60,true),pxConv(60,true));
-		bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (120),true));
-		this.prepShape(bodyDef, fixDef).setFillStyle('orange');
+	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(60,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (120),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('#4385f6').setLineWidth(5);
 		
 }
 
-lvl1.prototype.step = function(){
-}
-lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
-	if(!group){
-		group = 'worldObj';
-	}
-	if(!zIndex){
-		zIndex = 0;
-	}
 
+lvl1.prototype.step = function(){
+	var lio = this;
+	
+	if(this.goalTouch){
+		//console.log(this.goalTouch);
+		
+		if(this.goalTouch.GetBody() != selectedBody){
+			
+		
+			this.goalEffect.radius = this.goalTouchTime;
+			this.goalTouchTime++;
+		}else{
+		
+			this.goalEffect.radius = 0;
+			this.goalTouchTime = 0; 
+		}
+	}
+	//if time > goaltime WIN WIN WIN
+	if(this.goalTouchTime >= this.goalTime){
+		this.gameOver = true;
+	}
+	listener.BeginContact = function(contact) {
+		if(contact.GetFixtureB().GetUserData() == 'goal'){
+		
+			lio.goalTouch = contact.GetFixtureA();
+			lio.goal = contact.GetFixtureB();
+			//console.log(contact.GetFixtureA());		
+			//console.log(contact.GetFixtureB());
+			//FUNCTION TO STORE LAST TOUCHING
+				//REMOVE LAST TOUCH ON EXIT
+				
+			//lio.goalTimer(contact.GetFixtureA().GetBody(),selectedBody);
+		}
+	}
+	
+	listener.EndContact = function(contact) {
+		if(contact.GetFixtureB().GetUserData() == 'goal'){
+		
+			if (lio.goalTouch == contact.GetFixtureA()){
+				lio.goalTouch = undefined;
+				lio.goalEffect.radius = 0;
+			}
+
+	
+		}
+	}
+	
+	listener.PreSolve = function(contact){
+
+	}
+}
+lvl1.prototype.goalTimer = function(bodyA,bodyB){
+}
+
+lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
+	if(!group){group = 'worldObj';}
+	if(!zIndex){zIndex = 0;}
 	return  this.io.addToGroup(group,world.CreateBody(bodyDef),zIndex)
 	        .CreateFixture(fixDef)
 	        .GetShape()
 	        .prepGraphics(this.io.b2Scale); 
 };
+
+
 
 iio.AppManager.prototype.activateLevel1 = function(io){
 	this.level = new iio.lvl1(io);
@@ -124,3 +188,17 @@ iio.AppManager.prototype.activateLevel1 = function(io){
 }
 
 })();
+
+/*
+new TWEEN.Tween( {scale: 0 } )
+	.to( { scale:1}, 1000 )
+	.easing( TWEEN.Easing.Elastic.In)
+	.onUpdate( function () {
+		//contact.GetFixtureB();
+	contact.GetFixtureB().GetBody().SetAngle(this.scale) ;
+		//contact.GetFixtureB().GetShape().img.width = ;
+	} )
+	.yoyo(true)
+	//.repeat(Infinity)
+	.start();
+*/
