@@ -39,17 +39,17 @@ function GameControl(io) {
 	var scaleY = io.canvas.height / window.innerHeight;
 	var scaleToFit = Math.min(scaleX, scaleY);
 	
-		PIXEL_RATIO = (function () {
-		    var ctx = io.context,
-		        dpr = window.devicePixelRatio || 1,
-		        bsr = ctx.webkitBackingStorePixelRatio ||
-		              ctx.mozBackingStorePixelRatio ||
-		              ctx.msBackingStorePixelRatio ||
-		              ctx.oBackingStorePixelRatio ||
-		              ctx.backingStorePixelRatio || 1;
-		
-		    return dpr / bsr;
-		})();
+	PIXEL_RATIO = (function () {
+	    var ctx = io.context,
+	        dpr = window.devicePixelRatio || 1,
+	        bsr = ctx.webkitBackingStorePixelRatio ||
+	              ctx.mozBackingStorePixelRatio ||
+	              ctx.msBackingStorePixelRatio ||
+	              ctx.oBackingStorePixelRatio ||
+	              ctx.backingStorePixelRatio || 1;
+	
+	    return dpr / bsr;
+	})();
 	
 	this.onResize = function(event){
 		scaleX = io.canvas.width / window.innerWidth;
@@ -61,7 +61,9 @@ function GameControl(io) {
 	
 	
 	hiDPICanvas = function(w, h, ratio) {
-	    if (!ratio) { ratio = PIXEL_RATIO; }
+		if (!ratio) {
+			ratio = PIXEL_RATIO; 
+		}
 	   	
 	    var can = io.canvas;
 	    can.width = w * ratio;
@@ -74,7 +76,7 @@ function GameControl(io) {
 
 	//Debugging 
 	scaleX = scaleY = 1;
-	PIXEL_RATIO = 1;
+	//PIXEL_RATIO = 1;
 	
 	hiDPICanvas(720, 1280);
 	
@@ -111,7 +113,6 @@ function GameControl(io) {
 				level.step();
 			}
 		}
-	
 
 		if(isMouseDown && (!mouseJoint) && world) {
 		  var body = getB2BodyAt(mouseX,mouseY);
@@ -127,9 +128,9 @@ function GameControl(io) {
 		     
 		     clickedObjCenter = md.bodyB.m_xf.position
 		     
-		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,60).setFillStyle('rgba(255,255,255,0.2)'));
+		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,90).setFillStyle('rgba(255,255,255,0.2)'));
 		     new TWEEN.Tween( {y: 0 } )
-		     	.to( { x:60}, 1000 )
+		     	.to( { x:90}, 1000 )
 		     	.easing( TWEEN.Easing.Elastic.Out)
 		     	.onUpdate( function () {
 		     		jointEffect.radius = this.x;
@@ -151,6 +152,8 @@ function GameControl(io) {
 		     io.rmvObj(mouseJoint);
 		     io.rmvObj(jointEffect);
 		     mouseJoint = null;
+		     selectedBody = null;
+		     
 		  }
 		}
 		TWEEN.update();
@@ -447,7 +450,7 @@ function createWorld(io){
 	level.setup();
 	
 	//pause BUTTON
-	pauseBtn = io.addToGroup('MENU',new iio.Rect(pxConv(242),pxConv(50), pxConv(50), pxConv(50)),20);
+	pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('white'),20);
 	
 	
 	io.pauseB2World(false);
