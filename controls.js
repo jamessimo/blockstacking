@@ -450,7 +450,7 @@ function createWorld(io){
 	level.setup();
 	
 	//pause BUTTON
-	pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('white'),20);
+	pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)),20);
 	
 	
 	io.pauseB2World(false);

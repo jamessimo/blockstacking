@@ -117,7 +117,7 @@ lvl1.prototype.setup = function(){
 
 
 lvl1.prototype.step = function(){
-	var lio = this;
+	//var lio = this;
 	/*
 	if(this.goalTouch){		
 		if(this.goalTouch.GetBody() != selectedBody){
