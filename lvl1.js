@@ -61,8 +61,7 @@ lvl1.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(123/2,true),pxConv(117/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(150,true));
-	bodyDef.type = 'notHit';
-	
+		
 	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(150),0).setFillStyle('rgba(255,255,255,0.2)'));
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
@@ -112,24 +111,19 @@ lvl1.prototype.setup = function(){
 		
 	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(60,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (120),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('#4385f6').setLineWidth(5);
+	this.prepShape(bodyDef, fixDef).setFillStyle('orange')/*.setStrokeStyle('#4385f6').setLineWidth(5)*/;
 		
 }
 
 
 lvl1.prototype.step = function(){
-	var lio = this;
-	
-	if(this.goalTouch){
-		//console.log(this.goalTouch);
-		
+	//var lio = this;
+	/*
+	if(this.goalTouch){		
 		if(this.goalTouch.GetBody() != selectedBody){
-			
-		
 			this.goalEffect.radius = this.goalTouchTime;
 			this.goalTouchTime++;
 		}else{
-		
 			this.goalEffect.radius = 0;
 			this.goalTouchTime = 0; 
 		}
@@ -140,15 +134,8 @@ lvl1.prototype.step = function(){
 	}
 	listener.BeginContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
-		
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
-			//console.log(contact.GetFixtureA());		
-			//console.log(contact.GetFixtureB());
-			//FUNCTION TO STORE LAST TOUCHING
-				//REMOVE LAST TOUCH ON EXIT
-				
-			//lio.goalTimer(contact.GetFixtureA().GetBody(),selectedBody);
 		}
 	}
 	
@@ -159,16 +146,9 @@ lvl1.prototype.step = function(){
 				lio.goalTouch = undefined;
 				lio.goalEffect.radius = 0;
 			}
-
-	
 		}
 	}
-	
-	listener.PreSolve = function(contact){
-
-	}
-}
-lvl1.prototype.goalTimer = function(bodyA,bodyB){
+	*/
 }
 
 lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
