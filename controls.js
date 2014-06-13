@@ -73,13 +73,13 @@ function GameControl(io) {
 	}
 
 	//Debugging 
-	scaleX = scaleY = 1;
+	//scaleX = scaleY = 1;
 	PIXEL_RATIO = 1;
 	
 	hiDPICanvas(480, 853);
 	
-	io.canvas.width = io.canvas.width;
-	io.canvas.height = io.canvas.height;	
+	//io.canvas.width = io.canvas.width;
+	//io.canvas.height = io.canvas.height;	
 
 	//DEBUGGING
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
@@ -94,6 +94,10 @@ function GameControl(io) {
 	}).play();*/
 	
 	createWorld(io);
+	
+	io.canvas.style.width = '100%';
+	io.canvas.style.height = 'auto';
+	
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 	io.setB2Framerate(FPS, function(){
