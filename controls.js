@@ -95,7 +95,7 @@ function GameControl(io) {
 	
 	createWorld(io);
 	
-	io.canvas.style.width = '100%';
+	io.canvas.style.width = '720px';
 	io.canvas.style.height = 'auto';
 	
 	io.context.translate(canvasOffset.x, canvasOffset.y);
