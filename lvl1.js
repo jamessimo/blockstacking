@@ -49,6 +49,19 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 250),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('green');
 	
+	//GOAL
+	fixDef.isSensor = true;
+	fixDef.userData = 'goal';
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(123/2,true),pxConv(117/2,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(200,true));
+
+	//SHAPES!
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(150),0).setFillStyle('rgba(255,255,255,0.2)'));
+	
+	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
+	
+	
 	
 	
 	//SHAPES!
@@ -59,9 +72,6 @@ lvl1.prototype.setup = function(){
 	fixDef.density = 5;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
-	
-		//bodyDef.angle=1;
-	
 	
 	fixDef.shape.SetAsBox(pxConv(30,true),pxConv(30,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 30,true));
