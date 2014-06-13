@@ -127,9 +127,9 @@ function GameControl(io) {
 		     
 		     clickedObjCenter = md.bodyB.m_xf.position
 		     
-		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,60).setFillStyle('rgba(255,255,255,0.2)'));
+		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.2)'));
 		     new TWEEN.Tween( {y: 0 } )
-		     	.to( { x:60}, 1000 )
+		     	.to( { x:90}, 1000 )
 		     	.easing( TWEEN.Easing.Elastic.Out)
 		     	.onUpdate( function () {
 		     		jointEffect.radius = this.x;
@@ -151,6 +151,7 @@ function GameControl(io) {
 		     io.rmvObj(mouseJoint);
 		     io.rmvObj(jointEffect);
 		     mouseJoint = null;
+		     selectedBody = undefined;
 		  }
 		}
 		TWEEN.update();
@@ -447,7 +448,7 @@ function createWorld(io){
 	level.setup();
 	
 	//pause BUTTON
-	pauseBtn = io.addToGroup('MENU',new iio.Rect(pxConv(242),pxConv(50), pxConv(50), pxConv(50)),20);
+	pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('#fff'),20);
 	
 	
 	io.pauseB2World(false);
