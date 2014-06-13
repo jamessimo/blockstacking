@@ -55,8 +55,8 @@ function GameControl(io) {
 		scaleX = io.canvas.width / window.innerWidth;
 		scaleY = io.canvas.height / window.innerHeight;
 		scaleToFit = Math.min(scaleX, scaleY);
-		io.canvas.width = 720*PIXEL_RATIO;
-		io.canvas.height = 1280*PIXEL_RATIO;
+		io.canvas.width = 480*PIXEL_RATIO;
+		io.canvas.height = 853*PIXEL_RATIO;
 	};
 	
 	
@@ -76,7 +76,7 @@ function GameControl(io) {
 	scaleX = scaleY = 1;
 	PIXEL_RATIO = 1;
 	
-	hiDPICanvas(720, 1280);
+	hiDPICanvas(480, 853);
 	
 	io.canvas.width = io.canvas.width;
 	io.canvas.height = io.canvas.height;	
@@ -249,9 +249,9 @@ function GameControl(io) {
         if(pauseBtn && pauseBtn.contains(newPos)){
        		level.pause = true;	
         }
-      if(unPauseBtn && unPauseBtn.contains(newPos)){
-      		resume(io);	
-      }
+		if(unPauseBtn && unPauseBtn.contains(newPos)){
+			resume(io);	
+		}
     });
 
     this.focusOff = function(e){
