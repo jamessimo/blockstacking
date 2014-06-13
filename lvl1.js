@@ -53,13 +53,13 @@ lvl1.prototype.setup = function(){
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(123/2,true),pxConv(117/2,true));
+	fixDef.shape.SetAsBox(pxConv(62,true),pxConv(59,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(200,true));
 
 	//SHAPES!
 	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(150),0).setFillStyle('rgba(255,255,255,0.2)'));
 	
-	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
+	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star-small.png');
 	
 	
 	
