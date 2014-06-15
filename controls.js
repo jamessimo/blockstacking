@@ -216,8 +216,8 @@ function GameControl(io) {
     }
     
     function touchMove(e){
-    	//mouseX = pxConv(e.touches[0].pageX,true)*scaleX;
-    	//mouseY = pxConv(e.touches[0].pageY,true)*scaleY;
+    	mouseX = pxConv(e.touches[0].pageX*scaleX,true);
+    	mouseY = pxConv(e.touches[0].pageY*scaleY,true);
     }
     
     //TOUCH EVENTS
