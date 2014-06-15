@@ -63,7 +63,7 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 1;
+	//PIXEL_RATIO = 1;
 	
 	//hiDPICanvas(480, 853);
 	io.canvas.width = 480;
@@ -224,9 +224,8 @@ function GameControl(io) {
 	io.canvas.addEventListener('touchstart', function(e){
 		touchStart(e);
 		var newPos = io.getEventPosition(e);
-		newPos.x = e.touches[0].pageX*scaleX;
-		newPos.y = e.touches[0].pageY*scaleY;
-		
+		newPos.x = pxConv(e.touches[0].pageX)*scaleX;
+		newPos.y = pxConv(e.touches[0].pageY)*scaleY;
 		
 		
 		
