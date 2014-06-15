@@ -26,20 +26,20 @@ lvl1.prototype.setup = function(){
 	
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(10,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 10,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(0,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(0+10,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
+	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 125,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(this.cWidth - 10,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
+	bodyDef.position.Set(pxConv(this.cWidth - 0,true),pxConv(this.cHeight - 125,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	
@@ -54,15 +54,12 @@ lvl1.prototype.setup = function(){
 	fixDef.userData = 'goal';
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(62,true),pxConv(59,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(200,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(75,true));
+	
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.2)'));
+	
+	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
 
-	//SHAPES!
-	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(150),0).setFillStyle('rgba(255,255,255,0.2)'));
-	
-	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star-small.png');
-	
-	
-	
 	
 	//SHAPES!
 	
@@ -82,8 +79,8 @@ lvl1.prototype.setup = function(){
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	
-	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(60,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (60),true));
+	fixDef.shape.SetAsBox(pxConv(50,true),pxConv(50,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - 50,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('orange');
 	
 	fixDef.shape.SetAsBox(pxConv(60,true),pxConv(45,true));

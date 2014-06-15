@@ -35,9 +35,7 @@ var gameOn = false;
 var PIXEL_RATIO = 1;
 function GameControl(io) {
 
-	var scaleX = io.canvas.width / window.innerWidth;
-	var scaleY = io.canvas.height / window.innerHeight;
-	var scaleToFit = Math.min(scaleX, scaleY);
+
 	
 	PIXEL_RATIO = (function () {
 	    var ctx = io.context,
@@ -52,34 +50,28 @@ function GameControl(io) {
 	})();
 	
 	this.onResize = function(event){
+	io.canvas.width = 480;
+	io.canvas.height = 853;
 		scaleX = io.canvas.width / window.innerWidth;
 		scaleY = io.canvas.height / window.innerHeight;
 		scaleToFit = Math.min(scaleX, scaleY);
-		io.canvas.width = 480*PIXEL_RATIO;
-		io.canvas.height = 853*PIXEL_RATIO;
+
 		
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
 	};
 	
-	
-	hiDPICanvas = function(w, h, ratio) {
-	    if (!ratio) { ratio = PIXEL_RATIO; }
-	   	
-	    var can = io.canvas;
-	    can.width = w * ratio;
-	    can.height = h * ratio;
-	    can.style.width = w + "px";
-	    can.style.height = h + "px";
-	    can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
-	    return can;
-	}
-
 	//Debugging 
-	scaleX = scaleY = 1;
+	//scaleX = scaleY = 1;
 	PIXEL_RATIO = 1;
 	
-	hiDPICanvas(480, 853);
+	//hiDPICanvas(480, 853);
+	io.canvas.width = 480;
+	io.canvas.height = 853;
+	
+	var scaleX = io.canvas.width / window.innerWidth;
+	var scaleY = io.canvas.height / window.innerHeight;
+	var scaleToFit = Math.min(scaleX, scaleY);
 	
 	//io.canvas.width = io.canvas.width / PIXEL_RATIO;
 	//io.canvas.height = io.canvas.height / PIXEL_RATIO;	
@@ -88,6 +80,7 @@ function GameControl(io) {
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
 	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
+	console.log('scale X = ' +  scaleX+' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
 	
 	 
@@ -97,12 +90,15 @@ function GameControl(io) {
 	}).play();*/
 	
 	createWorld(io);
+		
 	
 	
-	
+	io.canvas.width = io.canvas.width*PIXEL_RATIO;
+	io.canvas.height = io.canvas.height*PIXEL_RATIO;
 	
 	io.canvas.style.width = window.innerWidth + 'px';
 	io.canvas.style.height = window.innerHeight + 'px';
+	
 	
 	
 	io.context.translate(canvasOffset.x, canvasOffset.y);
@@ -143,7 +139,7 @@ function GameControl(io) {
 		     	.to( { x:90}, 1000 )
 		     	.easing( TWEEN.Easing.Elastic.Out)
 		     	.onUpdate( function () {
-		     		jointEffect.radius = this.x;
+		     		jointEffect.radius = pxConv(this.x);;
 		     	})
 		     	.start();
 		     
@@ -215,13 +211,13 @@ function GameControl(io) {
     }
     
     function mouseMove(e){
-      	mouseX = pxConv(io.getEventPosition(e).x,true)*scaleX;
-       	mouseY = pxConv(io.getEventPosition(e).y,true)*scaleY; 
+      	mouseX = pxConv(io.getEventPosition(e).x*scaleX,true);
+       	mouseY = pxConv(io.getEventPosition(e).y*scaleY,true); 
     }
     
     function touchMove(e){
-    	mouseX = pxConv(e.touches[0].pageX,true)*scaleX;
-    	mouseY = pxConv(e.touches[0].pageY,true)*scaleY;
+    	//mouseX = pxConv(e.touches[0].pageX,true)*scaleX;
+    	//mouseY = pxConv(e.touches[0].pageY,true)*scaleY;
     }
     
     //TOUCH EVENTS
