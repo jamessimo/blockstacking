@@ -56,7 +56,8 @@ function GameControl(io) {
 		scaleY = io.canvas.height / window.innerHeight;
 		scaleToFit = Math.min(scaleX, scaleY);
 
-		
+		io.canvas.width = io.canvas.width*PIXEL_RATIO;
+		io.canvas.height = io.canvas.height*PIXEL_RATIO;
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
 	};
