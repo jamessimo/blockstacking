@@ -39,17 +39,17 @@ function GameControl(io) {
 	var scaleY = io.canvas.height / window.innerHeight;
 	var scaleToFit = Math.min(scaleX, scaleY);
 	
-		PIXEL_RATIO = (function () {
-		    var ctx = io.context,
-		        dpr = window.devicePixelRatio || 1,
-		        bsr = ctx.webkitBackingStorePixelRatio ||
-		              ctx.mozBackingStorePixelRatio ||
-		              ctx.msBackingStorePixelRatio ||
-		              ctx.oBackingStorePixelRatio ||
-		              ctx.backingStorePixelRatio || 1;
-		
-		    return dpr / bsr;
-		})();
+	PIXEL_RATIO = (function () {
+	    var ctx = io.context,
+	        dpr = window.devicePixelRatio || 1,
+	        bsr = ctx.webkitBackingStorePixelRatio ||
+	              ctx.mozBackingStorePixelRatio ||
+	              ctx.msBackingStorePixelRatio ||
+	              ctx.oBackingStorePixelRatio ||
+	              ctx.backingStorePixelRatio || 1;
+	
+	    return dpr / bsr;
+	})();
 	
 	this.onResize = function(event){
 		scaleX = io.canvas.width / window.innerWidth;
@@ -57,6 +57,9 @@ function GameControl(io) {
 		scaleToFit = Math.min(scaleX, scaleY);
 		io.canvas.width = 480*PIXEL_RATIO;
 		io.canvas.height = 853*PIXEL_RATIO;
+		
+		io.canvas.style.width = window.innerWidth + 'px';
+		io.canvas.style.height = window.innerHeight + 'px';
 	};
 	
 	
@@ -73,13 +76,13 @@ function GameControl(io) {
 	}
 
 	//Debugging 
-	//scaleX = scaleY = 1;
+	scaleX = scaleY = 1;
 	PIXEL_RATIO = 1;
 	
 	hiDPICanvas(480, 853);
 	
-	//io.canvas.width = io.canvas.width;
-	//io.canvas.height = io.canvas.height;	
+	//io.canvas.width = io.canvas.width / PIXEL_RATIO;
+	//io.canvas.height = io.canvas.height / PIXEL_RATIO;	
 
 	//DEBUGGING
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
@@ -95,8 +98,12 @@ function GameControl(io) {
 	
 	createWorld(io);
 	
-	io.canvas.style.width = '720px';
-	io.canvas.style.height = 'auto';
+	
+	
+	
+	io.canvas.style.width = window.innerWidth + 'px';
+	io.canvas.style.height = window.innerHeight + 'px';
+	
 	
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
