@@ -33,6 +33,7 @@ var level = undefined;
 
 var gameOn = false;
 var PIXEL_RATIO = 1;
+var WORLD_SCALE = 1;
 function GameControl(io) {
 
 
@@ -64,7 +65,7 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	//PIXEL_RATIO = 1;
+	PIXEL_RATIO = 1;
 	
 	//hiDPICanvas(480, 853);
 	io.canvas.width = 480;
@@ -91,7 +92,6 @@ function GameControl(io) {
 	}).play();*/
 	
 	createWorld(io);
-		
 	
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
