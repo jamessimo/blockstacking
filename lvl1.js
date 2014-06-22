@@ -10,15 +10,15 @@ function lvl1(io){
 	this.totalResources = 5;
 	
 	//GAME VARS
-	this.MIN_SIZE = 25;
-	this.MAX_SIZE = 45;
+	this.MIN_SIZE = 25/2;
+	this.MAX_SIZE = 45/2;
 	this.goal =
 	this.goalTouch =
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
 	
-	
+	this.water = [];
 	   
 }; iio.lvl1 = lvl1;
 
@@ -44,13 +44,13 @@ lvl1.prototype.setup = function(){
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150,true));
+	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 75,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(250,true));
-	bodyDef.position.Set(pxConv(this.cWidth - 0,true),pxConv(this.cHeight - 125,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150,true));
+	bodyDef.position.Set(pxConv(this.cWidth - 0,true),pxConv(this.cHeight - 75,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	
@@ -64,12 +64,26 @@ lvl1.prototype.setup = function(){
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(62/1.5,true),pxConv(59/1.5,true));
+	fixDef.shape.SetAsBox(pxConv(62/2,true),pxConv(59/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(75,true));
 	
 	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.2)'));
 	
-	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png');
+	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
+	
+	//WATER
+	/*
+	fixDef.userData = 'water';
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(100,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight/2,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('rgba(0,0,255,0.7)');*/
+	
+	/*this.io.addToGroup('WATER',world.CreateBody(bodyDef),0)
+	        .CreateFixture(fixDef)
+	        .GetShape()
+	        .prepGraphics(this.io.b2Scale).setFillStyle('rgba(0,0,255,0.7)')
+	*/
 
 	
 	//SHAPES!
@@ -89,18 +103,13 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
-	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('orange');
 	
-	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
-	
-	
-	
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
@@ -109,12 +118,37 @@ lvl1.prototype.setup = function(){
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(80,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('darkred');
-		
+	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('orange');
+	/*this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);*/
+	
+	
+	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
+	        .CreateFixture(fixDef)
+	        .GetShape()
+	        .prepGraphics(this.io.b2Scale).setFillStyle('orange')
+	        
+	        //.addObj(new iio.SimpleRect(pxConv(20),pxConv(20)).addImage('img/star.png'));
+	        
+	        //
+	        
+//WATER
+/*
+	fixDef.isSensor = true;
+bodyDef.type = b2Body.b2_staticBody;
+fixDef.userData = 'water';
+fixDef.shape = new b2PolygonShape;
+fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(100,true));
+bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight/2,true));
+this.prepShape(bodyDef, fixDef).setFillStyle('rgba(0,0,255,0.7)');
+	        */
+	        
+	        //.setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);
+	        	
 		
-}
+	 //
+}//SETUP
 	
 lvl1.prototype.step = function(){
 	var lio = this;
@@ -126,7 +160,6 @@ lvl1.prototype.step = function(){
 			this.goalEffect.radius = this.goalTouchTime;
 			this.goalTouchTime++;
 		}else{
-		
 			this.goalEffect.radius = 0;
 			this.goalTouchTime = 0; 
 		}
@@ -136,19 +169,54 @@ lvl1.prototype.step = function(){
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
 		}
+		
+		if(contact.GetFixtureB().GetUserData() == 'water'){
+			lio.water.push(contact.GetFixtureA().GetBody());
+		}
+			
 	}
-	
 	listener.EndContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
-		
 			if (lio.goalTouch == contact.GetFixtureA()){
 				lio.goalTouch = undefined;
 				lio.goalEffect.radius = 0;
 			}
 		}
+		
+		if(contact.GetFixtureB().GetUserData() == 'water'){
+		
+			var i = lio.water.indexOf(contact.GetFixtureA().GetBody());
+			if(i != -1) {
+				lio.water.splice(i, 1);
+			}
+		}
+		
 	}
 	
-}
+	
+	
+	//WATER
+	if(lio.water.length){
+		for (var i = 0, l = lio.water.length; i < l; ++i) {
+			//Density
+		
+			
+			if(lio.water[i]){
+				var setCenter = b2Vec2(0,0);
+				//console.log(lio.water[i].GetFixtureList());
+				//console.log(lio.water[i].GetMass());
+				setCenter = lio.water[i].GetWorldCenter();
+				
+				lio.water[i].ApplyImpulse(new b2Vec2(0,-Math.abs(lio.water[i].GetMass() / 1.95)),lio.water[i].GetWorldCenter());
+			}
+			
+			//return false;
+			//lio.water[i].SetLinearVelocity(new b2Vec2(0,-3));
+		}
+	}
+	
+	
+}//STEP
 lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';

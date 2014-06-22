@@ -34,10 +34,14 @@ var level = undefined;
 var gameOn = false;
 var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
+var GAMEHEIGHT = 480;
+var GAMEWIDTH = 320;
+
+// 480;
+// 853;
+
 function GameControl(io) {
 
-
-	
 	PIXEL_RATIO = (function () {
 	    var ctx = io.context,
 	        dpr = window.devicePixelRatio || 1,
@@ -51,38 +55,35 @@ function GameControl(io) {
 	})();
 	
 	this.onResize = function(event){
-	io.canvas.width = 480;
-	io.canvas.height = 853;
+		io.canvas.width = GAMEWIDTH;
+		io.canvas.height = GAMEHEIGHT;
 		scaleX = io.canvas.width / window.innerWidth;
 		scaleY = io.canvas.height / window.innerHeight;
 		scaleToFit = Math.min(scaleX, scaleY);
 
 		io.canvas.width = io.canvas.width*PIXEL_RATIO;
 		io.canvas.height = io.canvas.height*PIXEL_RATIO;
+		
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
 	};
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 1;
+	//PIXEL_RATIO = 1;
 	
-	//hiDPICanvas(480, 853);
-	io.canvas.width = 480;
-	io.canvas.height = 853;
+	io.canvas.width = GAMEWIDTH;
+		io.canvas.height = GAMEHEIGHT;
 	
 	var scaleX = io.canvas.width / window.innerWidth;
 	var scaleY = io.canvas.height / window.innerHeight;
 	var scaleToFit = Math.min(scaleX, scaleY);
-	
-	//io.canvas.width = io.canvas.width / PIXEL_RATIO;
-	//io.canvas.height = io.canvas.height / PIXEL_RATIO;	
 
 	//DEBUGGING
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
 	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
-	console.log('scale X = ' +  scaleX+' Y = '+scaleY);
+	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
 	
 	 
@@ -91,16 +92,16 @@ function GameControl(io) {
 		urls: ['music/FirstClassLounging.mp3']
 	}).play();*/
 	
-	createWorld(io);
+
 	
+	//intro(io);
+	createWorld(io,1);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
-	
+		
 	io.canvas.style.width = window.innerWidth + 'px';
 	io.canvas.style.height = window.innerHeight + 'px';
-	
-	
 	
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
@@ -215,12 +216,10 @@ function GameControl(io) {
       	mouseX = pxConv(io.getEventPosition(e).x*scaleX,true);
        	mouseY = pxConv(io.getEventPosition(e).y*scaleY,true); 
     }
-    
     function touchMove(e){
     	mouseX = pxConv(e.touches[0].pageX*scaleX,true);
     	mouseY = pxConv(e.touches[0].pageY*scaleY,true);
     }
-    
     //TOUCH EVENTS
 	io.canvas.addEventListener('touchstart', function(e){
 		touchStart(e);
@@ -228,16 +227,13 @@ function GameControl(io) {
 		newPos.x = pxConv(e.touches[0].pageX)*scaleX;
 		newPos.y = pxConv(e.touches[0].pageY)*scaleY;
 		
-		
-		
 		if (btn && btn.contains(newPos)){
 			createWorld(io);
 		}
 		if(pauseBtn && pauseBtn.contains(newPos)){
 			level.pause = true;
 		}
-		
-		
+	
 	});
 	io.canvas.addEventListener('touchmove', touchMove);
 	io.canvas.addEventListener('touchend', touchEnd);
@@ -259,6 +255,17 @@ function GameControl(io) {
 		if(unPauseBtn && unPauseBtn.contains(newPos)){
 			resume(io);	
 		}
+		if(level.lvlButtons){
+			for(var i = 1; i < level.lvlButtons.length ; i++){
+				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
+					//console.log(i);
+					//console.log(level.lvlButtons[i]);
+					createWorld(io,i);
+					return false;
+					
+				}
+			}
+		}
     });
 
     this.focusOff = function(e){
@@ -269,10 +276,6 @@ function GameControl(io) {
 };
 
 function pause(io){
-	level.pause = true
-    //level.pause = true;
-	io.pauseB2World(true);
-	io.pauseFramerate(true);
 		
 	gameoverText = io.addToGroup('MENU',(new iio.Text('- PAUSED -',iio.Vec.add(io.canvas.width/2,io.canvas.height/2-pxConv(40),0,0)))
 		.setFont(pxConv(60)+'px OpenSans')
@@ -289,6 +292,12 @@ function pause(io){
 		.translate(0,pxConv(9))
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
+		
+		level.pause = true
+		gameOn = false;
+			
+		io.pauseB2World(true);
+		io.pauseFramerate(true);
 }
 function resume(io){
 
@@ -298,6 +307,8 @@ function resume(io){
 	unPauseBtn = undefined; //To remove its POS
 	io.pauseB2World(false);
 	io.pauseFramerate(false);
+	
+	gameOn = false;
 	level.pause = false;
 	
 	console.log('un pause game');
@@ -391,7 +402,7 @@ function intro(io){
 	io.setBGColor('#ccc');
 
 	//SHOW LOGO
-	var logo = io.addToGroup('MENU',(new iio.Text('Commuter Fling!',iio.Vec.add(io.canvas.width,0,0,0)))
+	var logo = io.addToGroup('MENU',(new iio.Text('Block Stacking!',iio.Vec.add(io.canvas.width,0,0,0)))
 		.setFont(pxConv(60)+'px OpenSans')
 		.setTextAlign('center')
 		.setAlpha(0)
@@ -436,7 +447,7 @@ function intro(io){
 		.delay(2000)
 		.start();
 }
-function createWorld(io){
+function createWorld(io,levelNumber){
 	gameOn = true;
 	if ( world != null )
 		world = null;
@@ -448,16 +459,27 @@ function createWorld(io){
     new b2Vec2(0, 30)    //gravity
    	,true                 //allow sleep
 	));
-	level = io.activateLevel1(io);
+	
+	if(levelNumber){
+		level = eval( "io.activateLevel"+levelNumber+"(io);" );
+	}else{
+		level = io.activateLevelSelect(io);
+	}
 	
 	world.SetContactListener(listener);
 	
 	level.setup();
 	
 	//pause BUTTON
-	pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('#fff'),20);
+	
+	/*pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('#fff')).addObj(new iio.SimpleRect(pxConv(20),pxConv(20)).addImage('img/star.png').setImgSize(20,20));*/
 	
 	
+	/*.
+	
+	addImage('img/star.png').setImgSize(20,20),20);*/
+	
+	//console.log(level.lvlButtons[0]);
 	io.pauseB2World(false);
 	io.pauseFramerate(false);
 	
