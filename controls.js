@@ -36,6 +36,7 @@ var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
 var GAMEHEIGHT = 480;
 var GAMEWIDTH = 320;
+var scaleX = scaleY = scaleToFit = 0;
 
 // 480;
 // 853;
@@ -70,14 +71,14 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	//PIXEL_RATIO = 1;
+	PIXEL_RATIO = 1;
 	
 	io.canvas.width = GAMEWIDTH;
-		io.canvas.height = GAMEHEIGHT;
+	io.canvas.height = GAMEHEIGHT;
 	
-	var scaleX = io.canvas.width / window.innerWidth;
-	var scaleY = io.canvas.height / window.innerHeight;
-	var scaleToFit = Math.min(scaleX, scaleY);
+	scaleX = io.canvas.width / window.innerWidth;
+	scaleY = io.canvas.height / window.innerHeight;
+	scaleToFit = Math.min(scaleX, scaleY);
 
 	//DEBUGGING
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
@@ -103,6 +104,9 @@ function GameControl(io) {
 	io.canvas.style.width = window.innerWidth + 'px';
 	io.canvas.style.height = window.innerHeight + 'px';
 	
+	
+	
+	io.context.scale(1,1);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 	io.setB2Framerate(FPS, function(){
@@ -233,6 +237,14 @@ function GameControl(io) {
 		if(pauseBtn && pauseBtn.contains(newPos)){
 			level.pause = true;
 		}
+		if(level.lvlButtons){
+			for(var i = 1; i < level.lvlButtons.length ; i++){
+				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
+					createWorld(io,i);
+					return false;
+				}
+			}
+		}
 	
 	});
 	io.canvas.addEventListener('touchmove', touchMove);
@@ -258,11 +270,8 @@ function GameControl(io) {
 		if(level.lvlButtons){
 			for(var i = 1; i < level.lvlButtons.length ; i++){
 				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-					//console.log(i);
-					//console.log(level.lvlButtons[i]);
 					createWorld(io,i);
 					return false;
-					
 				}
 			}
 		}
@@ -459,7 +468,7 @@ function createWorld(io,levelNumber){
     new b2Vec2(0, 30)    //gravity
    	,true                 //allow sleep
 	));
-	
+
 	if(levelNumber){
 		level = eval( "io.activateLevel"+levelNumber+"(io);" );
 	}else{
@@ -467,7 +476,8 @@ function createWorld(io,levelNumber){
 	}
 	
 	world.SetContactListener(listener);
-	
+	console.log(level);
+	if(level)
 	level.setup();
 	
 	//pause BUTTON
@@ -482,6 +492,13 @@ function createWorld(io,levelNumber){
 	//console.log(level.lvlButtons[0]);
 	io.pauseB2World(false);
 	io.pauseFramerate(false);
+	
+	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
+	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
+	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
+	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
+	console.log('pixel_ratio = ' + PIXEL_RATIO);
+	
 	
 }
 

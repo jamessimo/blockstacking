@@ -43,21 +43,55 @@ lvl1.prototype.setup = function(){
 	
 
 	//BASIN WALLS
+	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 75,true));
+	
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth - 0,true),pxConv(this.cHeight - 75,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
+	//WORLD BOUNDRIES
+	
+	fixDef.friction = 0;
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
+		bodyDef.angle=-Math.PI/6;
+	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(this.cHeight - 320,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('red');
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
+		bodyDef.angle=Math.PI/6;
+	bodyDef.position.Set(pxConv(this.cWidth + 100,true),pxConv(this.cHeight - 320,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('red');
+	
+	
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
+		bodyDef.angle=-Math.PI/3;
+	bodyDef.position.Set(pxConv(this.cWidth + 30,true),pxConv(-110,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
+		bodyDef.angle=Math.PI/3;
+	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
+	
+	fixDef.friction = 1;
 	
 	//PLATFORM
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/4,true),pxConv(10,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 200),true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+		bodyDef.angle=0;
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('green');
 	
 	//GOAL
@@ -115,7 +149,7 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('darkorange');
 	
-	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(80,true));
+	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('darkred');
 	
@@ -193,8 +227,6 @@ lvl1.prototype.step = function(){
 		
 	}
 	
-	
-	
 	//WATER
 	if(lio.water.length){
 		for (var i = 0, l = lio.water.length; i < l; ++i) {
@@ -214,7 +246,6 @@ lvl1.prototype.step = function(){
 			//lio.water[i].SetLinearVelocity(new b2Vec2(0,-3));
 		}
 	}
-	
 	
 }//STEP
 lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){

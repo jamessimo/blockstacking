@@ -11,29 +11,36 @@ function lvlSelect(io){
 	this.loadResources = 0;
 	this.totalResources = 5;
 	
+	this.btnSize = 80;
+	
 	//Levels
 	this.lvlButtons =  new Array();
 	   
 }; iio.lvlSelect = lvlSelect;
 
 lvlSelect.prototype.setup = function(){
-
-
-	this.io.addToGroup('LEVEL',(new iio.Text('Level Select!',iio.Vec.add(this.cWidth/2,pxConv(60),0,0)))
-		.setFont(pxConv(60)+'px OpenSans')
+	this.io.setBGColor('white');
+	this.io.addToGroup('LEVEL',(new iio.Text('Level Select!',iio.Vec.add(pxConv(this.cWidth/2),pxConv(60),0,0)))
+		.setFont(pxConv(40)+'px OpenSans')
 		.setTextAlign('center')
 		.setFillStyle('black'),20);
 		this.lvlButtons.push(null);
 		
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(150),pxConv(250), pxConv(150), pxConv(150)).setFillStyle('yellow').addObj(new iio.Text('1').setFont(pxConv(20)+'px OpenSans')
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setFillStyle('yellow').addObj(new iio.Text('1').setFont(pxConv(20)+'px OpenSans')
 	.setTextAlign('center')
 	.setFillStyle('black')) 
 	));
 	
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(350),pxConv(250), pxConv(150), pxConv(150)).setFillStyle('orange').addObj(new iio.Text('2').setFont(pxConv(20)+'px OpenSans')
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setFillStyle('orange').addObj(new iio.Text('2').setFont(pxConv(20)+'px OpenSans')
 	.setTextAlign('center')
 	.setFillStyle('black')) 
 	));
+	
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setFillStyle('red').addObj(new iio.Text('3').setFont(pxConv(20)+'px OpenSans')
+	.setTextAlign('center')
+	.setFillStyle('black')) 
+	));
+	
 
 }
 lvlSelect.prototype.step = function(){
