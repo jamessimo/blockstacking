@@ -1,6 +1,6 @@
 (function(){
 
-function lvl1(io){
+function lvl3(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -41,9 +41,9 @@ function lvl1(io){
 	
 	this.gameEnd = false;
 	   
-}; iio.lvl1 = lvl1;
+}; iio.lvl3 = lvl3;
 
-lvl1.prototype.setup = function(){
+lvl3.prototype.setup = function(){
 	this.io.setBGColor(this.black);
 	
 	var fixDef = new b2FixtureDef;
@@ -140,6 +140,7 @@ lvl1.prototype.setup = function(){
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
+	fixDef.userData = 'blocks';
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
 	
@@ -181,35 +182,32 @@ lvl1.prototype.setup = function(){
 
 }//SETUP
 
-lvl1.prototype.step = function(){
+lvl3.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
-		
-	//	console.log(lio.platform.GetBody());
-		lio.platform.GetBody().SetAwake(true);
-		
-		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-		if(lio.platform.GetBody().m_xf.position.x < 5.2222){
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(5,2));
-			canvasOffset.x = -1;
-				canvasOffset.y = 1;
-				//canvasZoom.x = 1;
-		}else if (lio.platform.GetBody().m_xf.position.x > 5.3333) {
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-				canvasOffset.x = 1;
-				//canvasZoom.x = +0.1;
-					canvasOffset.y = -1;
+		//console.log(world);
+		world.m_gravity.x = 50;
+
+
+//REMOVE FROM LOOP!
+	  var node = world.GetBodyList(); 
+	  var i = 0;
+	  //MAKE ALL BLOCKS AWAKE!
+	  	while(node){
+	 		var curr = node;
+			node = node.GetNext();
+			if(curr.GetType() == b2Body.b2_dynamicBody){
+				if(curr.GetFixtureList().GetUserData() == 'blocks'){
+					i++;
+					curr.SetSleepingAllowed(false);
+					//curr.GetFixtureList().GetShape().m_radius = 10;
+					//Zconsole.log(curr.GetPosition());
+				}
+			}
 		}
-		 
-		
-		//x: 5.333333333333333
-		//y: 12.333333333333334
-		
-	}else {
-		this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-		lio.platform.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
-			canvasOffset.x = canvasOffset.y = 0;
+	}else{
+		world.m_gravity.x = 0;
 	}
 	
 	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
@@ -240,7 +238,7 @@ lvl1.prototype.step = function(){
 	}
 	
 }//STEP
-lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
+lvl3.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';
 	}
@@ -251,11 +249,11 @@ lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	return  this.io.addToGroup(group,world.CreateBody(bodyDef),zIndex)
 	        .CreateFixture(fixDef)
 	        .GetShape()
-	        .prepGraphics(this.io.b2Scale); 
+		    .prepGraphics(this.io.b2Scale); 
 };
 
-iio.AppManager.prototype.activateLevel1 = function(io){
-	this.level = new iio.lvl1(io);
+iio.AppManager.prototype.activateLevel3 = function(io){
+	this.level = new iio.lvl3(io);
 	return this.level;
 }
 

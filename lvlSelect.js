@@ -40,6 +40,11 @@ lvlSelect.prototype.setup = function(){
 	.setTextAlign('center')
 	.setFillStyle('black')) 
 	));
+
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setFillStyle('green').addObj(new iio.Text('4').setFont(pxConv(20)+'px OpenSans')
+	.setTextAlign('center')
+	.setFillStyle('black')) 
+	));
 	
 
 }

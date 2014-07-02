@@ -1,6 +1,6 @@
 (function(){
 
-function lvl1(io){
+function lvl2(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -9,23 +9,6 @@ function lvl1(io){
 	this.loadResources = 0;
 	this.totalResources = 5;
 	
-	//COLOR PALLET
-	this.red = '#DB4437';
-	this.sunset = '#F05722';
-	this.orange = '#E7981D';
-	this.yellow = '#F4DF3B';
-	this.lime = '#CDDC39';
-	this.green = '#65B045';
-	this.turquoise = '#11A9CC';
-	this.blue = '#4285F4';
-	this.navy = '#3F5CA9';
-	this.purple = '#7E3794';
-	this.burgundy = '#A61D4C';
-	this.brown = '#795548';
-	this.white = '#F9F9F9';
-	this.black = '#4D4D4D';
-	this.grey = '#CCCCCC';
-
 	//GAME VARS
 	this.MIN_SIZE = 25/2;
 	this.MAX_SIZE = 45/2;
@@ -39,12 +22,20 @@ function lvl1(io){
 	this.platformBodyDef = new b2BodyDef;
 	this.platformFixDef = new b2FixtureDef;
 	
+
+	this.water = [];
+
+	this.waterObj = undefined;
+	this.waterBodyDef = new b2BodyDef;
+	this.waterFixDef = new b2FixtureDef;
+	
 	this.gameEnd = false;
 	   
-}; iio.lvl1 = lvl1;
+}; iio.lvl2 = lvl2;
 
-lvl1.prototype.setup = function(){
-	this.io.setBGColor(this.black);
+lvl2.prototype.setup = function(){
+	this.io.setBGColor('black');
+	
 	
 	var fixDef = new b2FixtureDef;
 	fixDef.friction = 1;
@@ -52,6 +43,7 @@ lvl1.prototype.setup = function(){
 	
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
+	
 	
 	
 	//GROUND
@@ -80,31 +72,30 @@ lvl1.prototype.setup = function(){
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
-	bodyDef.angle=-Math.PI/6;
+		bodyDef.angle=-Math.PI/6;
 	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(this.cHeight - 320,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
-	bodyDef.angle=Math.PI/6;
+		bodyDef.angle=Math.PI/6;
 	bodyDef.position.Set(pxConv(this.cWidth + 100,true),pxConv(this.cHeight - 320,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
-	bodyDef.angle=-Math.PI/3;
+		bodyDef.angle=-Math.PI/3;
 	bodyDef.position.Set(pxConv(this.cWidth + 30,true),pxConv(-110,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
-	bodyDef.angle=Math.PI/3;
+		bodyDef.angle=Math.PI/3;
 	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.friction = 1;
-	bodyDef.angle = 0;
-
+		bodyDef.angle = 0;
 	//PLATFORM
 	
 	this.platformBodyDef.type = b2Body.b2_kinematicBody;
@@ -132,7 +123,6 @@ lvl1.prototype.setup = function(){
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
 	
-
 	
 	//SHAPES!
 	
@@ -140,32 +130,36 @@ lvl1.prototype.setup = function(){
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
+	//bodyDef.setActive(true);
+	console.log(bodyDef);
 	bodyDef.type = b2Body.b2_dynamicBody;
+	bodyDef.allowSleep = false;
+	bodyDef.bullet = true;
 	fixDef.shape = new b2PolygonShape;
 	
 	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.orange);
+	this.prepShape(bodyDef, fixDef).setFillStyle('orange');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.red);
+	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.brown);
+	this.prepShape(bodyDef, fixDef).setFillStyle('darkorange');
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.purple);
+	this.prepShape(bodyDef, fixDef).setFillStyle('darkred');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
@@ -175,41 +169,69 @@ lvl1.prototype.setup = function(){
 	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
 	        .CreateFixture(fixDef)
 	        .GetShape()
-	        .prepGraphics(this.io.b2Scale).setFillStyle(this.sunset)
+	        .prepGraphics(this.io.b2Scale).setFillStyle('orange')
 	        
-	  
+	       
+	        
+	//WATER
+	this.waterFixDef.isSensor = true;
+
+	this.waterBodyDef.type = b2Body.b2_kinematicBody;
+	this.waterBodyDef.allowSleep = false;
+
+	this.waterFixDef.userData = 'water';
+
+	this.waterFixDef.shape = new b2PolygonShape;
+	this.waterFixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(100,true));
+
+	this.waterBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight+200,true));	
+	
+	this.waterObj = this.io.addObj(world.CreateBody(this.waterBodyDef)).CreateFixture(this.waterFixDef);
+
+	this.waterObj.GetShape().prepGraphics(this.io.b2Scale)
+	     .setFillStyle('rgba(0,0,255,0.7)');
+	
 
 }//SETUP
 
-lvl1.prototype.step = function(){
+lvl2.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
-		
-	//	console.log(lio.platform.GetBody());
-		lio.platform.GetBody().SetAwake(true);
-		
+		//console.log(world);
+
+
+	  var node = world.GetBodyList(); 
+	  var i = 0;
+		  while(node){
+	 		var curr = node;
+			node = node.GetNext();
+			if(curr.GetType() == b2Body.b2_dynamicBody){
+				if(curr.GetFixtureList().GetUserData() == 'blocks'){
+					i++;
+					curr.SetSleepingAllowed(false);
+				}
+			}
+		}
+
+		lio.waterObj.GetBody().SetSleepingAllowed(false);
+
+
+		//world.m_gravity.y = -0.1;
+
+		//lio.waterObj.GetBody().SetAwake(true);
+			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
 		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-		if(lio.platform.GetBody().m_xf.position.x < 5.2222){
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(5,2));
-			canvasOffset.x = -1;
-				canvasOffset.y = 1;
-				//canvasZoom.x = 1;
-		}else if (lio.platform.GetBody().m_xf.position.x > 5.3333) {
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-				canvasOffset.x = 1;
-				//canvasZoom.x = +0.1;
-					canvasOffset.y = -1;
+		if(lio.waterObj.GetBody().m_xf.position.x > 10){
+			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,0));
 		}
 		 
-		
-		//x: 5.333333333333333
-		//y: 12.333333333333334
-		
+	
 	}else {
-		this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-		lio.platform.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
-			canvasOffset.x = canvasOffset.y = 0;
+		this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,0));
+		//lio.waterObj.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
+				world.m_gravity.y = 30;
+
 	}
 	
 	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
@@ -225,11 +247,29 @@ lvl1.prototype.step = function(){
 			this.goalEffect.radius = this.goalTouchTime;
 		}
 	}
+	listener.PreSolve = function(contact){
+		//console.log(contact)
+		if(contact.GetFixtureA().GetShape().styles.fillStyle == 'darkred'){
+			//lio.water.push(contact.GetFixtureA().GetBody());
+			//console.log(contact);
+			//console.log(contact.GetFixtureB().GetUserData());
+			if(contact.GetFixtureB().GetUserData() == 'water'){
+				//console.log('pre touched block ' + contact.GetFixtureB().GetShape().styles.fillStyle);
+			}
+		}
+	}
 	listener.BeginContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
-		}	
+		}
+		
+		if(contact.GetFixtureB().GetUserData() == 'water'){
+			lio.water.push(contact.GetFixtureA().GetBody());
+			console.log(contact.GetFixtureA().GetShape().styles.fillStyle);
+			console.log('touched block ' + contact.GetFixtureA().GetShape().styles.fillStyle);
+		}
+			
 	}
 	listener.EndContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
@@ -237,10 +277,35 @@ lvl1.prototype.step = function(){
 			lio.goalTouch = undefined;
 			lio.goalEffect.radius = 0;
 		}
+		
+		if(contact.GetFixtureB().GetUserData() == 'water'){
+			var i = lio.water.indexOf(contact.GetFixtureA().GetBody());
+			if(i != -1) {
+				lio.water.splice(i, 1);
+			}
+		}
+	}
+	
+	//WATER
+	if(lio.water.length){
+		for (var i = 0, l = lio.water.length; i < l; ++i) {
+						
+			if(lio.water[i]){
+				var setCenter = b2Vec2(0,0);
+				//console.log(lio.water[i].GetFixtureList());
+				//console.log(lio.water[i].GetMass());
+				setCenter = lio.water[i].GetWorldCenter();
+				lio.water[i].SetAwake(true);
+				lio.water[i].ApplyImpulse(new b2Vec2(0,-Math.abs(lio.water[i].GetMass() / 1.95)),lio.water[i].GetWorldCenter());
+			}
+			
+			//return false;
+			//lio.water[i].SetLinearVelocity(new b2Vec2(0,-3));
+		}
 	}
 	
 }//STEP
-lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
+lvl2.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';
 	}
@@ -254,8 +319,8 @@ lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	        .prepGraphics(this.io.b2Scale); 
 };
 
-iio.AppManager.prototype.activateLevel1 = function(io){
-	this.level = new iio.lvl1(io);
+iio.AppManager.prototype.activateLevel2 = function(io){
+	this.level = new iio.lvl2(io);
 	return this.level;
 }
 

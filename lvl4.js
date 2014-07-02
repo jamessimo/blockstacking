@@ -1,6 +1,6 @@
 (function(){
 
-function lvl1(io){
+function lvl4(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -41,9 +41,9 @@ function lvl1(io){
 	
 	this.gameEnd = false;
 	   
-}; iio.lvl1 = lvl1;
+}; iio.lvl4 = lvl4;
 
-lvl1.prototype.setup = function(){
+lvl4.prototype.setup = function(){
 	this.io.setBGColor(this.black);
 	
 	var fixDef = new b2FixtureDef;
@@ -105,21 +105,55 @@ lvl1.prototype.setup = function(){
 	fixDef.friction = 1;
 	bodyDef.angle = 0;
 
-	//PLATFORM
+
+	//PLATFORM ANCHROR
+	this.platformBodyDef.type = b2Body.b2_staticBody;
+	this.platformFixDef.shape = new b2PolygonShape;
+	this.platformFixDef.isSensor = true;
+	this.platformFixDef.shape.SetAsBox(pxConv(this.cWidth/4,true),pxConv(10,true));
+	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
+	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
+
+
 	
-	this.platformBodyDef.type = b2Body.b2_kinematicBody;
+
+	//PLATFORM
+	this.platformFixDef.isSensor = false;
+	var anchor = this.platform.GetBody();
+	var joint = new b2RevoluteJointDef();
+ 	
+
+	this.platformBodyDef.type = b2Body.b2_dynamicBody;
 	this.platformFixDef.shape = new b2PolygonShape;
 	this.platformFixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
 
+	this.platformFixDef.density = 1;
 	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
 	
+
+
+
+
 	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
-   	//this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
+   //	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
+
+
+
+	joint.Initialize(this.platform.GetBody(), anchor, this.platform.GetBody().GetWorldCenter());
+
+
+   	world.CreateJoint(joint);
 
 	this.platform.GetShape().prepGraphics(this.io.b2Scale)
 	     .setFillStyle('green');
+
+
+
+	console.log(this.platform);
+	console.log(anchor)
+
+
 	
-		
 		
 	//GOAL
 	fixDef.isSensor = true;
@@ -181,37 +215,32 @@ lvl1.prototype.setup = function(){
 
 }//SETUP
 
-lvl1.prototype.step = function(){
+lvl4.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
 		
-	//	console.log(lio.platform.GetBody());
+	//	SetAngle: function (angle) {
+//SetAngularDamping: function (angularDamping) {console.log(lio.platform.GetBody());
+
+	
 		lio.platform.GetBody().SetAwake(true);
-		
-		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-		if(lio.platform.GetBody().m_xf.position.x < 5.2222){
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(5,2));
-			canvasOffset.x = -1;
-				canvasOffset.y = 1;
-				//canvasZoom.x = 1;
-		}else if (lio.platform.GetBody().m_xf.position.x > 5.3333) {
-			this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-				canvasOffset.x = 1;
-				//canvasZoom.x = +0.1;
-					canvasOffset.y = -1;
-		}
-		 
-		
-		//x: 5.333333333333333
-		//y: 12.333333333333334
+
+		lio.platform.GetBody().SetFixedRotation(false);
+
+
+	
 		
 	}else {
-		this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-		lio.platform.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
-			canvasOffset.x = canvasOffset.y = 0;
+		//.platform.SetDensity(0);
+
+		lio.platform.GetBody().SetAngle(0);
+
+		lio.platform.GetBody().SetFixedRotation(true);
+		   	//lio.platform.GetBody().SetAngle(0);
+		
 	}
-	
+
 	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
 	if(this.goalTouchTime >= this.goalTime){
 		this.gameOver = true;
@@ -240,7 +269,7 @@ lvl1.prototype.step = function(){
 	}
 	
 }//STEP
-lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
+lvl4.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';
 	}
@@ -254,8 +283,8 @@ lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	        .prepGraphics(this.io.b2Scale); 
 };
 
-iio.AppManager.prototype.activateLevel1 = function(io){
-	this.level = new iio.lvl1(io);
+iio.AppManager.prototype.activateLevel4 = function(io){
+	this.level = new iio.lvl4(io);
 	return this.level;
 }
 
