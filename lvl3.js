@@ -44,7 +44,9 @@ function lvl3(io){
 }; iio.lvl3 = lvl3;
 
 lvl3.prototype.setup = function(){
-	this.io.setBGColor(this.black);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl3.png'),-30);
+	
+	
 	
 	var fixDef = new b2FixtureDef;
 	fixDef.friction = 1;

@@ -44,7 +44,9 @@ function lvl1(io){
 }; iio.lvl1 = lvl1;
 
 lvl1.prototype.setup = function(){
-	this.io.setBGColor(this.black);
+
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl1.png'),-30);
+	
 	
 	var fixDef = new b2FixtureDef;
 	fixDef.friction = 1;
@@ -53,7 +55,7 @@ lvl1.prototype.setup = function(){
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
 	
-	
+
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(0,true));
@@ -66,7 +68,6 @@ lvl1.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 75,true));
-	
 	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
 	
 	fixDef.shape = new b2PolygonShape;
@@ -114,13 +115,10 @@ lvl1.prototype.setup = function(){
 	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
 	
 	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
-   	//this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
 
 	this.platform.GetShape().prepGraphics(this.io.b2Scale)
 	     .setFillStyle('green');
 	
-		
-		
 	//GOAL
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
@@ -195,11 +193,16 @@ lvl1.prototype.step = function(){
 			canvasOffset.x = -1;
 				canvasOffset.y = 1;
 				//canvasZoom.x = 1;
+								this.io.context.translate(canvasOffset.x, canvasOffset.y);
+
 		}else if (lio.platform.GetBody().m_xf.position.x > 5.3333) {
 			this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
 				canvasOffset.x = 1;
 				//canvasZoom.x = +0.1;
-					canvasOffset.y = -1;
+				canvasOffset.y = -1;
+
+				this.io.context.translate(canvasOffset.x, canvasOffset.y);
+
 		}
 		 
 		
@@ -210,6 +213,7 @@ lvl1.prototype.step = function(){
 		this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
 		lio.platform.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
 			canvasOffset.x = canvasOffset.y = 0;
+			this.io.context.translate(0, 0);
 	}
 	
 	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));

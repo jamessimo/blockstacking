@@ -10,7 +10,7 @@ var canvasZoom = {
 }; 
 
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn,
-menuTween;
+menuTween, nextLvlBtn, restartLvlBtn;
 var touches = [];
 //load BOX2D classes
 var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -31,19 +31,43 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
 ,	b2WorldManifold = Box2D.Collision.b2WorldManifold
 ,   b2AABB = Box2D.Collision.b2AABB;
 
+colors = [
+
+'#DB4437' ,
+'#F05722' ,
+'#E7981D' ,
+'#F4DF3B' ,
+'#CDDC39' ,
+'#65B045' ,
+'#11A9CC' ,
+'#4285F4' ,
+'#3F5CA9' ,
+'#7E3794' ,
+'#A61D4C' ,
+'#795548' ,
+'#F9F9F9' ,
+'#4D4D4D'  
+
+];
+
+
+
 var PTM = 30;
 var FPS = 60;
-var world = new b2World(new b2Vec2(0, 0),true);
+var world = new b2World(new b2Vec2(0, 30),true);
 var listener = new b2Listener;
-var level = undefined;
+var level = null;
 
 var gameOn = false;
+var gameIntro = false;
 var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
 var GAMEHEIGHT = 480;
 var GAMEWIDTH = 320;
 var scaleX = scaleY = scaleToFit = 0;
 
+var bgBlocks = 0;
+var MAXBGBLOCKS = 35;
 
 // 480;
 // 853;
@@ -102,8 +126,8 @@ function GameControl(io) {
 	
 
 	
-	//intro(io);
-	createWorld(io);
+	intro(io);
+	//createWorld(io);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -113,7 +137,7 @@ function GameControl(io) {
 	
 	
 	
-	io.context.scale(canvasZoom.x,canvasZoom.y);
+//	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 	io.setB2Framerate(FPS, function(){
@@ -128,11 +152,18 @@ function GameControl(io) {
 				pause(io);
 			}
 			else{
-				io.context.scale(canvasZoom.x,canvasZoom.y);
-				//console.log(canvasOffset.x);
-				io.context.translate(canvasOffset.x, canvasOffset.y);
+				//io.context.scale(canvasZoom.x,canvasZoom.y);
+				//io.context.translate(canvasOffset.x, canvasOffset.y);
 				level.step();
+				//create new shapes randomly
 			}
+		}else{
+			if (gameIntro && bgBlocks < MAXBGBLOCKS && Math.random()<.03){
+		        if (Math.random()<.5){
+		        	createBlock(io);
+		        	bgBlocks++;
+		        }
+		    }
 		}
 	
 
@@ -152,7 +183,7 @@ function GameControl(io) {
 		     
 		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.2)'));
 		     new TWEEN.Tween( {y: 0 } )
-		     	.to( { x:90}, 1000 )
+		     	.to( { x:pxConv(50)}, 1000 )
 		     	.easing( TWEEN.Easing.Elastic.Out)
 		     	.onUpdate( function () {
 		     		jointEffect.radius = pxConv(this.x);;
@@ -247,11 +278,13 @@ function GameControl(io) {
 		if(pauseBtn && pauseBtn.contains(newPos)){
 			level.pause = true;
 		}
-		if(level.lvlButtons){
-			for(var i = 1; i < level.lvlButtons.length ; i++){
-				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-					createWorld(io,i);
-					return false;
+		if(level){
+			if(level.lvlButtons){
+				for(var i = 1; i < level.lvlButtons.length ; i++){
+					if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
+						createWorld(io,i);
+						return false;
+					}
 				}
 			}
 		}
@@ -281,6 +314,18 @@ function GameControl(io) {
 			else 
 				level.gameWin = true
 		}
+		if (iio.keyCodeIs('r', this.event)){
+			createWorld(io,currentLvl);
+		}
+		if (iio.keyCodeIs('l', this.event)){
+			createWorld(io);
+		}
+		if (iio.keyCodeIs('p', this.event)){
+			if(level.pause == true)
+				resume(io);	
+			else 
+				pause(io);	
+		}
 		
 	});
 	//CLICK EVENTS
@@ -288,7 +333,7 @@ function GameControl(io) {
 	io.canvas.addEventListener('mouseup', mouseUp);
 	io.canvas.addEventListener('mousedown', function(e){
 		mouseDown(e);
-		var newPos = io.getEventPosition(e);
+		 var newPos = io.getEventPosition(e);
 		newPos.x = pxConv(io.getEventPosition(e).x)*scaleX;
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
         if (btn && btn.contains(newPos)){
@@ -300,7 +345,16 @@ function GameControl(io) {
 		if(unPauseBtn && unPauseBtn.contains(newPos)){
 			resume(io);	
 		}
-		if(level.lvlButtons){
+		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
+			createWorld(io, currentLvl);
+		}
+		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
+			if(currentLvl <= 5)
+				createWorld(io, currentLvl+1);
+			else
+				createWorld(io, currentLvl);
+		}
+		if(gameOn && level.lvlButtons){
 			for(var i = 1; i < level.lvlButtons.length ; i++){
 				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
 					createWorld(io,i);
@@ -313,8 +367,6 @@ function GameControl(io) {
     this.focusOff = function(e){
        mouseUp(e);
  	}
- 	
-    
 };
 
 function pause(io){
@@ -367,12 +419,12 @@ function winGame(io){
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
 	  
-	//SHOW GAMEOVER BUTTON      		      
-	btn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
+	//SHOW NEXT LEVEL BUTTON      		      
+	nextLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
 		.setRoundingRadius(10)
 		.setStrokeStyle('#4385f6').setLineWidth(2)
 		.setFillStyle('#4385f6'),20);
-	btn.text = io.addToGroup('MENU', new iio.Text('Next Level',btn.pos)
+	nextLvlBtn.text = io.addToGroup('MENU', new iio.Text('Next Level',nextLvlBtn.pos)
 		.setFont(pxConv(20)+'px OpenSans')
 		.translate(0,pxConv(10))
 		.setTextAlign('center')
@@ -401,10 +453,10 @@ function winGame(io){
 		.to( { y:io.canvas.height/2}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
 		.onUpdate( function () {
-			if(btn){
-				btn.pos.y = this.y+50;
-				btn.text.pos.y = this.y+50;
-				btn.text.translate(0,pxConv(8));
+			if(nextLvlBtn){
+				nextLvlBtn.pos.y = this.y+50;
+				nextLvlBtn.text.pos.y = this.y+50;
+				nextLvlBtn.text.translate(0,pxConv(8));
 			}
 		} )
 		.delay(1000)
@@ -425,11 +477,11 @@ function gameOver(io){
 		.setFillStyle('white'),20);
 	  
 	//SHOW GAMEOVER BUTTON      		      
-	btn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
+	restartLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
 		.setRoundingRadius(10)
 		.setStrokeStyle('#4385f6').setLineWidth(2)
 		.setFillStyle('#4385f6'),20);
-	btn.text = io.addToGroup('MENU', new iio.Text('Restart',btn.pos)
+	restartLvlBtn.text = io.addToGroup('MENU', new iio.Text('Restart',restartLvlBtn.pos)
 		.setFont(pxConv(20)+'px OpenSans')
 		.translate(0,pxConv(10))
 		.setTextAlign('center')
@@ -458,10 +510,10 @@ function gameOver(io){
 		.to( { y:io.canvas.height/2}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
 		.onUpdate( function () {
-			if(btn){
-				btn.pos.y = this.y+50;
-				btn.text.pos.y = this.y+50;
-				btn.text.translate(0,pxConv(8));
+			if(restartLvlBtn){
+				restartLvlBtn.pos.y = this.y+50;
+				restartLvlBtn.text.pos.y = this.y+50;
+				restartLvlBtn.text.translate(0,pxConv(8));
 			}
 		} )
 		.delay(1000)
@@ -473,25 +525,27 @@ function gameOver(io){
 
 function intro(io){
 	
+
 	io.setBGColor('#ccc');
+	io.addToGroup('BACKGROUND',new iio.Rect(GAMEWIDTH/2,GAMEHEIGHT/2,GAMEWIDTH,GAMEHEIGHT).addImage('img/mountain.png'),-30);
+
 
 	//SHOW LOGO
 	var logo = io.addToGroup('MENU',(new iio.Text('Block Stacking!',iio.Vec.add(io.canvas.width,0,0,0)))
-		.setFont(pxConv(60)+'px OpenSans')
+		.setFont(pxConv(30)+'px OpenSans')
 		.setTextAlign('center')
 		.setAlpha(0)
 		.setFillStyle('white'),20);
 
 	//SHOW START BUTTON      		      
-	btn = io.addObj(new iio.Rect(io.canvas.width/2,io.canvas.height+pxConv(100), pxConv(160), pxConv(60))
-	    .setRoundingRadius(pxConv(20))
+	btn = io.addObj(new iio.Rect(io.canvas.width/2,io.canvas.height+pxConv(50), pxConv(100), pxConv(60))
+	    .setRoundingRadius(pxConv(10))
 	    .setStrokeStyle('#4385f6')
 	    .setFillStyle('#4385f6')
-	    .setShadow('#386ad5',pxConv(2.5),pxConv(2.5),0)
 	    );
 	
 	btn.text = io.addToGroup('MENU',new iio.Text('Start',btn.pos)
-		.setFont(pxConv(30)+'px OpenSans')
+		.setFont(pxConv(20)+'px OpenSans')
 		.translate(0,pxConv(9))
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
@@ -509,7 +563,7 @@ function intro(io){
 		.start();
 				
 	new TWEEN.Tween( { x: 0, y: io.canvas.height})
-		.to( { x: io.canvas.width/2,y: io.canvas.height/2 + 150}, 1000 )
+		.to( { x: io.canvas.width/2,y: io.canvas.height/2 + 50}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
 		.onUpdate( function () {
 			if(btn){
@@ -519,7 +573,37 @@ function intro(io){
 			}
 		} )
 		.delay(2000)
+		.onComplete(function(){gameIntro = true;})
 		.start();
+
+
+
+	var fixDef = new b2FixtureDef;
+	fixDef.friction = 1;
+	fixDef.restitution = 0.5;
+	
+	var bodyDef = new b2BodyDef;
+	bodyDef.type = b2Body.b2_staticBody;
+	
+
+	//GROUND
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(10,true));
+	bodyDef.position.Set(pxConv(GAMEWIDTH/2,true),pxConv(GAMEHEIGHT,true));
+	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+
+	//BASIN WALLS
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(GAMEHEIGHT/2,true));
+	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT/2,true));
+	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(GAMEHEIGHT/2,true));
+	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
+	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+
 }
 function createWorld(io,levelNumber){
 	gameOn = true;
@@ -527,10 +611,10 @@ function createWorld(io,levelNumber){
 		world = null;
 		
 	io.rmvAll();
-	btn = undefined;    
+	btn = restartLvlBtn = nextLvlBtn = undefined;    
     //create the box2d world
 	world = io.addB2World(new b2World(
-    new b2Vec2(0, 30)    //gravity
+    new b2Vec2(0, 30 * PIXEL_RATIO)    //gravity
    	,true                 //allow sleep
 	));
 
@@ -542,13 +626,14 @@ function createWorld(io,levelNumber){
 	}
 	
 	world.SetContactListener(listener);
-	console.log(level);
+	//console.log(level);
 	if(level)
-	level.setup();
+		level.setup();
+	else
+		level = null;
 	
+	gameIntro = false;
 	//pause BUTTON
-	
-	/*pauseBtn = io.addToGroup('PAUSE',new iio.Rect(pxConv(50),pxConv(50), pxConv(50), pxConv(50)).setFillStyle('#fff')).addObj(new iio.SimpleRect(pxConv(20),pxConv(20)).addImage('img/star.png').setImgSize(20,20));*/
 	
 	
 	/*.
@@ -568,10 +653,54 @@ function createWorld(io,levelNumber){
 	
 }
 
+function prepShape(io,bodyDef, fixDef,group,zIndex){
+	if(!group){
+		group = 'worldObj';
+	}
+	if(!zIndex){
+		zIndex = 0;
+	}
+
+	return  io.addToGroup(group,world.CreateBody(bodyDef),zIndex)
+	        .CreateFixture(fixDef)
+	        .GetShape()
+	        .prepGraphics(io.b2Scale); 
+};
+
 function pxConv(x,box2dconv){
 	x = x * PIXEL_RATIO;
 	if(box2dconv == true){
 		x = x / PTM;
 	}
 	return x;
+}
+
+//create a block
+function createBlock(io){
+	var fixDef = new b2FixtureDef;
+	fixDef = new b2FixtureDef;
+	fixDef.friction = 0.3;
+	fixDef.restitution = 0.3;
+	fixDef.density = 5;
+	height = iio.getRandomNum(.3,1.5);
+	width = iio.getRandomNum(.2,1.5);
+	var bodyDef = new b2BodyDef;
+	bodyDef.angle = height;
+
+	bodyDef.type = b2Body.b2_dynamicBody;
+	fixDef.shape = new b2PolygonShape;
+
+	x = iio.getRandomNum(0, GAMEWIDTH);
+
+
+	
+	bodyDef.type = b2Body.b2_dynamicBody;
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(height, width);
+
+	color = iio.getRandomNum(0,colors.length-1)
+	color = Math.round(color)
+
+	bodyDef.position.Set(pxConv(x,true),pxConv(-100,true));
+	prepShape(io,bodyDef, fixDef).setFillStyle(colors[color]);
 }

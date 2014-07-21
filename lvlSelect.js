@@ -20,6 +20,8 @@ function lvlSelect(io){
 
 lvlSelect.prototype.setup = function(){
 	this.io.setBGColor('white');
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'mountain.png'),-30);
+	
 	this.io.addToGroup('LEVEL',(new iio.Text('Level Select!',iio.Vec.add(pxConv(this.cWidth/2),pxConv(60),0,0)))
 		.setFont(pxConv(40)+'px OpenSans')
 		.setTextAlign('center')

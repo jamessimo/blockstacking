@@ -34,7 +34,9 @@ function lvl2(io){
 }; iio.lvl2 = lvl2;
 
 lvl2.prototype.setup = function(){
-	this.io.setBGColor('black');
+
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl2.png'),-30);
+	
 	
 	
 	var fixDef = new b2FixtureDef;
@@ -123,6 +125,7 @@ lvl2.prototype.setup = function(){
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
 	
+	fixDef.isSensor = false;
 	
 	//SHAPES!
 	
@@ -130,11 +133,12 @@ lvl2.prototype.setup = function(){
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
-	//bodyDef.setActive(true);
+	bodyDef.active = true;
 	console.log(bodyDef);
 	bodyDef.type = b2Body.b2_dynamicBody;
-	bodyDef.allowSleep = false;
-	bodyDef.bullet = true;
+	bodyDef.allowSleep = true;
+	fixDef.userData = 'blocks';
+	bodyDef.bullet = false;
 	fixDef.shape = new b2PolygonShape;
 	
 	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
@@ -163,14 +167,9 @@ lvl2.prototype.setup = function(){
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	/*this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);*/
+	this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',2);
 	
-	
-	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
-	        .CreateFixture(fixDef)
-	        .GetShape()
-	        .prepGraphics(this.io.b2Scale).setFillStyle('orange')
-	        
+
 	       
 	        
 	//WATER
@@ -178,18 +177,25 @@ lvl2.prototype.setup = function(){
 
 	this.waterBodyDef.type = b2Body.b2_kinematicBody;
 	this.waterBodyDef.allowSleep = false;
+	this.waterBodyDef.active = true;
 
 	this.waterFixDef.userData = 'water';
 
 	this.waterFixDef.shape = new b2PolygonShape;
-	this.waterFixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(100,true));
+	this.waterFixDef.shape.SetAsBox(pxConv(this.cWidth,true),pxConv(200,true));
 
 	this.waterBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight+200,true));	
 	
+	
+
+
 	this.waterObj = this.io.addObj(world.CreateBody(this.waterBodyDef)).CreateFixture(this.waterFixDef);
+
+//this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
 
 	this.waterObj.GetShape().prepGraphics(this.io.b2Scale)
 	     .setFillStyle('rgba(0,0,255,0.7)');
+
 	
 
 }//SETUP
@@ -198,8 +204,11 @@ lvl2.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
-		//console.log(world);
-
+		/*console.log('--------')
+		console.log(this.waterObj.GetBody().IsAwake());
+		console.log(this.waterObj.GetBody().IsActive());
+		console.log(this.waterObj.GetBody().IsSleepingAllowed());
+		*/
 
 	  var node = world.GetBodyList(); 
 	  var i = 0;
@@ -208,22 +217,28 @@ lvl2.prototype.step = function(){
 			node = node.GetNext();
 			if(curr.GetType() == b2Body.b2_dynamicBody){
 				if(curr.GetFixtureList().GetUserData() == 'blocks'){
-					i++;
-					curr.SetSleepingAllowed(false);
+
 				}
 			}
 		}
 
-		lio.waterObj.GetBody().SetSleepingAllowed(false);
+		//lio.waterObj.GetBody().SetSleepingAllowed(false);
 
 
 		//world.m_gravity.y = -0.1;
 
 		//lio.waterObj.GetBody().SetAwake(true);
-			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
+
+		//	var oldPos = this.waterObj.GetBody().GetPosition();
+		//	oldPos.y -= 0.05;
+//this.waterObj.GetBody().SetPosition(oldPos);
+
 		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-		if(lio.waterObj.GetBody().m_xf.position.x > 10){
+		if(pxConv(lio.waterObj.GetBody().GetPosition().y*PTM) < pxConv(this.cHeight - 100)){
 			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,0));
+
+		}else{
+			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
 		}
 		 
 	
@@ -264,11 +279,17 @@ lvl2.prototype.step = function(){
 			lio.goal = contact.GetFixtureB();
 		}
 		
-		if(contact.GetFixtureB().GetUserData() == 'water'){
-			lio.water.push(contact.GetFixtureA().GetBody());
+		if(contact.GetFixtureA().GetUserData() == 'water'){
+			//console.log(lio.waterObj.SetSensor(true));
+			lio.water.push(contact.GetFixtureB().GetBody());
+
 			console.log(contact.GetFixtureA().GetShape().styles.fillStyle);
 			console.log('touched block ' + contact.GetFixtureA().GetShape().styles.fillStyle);
+		}		
+		if(contact.GetFixtureB().GetUserData() == 'water'){
+			lio.water.push(contact.GetFixtureA().GetBody());
 		}
+
 			
 	}
 	listener.EndContact = function(contact) {
@@ -278,6 +299,12 @@ lvl2.prototype.step = function(){
 			lio.goalEffect.radius = 0;
 		}
 		
+		if(contact.GetFixtureA().GetUserData() == 'water'){
+			var i = lio.water.indexOf(contact.GetFixtureB().GetBody());
+			if(i != -1) {
+				lio.water.splice(i, 1);
+			}
+		}
 		if(contact.GetFixtureB().GetUserData() == 'water'){
 			var i = lio.water.indexOf(contact.GetFixtureA().GetBody());
 			if(i != -1) {

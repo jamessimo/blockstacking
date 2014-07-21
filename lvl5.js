@@ -10,17 +10,17 @@ function lvl5(io){
 	this.totalResources = 5;
 	
 	//COLOR PALLET
-	this.red = '#DB4437';
+	this.red = '#C91E1B';
 	this.sunset = '#F05722';
-	this.orange = '#E7981D';
-	this.yellow = '#F4DF3B';
-	this.lime = '#CDDC39';
-	this.green = '#65B045';
-	this.turquoise = '#11A9CC';
-	this.blue = '#4285F4';
-	this.navy = '#3F5CA9';
-	this.purple = '#7E3794';
-	this.burgundy = '#A61D4C';
+	this.orange = '#E35D08';
+	this.yellow = '#EFC318';
+	this.lime = '#ABB82C';
+	this.green = '#13774F';
+	this.turquoise = '#117BB3';
+	this.blue = '#3158DC';
+	this.navy = '#332D8C';
+	this.purple = '#4A1A84';
+	this.burgundy = '#730835';
 	this.brown = '#795548';
 	this.white = '#F9F9F9';
 	this.black = '#4D4D4D';
@@ -44,8 +44,10 @@ function lvl5(io){
 }; iio.lvl5 = lvl5;
 
 lvl5.prototype.setup = function(){
+
 	this.io.setBGColor(this.black);
-	
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl5.png'),-30);
+
 	var fixDef = new b2FixtureDef;
 	fixDef.friction = 1;
 	fixDef.restitution = 0.5;
@@ -117,7 +119,7 @@ lvl5.prototype.setup = function(){
    	//this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
 
 	this.platform.GetShape().prepGraphics(this.io.b2Scale)
-	     .setFillStyle('green');
+	.setFillStyle(this.green);
 	
 		
 		
@@ -146,15 +148,15 @@ lvl5.prototype.setup = function(){
 	
 	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.navy);
 	
 	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.turquoise);
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.orange);
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.sunset);
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
@@ -162,22 +164,23 @@ lvl5.prototype.setup = function(){
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.brown);
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.blue).setStrokeStyle(this.black,2);
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(this.purple);
 	
-	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	/*this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);*/
+
 	
+	fixDef.shape.SetAsArray([
+			new b2Vec2(pxConv(-80,true)/4, pxConv(-0,true)/4), 
+			new b2Vec2(pxConv(80,true)/4, pxConv(-0,true)/4), 
+			new b2Vec2(pxConv(120,true)/4, pxConv(120,true)/4), 
+			new b2Vec2(pxConv(-120,true)/4, pxConv(120,true)/4)
+		]);
+bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
 	
-	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
-	        .CreateFixture(fixDef)
-	        .GetShape()
-	        .prepGraphics(this.io.b2Scale).setFillStyle(this.sunset)
-	        
+	    this.prepShape(bodyDef, fixDef).setFillStyle(this.burgundy);    
 	  
 
 }//SETUP
