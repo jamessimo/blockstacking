@@ -34,7 +34,11 @@ function lvl1(io){
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
-	gameWin = 
+	
+	this.platform = undefined;
+	this.platformBodyDef = new b2BodyDef;
+	this.platformFixDef = new b2FixtureDef;
+	
 	this.gameEnd = false;
 	   
 }; iio.lvl1 = lvl1;
@@ -104,14 +108,17 @@ lvl1.prototype.setup = function(){
 
 	//PLATFORM
 	
-	bodyDef.type = b2Body.b2_kinematicBody;
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
+	this.platformBodyDef.type = b2Body.b2_kinematicBody;
+	this.platformFixDef.shape = new b2PolygonShape;
+	this.platformFixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
 
-	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
+	
+	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
 
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.green);
-
+	this.platform.GetShape().prepGraphics(this.io.b2Scale)
+	     .setFillStyle('green');
+	
 	//GOAL
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
@@ -133,9 +140,16 @@ lvl1.prototype.setup = function(){
 	fixDef.density = 5;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
-
 	
-	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.5,true),pxConv(this.MAX_SIZE*1.5,true));
+	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	
+	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
+	
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(this.orange);
 	
@@ -143,15 +157,23 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(this.red);
 	
-	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/1.5,true));
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(this.brown);
+	
+	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(this.purple);
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.sunset).setStrokeStyle('darkorange',2);
+	/*this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);*/
 	
-
+	
+	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
+	        .CreateFixture(fixDef)
+	        .GetShape()
+	        .prepGraphics(this.io.b2Scale).setFillStyle(this.sunset)
 	        
 	  
 
@@ -162,13 +184,42 @@ lvl1.prototype.step = function(){
 	
 	if(this.gameEnd == true){
 		
+	//	console.log(lio.platform.GetBody());
+		lio.platform.GetBody().SetAwake(true);
+		
+		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
+		if(lio.platform.GetBody().m_xf.position.x < 5.2222){
+			this.platform.GetBody().SetLinearVelocity(new b2Vec2(5,2));
+			canvasOffset.x = -1;
+				canvasOffset.y = 1;
+				//canvasZoom.x = 1;
+								this.io.context.translate(canvasOffset.x, canvasOffset.y);
 
+		}else if (lio.platform.GetBody().m_xf.position.x > 5.3333) {
+			this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
+				canvasOffset.x = 1;
+				//canvasZoom.x = +0.1;
+				canvasOffset.y = -1;
+
+				this.io.context.translate(canvasOffset.x, canvasOffset.y);
+
+		}
+		 
+		
+		//x: 5.333333333333333
+		//y: 12.333333333333334
+		
+	}else {
+		this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
+		lio.platform.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
+			canvasOffset.x = canvasOffset.y = 0;
+			this.io.context.translate(0, 0);
 	}
 	
+	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
 	if(this.goalTouchTime >= this.goalTime){
-		this.gameWin = true;
+		this.gameOver = true;
 	}
-	
 	if(this.goalTouch){
 		if(this.goalTouch.GetBody() != selectedBody){
 			this.goalEffect.radius = this.goalTouchTime;

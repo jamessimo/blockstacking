@@ -51,6 +51,24 @@ colors = [
 ];
 
 
+//COLOR PALLET
+this.red = '#DB4437';
+this.sunset = '#F05722';
+this.orange = '#E7981D';
+this.yellow = '#F4DF3B';
+this.lime = '#CDDC39';
+this.green = '#65B045';
+this.turquoise = '#11A9CC';
+this.blue = '#4285F4';
+this.navy = '#3F5CA9';
+this.purple = '#7E3794';
+this.burgundy = '#A61D4C';
+this.brown = '#795548';
+this.white = '#F9F9F9';
+this.black = '#4D4D4D';
+this.grey = '#CCCCCC';
+
+
 
 var PTM = 30;
 var FPS = 60;
@@ -372,7 +390,7 @@ function GameControl(io) {
 function pause(io){
 		
 	gameoverText = io.addToGroup('MENU',(new iio.Text('- PAUSED -',iio.Vec.add(io.canvas.width/2,io.canvas.height/2-pxConv(40),0,0)))
-		.setFont(pxConv(60)+'px OpenSans')
+		.setFont(pxConv(60)+'px KGWhattheTeacherWants')
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
 
@@ -525,14 +543,12 @@ function gameOver(io){
 
 function intro(io){
 	
-
-	io.setBGColor('#ccc');
 	io.addToGroup('BACKGROUND',new iio.Rect(GAMEWIDTH/2,GAMEHEIGHT/2,GAMEWIDTH,GAMEHEIGHT).addImage('img/mountain.png'),-30);
 
 
 	//SHOW LOGO
 	var logo = io.addToGroup('MENU',(new iio.Text('Block Stacking!',iio.Vec.add(io.canvas.width,0,0,0)))
-		.setFont(pxConv(30)+'px OpenSans')
+		.setFont(pxConv(30)+'px KGWhattheTeacherWants')
 		.setTextAlign('center')
 		.setAlpha(0)
 		.setFillStyle('white'),20);
@@ -545,7 +561,7 @@ function intro(io){
 	    );
 	
 	btn.text = io.addToGroup('MENU',new iio.Text('Start',btn.pos)
-		.setFont(pxConv(20)+'px OpenSans')
+		.setFont(pxConv(20)+'px KGWhattheTeacherWants')
 		.translate(0,pxConv(9))
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
