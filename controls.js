@@ -296,6 +296,15 @@ function GameControl(io) {
 		if(pauseBtn && pauseBtn.contains(newPos)){
 			level.pause = true;
 		}
+		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
+			createWorld(io, currentLvl);
+		}
+		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
+			if(currentLvl <= 5)
+				createWorld(io, currentLvl+1);
+			else
+				createWorld(io, currentLvl);
+		}
 		if(level){
 			if(level.lvlButtons){
 				for(var i = 1; i < level.lvlButtons.length ; i++){
@@ -543,7 +552,7 @@ function gameOver(io){
 
 function intro(io){
 	
-	io.addToGroup('BACKGROUND',new iio.Rect(GAMEWIDTH/2,GAMEHEIGHT/2,GAMEWIDTH,GAMEHEIGHT).addImage('img/mountain.png'),-30);
+	io.addToGroup('BACKGROUND',new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2),pxConv(GAMEWIDTH),pxConv(GAMEHEIGHT)).addImage('img/mountain.png'),-30);
 
 
 	//SHOW LOGO

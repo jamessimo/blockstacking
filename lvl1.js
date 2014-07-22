@@ -113,6 +113,7 @@ lvl1.prototype.setup = function(){
 	this.prepShape(bodyDef, fixDef).setFillStyle(this.green);
 
 	//GOAL
+	bodyDef.type = b2Body.b2_staticBody;
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
 	fixDef.shape = new b2PolygonShape;
