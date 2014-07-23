@@ -31,44 +31,37 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
 ,	b2WorldManifold = Box2D.Collision.b2WorldManifold
 ,   b2AABB = Box2D.Collision.b2AABB;
 
-colors = [
+var colors = new Array();
 
-'#DB4437' ,
-'#F05722' ,
-'#E7981D' ,
-'#F4DF3B' ,
-'#CDDC39' ,
-'#65B045' ,
-'#11A9CC' ,
-'#4285F4' ,
-'#3F5CA9' ,
-'#7E3794' ,
-'#A61D4C' ,
-'#795548' ,
-'#F9F9F9' ,
-'#4D4D4D'  
-
-];
-
-
-//COLOR PALLET
-this.red = '#DB4437';
-this.sunset = '#F05722';
-this.orange = '#E7981D';
-this.yellow = '#F4DF3B';
-this.lime = '#CDDC39';
-this.green = '#65B045';
-this.turquoise = '#11A9CC';
-this.blue = '#4285F4';
-this.navy = '#3F5CA9';
-this.purple = '#7E3794';
-this.burgundy = '#A61D4C';
-this.brown = '#795548';
-this.white = '#F9F9F9';
-this.black = '#4D4D4D';
-this.grey = '#CCCCCC';
-
-
+colors[0] = ['#DB4437','#D3362D'];
+colors[1] = ['#F05722','#E3421E'];
+colors[2] = ['#E7981D','#E05C16'];
+colors[3] = ['#F4DF3B','#EBC12C'];
+colors[4] = ['#CDDC39','#B9C246'];
+colors[5] = ['#65B045','#4F8742'];
+colors[6] = ['#11A9CC','#1B7DB1'];
+colors[7] = ['#4285F4','#355BD8'];
+colors[8] = ['#3F5CA9','#34318A'];
+colors[9] = ['#7E3794','#491F81'];
+colors[10] = ['#A61D4C','#720D37'];
+colors[11] = ['#795548','#451F14'];
+colors[12] = ['#4D4D4D','#151515'];
+	
+	/*this.red = '#DB4437';
+	this.sunset = '#F05722';
+	this.orange = '#E7981D';
+	this.yellow = '#F4DF3B';
+	this.lime = '#CDDC39';
+	this.green = '#65B045';
+	this.turquoise = '#11A9CC';
+	this.blue = '#4285F4';
+	this.navy = '#3F5CA9';
+	this.purple = '#7E3794';
+	this.burgundy = '#A61D4C';
+	this.brown = '#795548';
+	this.white = '#F9F9F9';
+	this.black = '#4D4D4D';
+	this.grey = '#CCCCCC';*/
 
 var PTM = 30;
 var FPS = 60;
@@ -80,6 +73,7 @@ var gameOn = false;
 var gameIntro = false;
 var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
+var MAX_LEVELS = 5
 var GAMEHEIGHT = 480;
 var GAMEWIDTH = 320;
 var scaleX = scaleY = scaleToFit = 0;
@@ -136,16 +130,18 @@ function GameControl(io) {
 	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
 	
-	 
+	localStorage["level.1"] = true;
+
 	io.addB2World(world);
+
 	/*var sound = new Howl({
 		urls: ['music/FirstClassLounging.mp3']
 	}).play();*/
 	
-
+	//supports_html5_storage();
 	
-	intro(io);
-	//createWorld(io);
+	//intro(io);
+	createWorld(io);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -199,7 +195,7 @@ function GameControl(io) {
 		     
 		     clickedObjCenter = md.bodyB.m_xf.position
 		     
-		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.2)'));
+		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.4)'));
 		     new TWEEN.Tween( {y: 0 } )
 		     	.to( { x:pxConv(50)}, 1000 )
 		     	.easing( TWEEN.Easing.Elastic.Out)
@@ -309,7 +305,9 @@ function GameControl(io) {
 			if(level.lvlButtons){
 				for(var i = 1; i < level.lvlButtons.length ; i++){
 					if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-						createWorld(io,i);
+						if(localStorage["level." + i] == "true"){
+							createWorld(io,i);
+						}
 						return false;
 					}
 				}
@@ -376,15 +374,18 @@ function GameControl(io) {
 			createWorld(io, currentLvl);
 		}
 		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
-			if(currentLvl <= 5)
+			if(currentLvl <= MAX_LEVELS)
 				createWorld(io, currentLvl+1);
 			else
 				createWorld(io, currentLvl);
 		}
 		if(gameOn && level.lvlButtons){
 			for(var i = 1; i < level.lvlButtons.length ; i++){
+
 				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-					createWorld(io,i);
+					if(localStorage["level." + i] == "true"){
+						createWorld(io,i);
+					}
 					return false;
 				}
 			}
@@ -439,6 +440,15 @@ function resume(io){
 function winGame(io){
 	gameOn = false;
 
+
+ 	if (supports_html5_storage() != false) { 
+
+ 		var saveLvl = currentLvl + 1;
+ 		localStorage["level." + saveLvl] = true;
+
+ 		console.log('level ' + saveLvl + ' is unlocked');
+ 	}
+   
 	//SHOW WIN TEXT
 
 	var gameoverText = io.addToGroup('MENU',(new iio.Text('Level ' + currentLvl + ' Clear!',iio.Vec.add(io.canvas.width/2,-pxConv(60),0,0)))
@@ -615,19 +625,19 @@ function intro(io){
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(10,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH/2,true),pxConv(GAMEHEIGHT,true));
-	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+	prepShape(io,bodyDef, fixDef).setFillStyle(colors[3][0]);
 
 	//BASIN WALLS
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT/2,true));
-	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+	prepShape(io,bodyDef, fixDef).setFillStyle(colors[5][0]);
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
-	prepShape(io,bodyDef, fixDef).setFillStyle('blue');
+	prepShape(io,bodyDef, fixDef).setFillStyle(colors[2][0]);
 
 }
 function createWorld(io,levelNumber){
@@ -700,6 +710,16 @@ function pxConv(x,box2dconv){
 	return x;
 }
 
+function supports_html5_storage() {
+  try {
+  	console.log('ya storage');
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+  	console.log('nope');
+    return false;
+  }
+}
+
 //create a block
 function createBlock(io){
 	var fixDef = new b2FixtureDef;
@@ -727,5 +747,5 @@ function createBlock(io){
 	color = Math.round(color)
 
 	bodyDef.position.Set(pxConv(x,true),pxConv(-100,true));
-	prepShape(io,bodyDef, fixDef).setFillStyle(colors[color]);
+	prepShape(io,bodyDef, fixDef).setFillStyle(colors[color][0]).setStrokeStyle(colors[color][1],2);
 }

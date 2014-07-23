@@ -38,7 +38,7 @@ function lvl3(io){
 	this.platform = undefined;
 	this.platformBodyDef = new b2BodyDef;
 	this.platformFixDef = new b2FixtureDef;
-	
+	this.gameWin,
 	this.gameEnd = false;
 	   
 }; iio.lvl3 = lvl3;
@@ -214,7 +214,7 @@ lvl3.prototype.step = function(){
 	
 	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
 	if(this.goalTouchTime >= this.goalTime){
-		this.gameOver = true;
+		this.gameWin = true;
 	}
 	if(this.goalTouch){
 		if(this.goalTouch.GetBody() != selectedBody){

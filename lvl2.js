@@ -17,18 +17,7 @@ function lvl2(io){
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
-	
-	this.platform = undefined;
-	this.platformBodyDef = new b2BodyDef;
-	this.platformFixDef = new b2FixtureDef;
-	
-
-	this.water = [];
-
-	this.waterObj = undefined;
-	this.waterBodyDef = new b2BodyDef;
-	this.waterFixDef = new b2FixtureDef;
-	
+	this.gameWin = 
 	this.gameEnd = false;
 	   
 }; iio.lvl2 = lvl2;
@@ -74,45 +63,38 @@ lvl2.prototype.setup = function(){
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
-		bodyDef.angle=-Math.PI/6;
+	bodyDef.angle=-Math.PI/6;
 	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(this.cHeight - 320,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
-		bodyDef.angle=Math.PI/6;
+	bodyDef.angle=Math.PI/6;
 	bodyDef.position.Set(pxConv(this.cWidth + 100,true),pxConv(this.cHeight - 320,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('red');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
-		bodyDef.angle=-Math.PI/3;
+	bodyDef.angle=-Math.PI/3;
 	bodyDef.position.Set(pxConv(this.cWidth + 30,true),pxConv(-110,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
-		bodyDef.angle=Math.PI/3;
+	bodyDef.angle = Math.PI/3;
 	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.friction = 1;
-		bodyDef.angle = 0;
+	bodyDef.angle = 0;
+
+
 	//PLATFORM
-	
-	this.platformBodyDef.type = b2Body.b2_kinematicBody;
-	this.platformFixDef.shape = new b2PolygonShape;
-	this.platformFixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
-
-	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
-	
-	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
-   	//this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-
-	this.platform.GetShape().prepGraphics(this.io.b2Scale)
-	     .setFillStyle('green');
-	
-		
+	bodyDef.type = b2Body.b2_staticBody;
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]);
 		
 	//GOAL
 	fixDef.isSensor = true;
@@ -141,62 +123,26 @@ lvl2.prototype.setup = function(){
 	bodyDef.bullet = false;
 	fixDef.shape = new b2PolygonShape;
 	
-	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
-	
-	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
-	
+
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('orange');
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[2][0]).setStrokeStyle(colors[2][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('red');
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[3][0]).setStrokeStyle(colors[3][1],pxConv(2));
 	
-	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE/1.5,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('darkorange');
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[4][0]).setStrokeStyle(colors[4][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('darkred');
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[6][0]).setStrokeStyle(colors[6][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',2);
-	
-
-	       
-	        
-	//WATER
-	this.waterFixDef.isSensor = true;
-
-	this.waterBodyDef.type = b2Body.b2_kinematicBody;
-	this.waterBodyDef.allowSleep = false;
-	this.waterBodyDef.active = true;
-
-	this.waterFixDef.userData = 'water';
-
-	this.waterFixDef.shape = new b2PolygonShape;
-	this.waterFixDef.shape.SetAsBox(pxConv(this.cWidth,true),pxConv(200,true));
-
-	this.waterBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight+200,true));	
-	
-	
-
-
-	this.waterObj = this.io.addObj(world.CreateBody(this.waterBodyDef)).CreateFixture(this.waterFixDef);
-
-//this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
-
-	this.waterObj.GetShape().prepGraphics(this.io.b2Scale)
-	     .setFillStyle('rgba(0,0,255,0.7)');
-
-	
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[7][0]).setStrokeStyle(colors[7][1],pxConv(2));
 
 }//SETUP
 
@@ -204,54 +150,11 @@ lvl2.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
-		/*console.log('--------')
-		console.log(this.waterObj.GetBody().IsAwake());
-		console.log(this.waterObj.GetBody().IsActive());
-		console.log(this.waterObj.GetBody().IsSleepingAllowed());
-		*/
-
-	  var node = world.GetBodyList(); 
-	  var i = 0;
-		  while(node){
-	 		var curr = node;
-			node = node.GetNext();
-			if(curr.GetType() == b2Body.b2_dynamicBody){
-				if(curr.GetFixtureList().GetUserData() == 'blocks'){
-
-				}
-			}
-		}
-
-		//lio.waterObj.GetBody().SetSleepingAllowed(false);
-
-
-		//world.m_gravity.y = -0.1;
-
-		//lio.waterObj.GetBody().SetAwake(true);
-
-		//	var oldPos = this.waterObj.GetBody().GetPosition();
-		//	oldPos.y -= 0.05;
-//this.waterObj.GetBody().SetPosition(oldPos);
-
-		//this.platform.GetBody().SetLinearVelocity(new b2Vec2(-5,-2));
-		if(pxConv(lio.waterObj.GetBody().GetPosition().y*PTM) < pxConv(this.cHeight - 100)){
-			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-
-		}else{
-			this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,-2));
-		}
-		 
-	
-	}else {
-		this.waterObj.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-		//lio.waterObj.GetBody().SetPosition(new b2Vec2(5.4444,12.333))
-				world.m_gravity.y = 30;
 
 	}
 	
-	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
 	if(this.goalTouchTime >= this.goalTime){
-		this.gameOver = true;
+		this.gameWin = true;
 	}
 	if(this.goalTouch){
 		if(this.goalTouch.GetBody() != selectedBody){
@@ -262,72 +165,18 @@ lvl2.prototype.step = function(){
 			this.goalEffect.radius = this.goalTouchTime;
 		}
 	}
-	listener.PreSolve = function(contact){
-		//console.log(contact)
-		if(contact.GetFixtureA().GetShape().styles.fillStyle == 'darkred'){
-			//lio.water.push(contact.GetFixtureA().GetBody());
-			//console.log(contact);
-			//console.log(contact.GetFixtureB().GetUserData());
-			if(contact.GetFixtureB().GetUserData() == 'water'){
-				//console.log('pre touched block ' + contact.GetFixtureB().GetShape().styles.fillStyle);
-			}
-		}
-	}
+
 	listener.BeginContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
-		}
-		
-		if(contact.GetFixtureA().GetUserData() == 'water'){
-			//console.log(lio.waterObj.SetSensor(true));
-			lio.water.push(contact.GetFixtureB().GetBody());
-
-			console.log(contact.GetFixtureA().GetShape().styles.fillStyle);
-			console.log('touched block ' + contact.GetFixtureA().GetShape().styles.fillStyle);
-		}		
-		if(contact.GetFixtureB().GetUserData() == 'water'){
-			lio.water.push(contact.GetFixtureA().GetBody());
-		}
-
-			
+		}	
 	}
 	listener.EndContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouchTime = 0; 
 			lio.goalTouch = undefined;
 			lio.goalEffect.radius = 0;
-		}
-		
-		if(contact.GetFixtureA().GetUserData() == 'water'){
-			var i = lio.water.indexOf(contact.GetFixtureB().GetBody());
-			if(i != -1) {
-				lio.water.splice(i, 1);
-			}
-		}
-		if(contact.GetFixtureB().GetUserData() == 'water'){
-			var i = lio.water.indexOf(contact.GetFixtureA().GetBody());
-			if(i != -1) {
-				lio.water.splice(i, 1);
-			}
-		}
-	}
-	
-	//WATER
-	if(lio.water.length){
-		for (var i = 0, l = lio.water.length; i < l; ++i) {
-						
-			if(lio.water[i]){
-				var setCenter = b2Vec2(0,0);
-				//console.log(lio.water[i].GetFixtureList());
-				//console.log(lio.water[i].GetMass());
-				setCenter = lio.water[i].GetWorldCenter();
-				lio.water[i].SetAwake(true);
-				lio.water[i].ApplyImpulse(new b2Vec2(0,-Math.abs(lio.water[i].GetMass() / 1.95)),lio.water[i].GetWorldCenter());
-			}
-			
-			//return false;
-			//lio.water[i].SetLinearVelocity(new b2Vec2(0,-3));
 		}
 	}
 	

@@ -9,23 +9,6 @@ function lvl1(io){
 	this.loadResources = 0;
 	this.totalResources = 5;
 	
-	//COLOR PALLET
-	this.red = '#DB4437';
-	this.sunset = '#F05722';
-	this.orange = '#E7981D';
-	this.yellow = '#F4DF3B';
-	this.lime = '#CDDC39';
-	this.green = '#65B045';
-	this.turquoise = '#11A9CC';
-	this.blue = '#4285F4';
-	this.navy = '#3F5CA9';
-	this.purple = '#7E3794';
-	this.burgundy = '#A61D4C';
-	this.brown = '#795548';
-	this.white = '#F9F9F9';
-	this.black = '#4D4D4D';
-	this.grey = '#CCCCCC';
-
 	//GAME VARS
 	this.MIN_SIZE = 25/2;
 	this.MAX_SIZE = 45/2;
@@ -34,7 +17,7 @@ function lvl1(io){
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
-	gameWin = 
+	this.gameWin = 
 	this.gameEnd = false;
 	   
 }; iio.lvl1 = lvl1;
@@ -54,22 +37,22 @@ lvl1.prototype.setup = function(){
 
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(0,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(1,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
+	this.prepShape(bodyDef, fixDef);
 	
 
 	//BASIN WALLS
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(this.cHeight - 75,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
+	this.prepShape(bodyDef, fixDef);
 	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth - 0,true),pxConv(this.cHeight - 75,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('blue');
+	this.prepShape(bodyDef, fixDef);
 	
 	//WORLD BOUNDRIES
 	
@@ -79,38 +62,35 @@ lvl1.prototype.setup = function(){
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
 	bodyDef.angle=-Math.PI/6;
 	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(this.cHeight - 320,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('red');
+	this.prepShape(bodyDef, fixDef);
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
 	bodyDef.angle=Math.PI/6;
 	bodyDef.position.Set(pxConv(this.cWidth + 100,true),pxConv(this.cHeight - 320,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('red');
+	this.prepShape(bodyDef, fixDef);
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
 	bodyDef.angle=-Math.PI/3;
 	bodyDef.position.Set(pxConv(this.cWidth + 30,true),pxConv(-110,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
+	this.prepShape(bodyDef, fixDef);
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
 	bodyDef.angle=Math.PI/3;
 	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
+	this.prepShape(bodyDef, fixDef);
 	
 	fixDef.friction = 1;
 	bodyDef.angle = 0;
 
 	//PLATFORM
-	
-	bodyDef.type = b2Body.b2_kinematicBody;
+	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
-
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
-
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.green);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]);
 
 	//GOAL
 	bodyDef.type = b2Body.b2_staticBody;
@@ -119,8 +99,8 @@ lvl1.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(62/2,true),pxConv(59/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(75,true));
-	
-	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.2)'));
+
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.4)'));
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
 	
@@ -137,24 +117,30 @@ lvl1.prototype.setup = function(){
 
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.5,true),pxConv(this.MAX_SIZE*1.5,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.orange);
+	bodyDef.position.Set(pxConv(this.cWidth/2 + 60,true),pxConv(this.cHeight - this.MAX_SIZE,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[1][0]).setStrokeStyle(colors[1][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.red);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[5][0]).setStrokeStyle(colors[5][1],pxConv(2));
+
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[0][0]).setStrokeStyle(colors[0][1],pxConv(2));
+
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.1,true),pxConv(this.MAX_SIZE*1.1,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]).setStrokeStyle(colors[11][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/1.5,true));
+	bodyDef.angle = -0.5;
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.purple);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[8][0]).setStrokeStyle(colors[8][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
+	bodyDef.angle = 0;
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.sunset).setStrokeStyle('darkorange',2);
-	
-
-	        
-	  
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[4][0]).setStrokeStyle(colors[4][1],pxConv(2));  
 
 }//SETUP
 
@@ -201,7 +187,7 @@ lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!zIndex){
 		zIndex = 0;
 	}
-
+	
 	return  this.io.addToGroup(group,world.CreateBody(bodyDef),zIndex)
 	        .CreateFixture(fixDef)
 	        .GetShape()
