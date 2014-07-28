@@ -93,7 +93,7 @@ lvl2.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.5,true),pxConv(5,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]);
 		
 	//GOAL
@@ -103,7 +103,7 @@ lvl2.prototype.setup = function(){
 	fixDef.shape.SetAsBox(pxConv(62/2,true),pxConv(59/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(75,true));
 	
-	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.2)'));
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.cWidth/2),pxConv(75),0).setFillStyle('rgba(255,255,255,0.4)'));
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
 	
@@ -115,14 +115,10 @@ lvl2.prototype.setup = function(){
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
-	bodyDef.active = true;
-	console.log(bodyDef);
+
 	bodyDef.type = b2Body.b2_dynamicBody;
-	bodyDef.allowSleep = true;
 	fixDef.userData = 'blocks';
-	bodyDef.bullet = false;
 	fixDef.shape = new b2PolygonShape;
-	
 
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
@@ -143,6 +139,15 @@ lvl2.prototype.setup = function(){
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[7][0]).setStrokeStyle(colors[7][1],pxConv(2));
+
+	fixDef.shape.SetAsArray([
+		new b2Vec2(pxConv(-80,true)/4, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(80,true)/4, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(120,true)/4, pxConv(120,true)/4), 
+		new b2Vec2(pxConv(-120,true)/4, pxConv(120,true)/4)
+	]);
+	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[9][0]).setStrokeStyle(colors[9][1],2);   
 
 }//SETUP
 

@@ -89,7 +89,7 @@ lvl1.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.1,true),pxConv(5,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]);
 
 	//GOAL
@@ -126,7 +126,7 @@ lvl1.prototype.setup = function(){
 
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(colors[0][0]).setStrokeStyle(colors[0][1],pxConv(2));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[6][0]).setStrokeStyle(colors[6][1],pxConv(2));
 
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.1,true),pxConv(this.MAX_SIZE*1.1,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
@@ -149,7 +149,6 @@ lvl1.prototype.step = function(){
 	
 	if(this.gameEnd == true){
 		
-
 	}
 	
 	if(this.goalTouchTime >= this.goalTime){
@@ -169,7 +168,7 @@ lvl1.prototype.step = function(){
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
-		}	
+		}
 	}
 	listener.EndContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){

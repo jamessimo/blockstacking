@@ -9,23 +9,6 @@ function lvl3(io){
 	this.loadResources = 0;
 	this.totalResources = 5;
 	
-	//COLOR PALLET
-	this.red = '#DB4437';
-	this.sunset = '#F05722';
-	this.orange = '#E7981D';
-	this.yellow = '#F4DF3B';
-	this.lime = '#CDDC39';
-	this.green = '#65B045';
-	this.turquoise = '#11A9CC';
-	this.blue = '#4285F4';
-	this.navy = '#3F5CA9';
-	this.purple = '#7E3794';
-	this.burgundy = '#A61D4C';
-	this.brown = '#795548';
-	this.white = '#F9F9F9';
-	this.black = '#4D4D4D';
-	this.grey = '#CCCCCC';
-
 	//GAME VARS
 	this.MIN_SIZE = 25/2;
 	this.MAX_SIZE = 45/2;
@@ -34,17 +17,14 @@ function lvl3(io){
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
-	
-	this.platform = undefined;
-	this.platformBodyDef = new b2BodyDef;
-	this.platformFixDef = new b2FixtureDef;
-	this.gameWin,
+	this.gameWin = 
 	this.gameEnd = false;
 	   
 }; iio.lvl3 = lvl3;
 
 lvl3.prototype.setup = function(){
-	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl3.png'),-30);
+
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl3.png'),-30);
 	
 	
 	
@@ -54,6 +34,7 @@ lvl3.prototype.setup = function(){
 	
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
+	
 	
 	
 	//GROUND
@@ -100,28 +81,20 @@ lvl3.prototype.setup = function(){
 	
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
-	bodyDef.angle=Math.PI/3;
+	bodyDef.angle = Math.PI/3;
 	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle('yellow');
 	
 	fixDef.friction = 1;
 	bodyDef.angle = 0;
 
+
 	//PLATFORM
-	
-	this.platformBodyDef.type = b2Body.b2_kinematicBody;
-	this.platformFixDef.shape = new b2PolygonShape;
-	this.platformFixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
-
-	this.platformBodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
-	
-	this.platform = this.io.addObj(world.CreateBody(this.platformBodyDef)).CreateFixture(this.platformFixDef);
-   	//this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,0));
-
-	this.platform.GetShape().prepGraphics(this.io.b2Scale)
-	     .setFillStyle('green');
-	
-		
+	bodyDef.type = b2Body.b2_staticBody;
+	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.5,true),pxConv(5,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]);
 		
 	//GOAL
 	fixDef.isSensor = true;
@@ -134,7 +107,7 @@ lvl3.prototype.setup = function(){
 	
 	this.prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
 	
-
+	fixDef.isSensor = false;
 	
 	//SHAPES!
 	
@@ -142,45 +115,39 @@ lvl3.prototype.setup = function(){
 	fixDef.friction = 0.3;
 	fixDef.restitution = 0.5;
 	fixDef.density = 5;
-	fixDef.userData = 'blocks';
+
 	bodyDef.type = b2Body.b2_dynamicBody;
+	fixDef.userData = 'blocks';
 	fixDef.shape = new b2PolygonShape;
-	
-	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
-	
-	fixDef.shape.SetAsBox(pxConv(this.MIN_SIZE,true),pxConv(this.MIN_SIZE,true));
-	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MIN_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.yellow);
-	
+
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.orange);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[2][0]).setStrokeStyle(colors[2][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.red);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[3][0]).setStrokeStyle(colors[3][1],pxConv(2));
 	
-	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MIN_SIZE,true));
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE/1.5,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.brown);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[4][0]).setStrokeStyle(colors[4][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(this.purple);
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[6][0]).setStrokeStyle(colors[6][1],pxConv(2));
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
-	/*this.prepShape(bodyDef, fixDef).setFillStyle('orange').setStrokeStyle('darkorange',6).setAlpha(0.5);*/
-	
-	
-	this.io.addToGroup('BLOCKS',world.CreateBody(bodyDef),0)
-	        .CreateFixture(fixDef)
-	        .GetShape()
-	        .prepGraphics(this.io.b2Scale).setFillStyle(this.sunset)
-	        
-	  
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[7][0]).setStrokeStyle(colors[7][1],pxConv(2));
+
+	fixDef.shape.SetAsArray([
+		new b2Vec2(pxConv(-80,true)/3, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(80,true)/3, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(120,true)/3, pxConv(120,true)/3), 
+		new b2Vec2(pxConv(-120,true)/3, pxConv(120,true)/4)
+	]);
+	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[9][0]).setStrokeStyle(colors[9][1],pxConv(2));   
 
 }//SETUP
 
@@ -188,31 +155,9 @@ lvl3.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
-		//console.log(world);
-		world.m_gravity.x = 50;
 
-
-//REMOVE FROM LOOP!
-	  var node = world.GetBodyList(); 
-	  var i = 0;
-	  //MAKE ALL BLOCKS AWAKE!
-	  	while(node){
-	 		var curr = node;
-			node = node.GetNext();
-			if(curr.GetType() == b2Body.b2_dynamicBody){
-				if(curr.GetFixtureList().GetUserData() == 'blocks'){
-					i++;
-					curr.SetSleepingAllowed(false);
-					//curr.GetFixtureList().GetShape().m_radius = 10;
-					//Zconsole.log(curr.GetPosition());
-				}
-			}
-		}
-	}else{
-		world.m_gravity.x = 0;
 	}
 	
-	//	this.platform.GetBody().SetLinearVelocity(new b2Vec2(0,3));
 	if(this.goalTouchTime >= this.goalTime){
 		this.gameWin = true;
 	}
@@ -225,6 +170,7 @@ lvl3.prototype.step = function(){
 			this.goalEffect.radius = this.goalTouchTime;
 		}
 	}
+
 	listener.BeginContact = function(contact) {
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouch = contact.GetFixtureA();
@@ -251,7 +197,7 @@ lvl3.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	return  this.io.addToGroup(group,world.CreateBody(bodyDef),zIndex)
 	        .CreateFixture(fixDef)
 	        .GetShape()
-		    .prepGraphics(this.io.b2Scale); 
+	        .prepGraphics(this.io.b2Scale); 
 };
 
 iio.AppManager.prototype.activateLevel3 = function(io){
