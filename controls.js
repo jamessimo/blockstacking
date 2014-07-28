@@ -85,6 +85,8 @@ var scaleX = scaleY = scaleToFit = 0;
 var bgBlocks = 0;
 var MAXBGBLOCKS = 35;
 
+var bgMusicID = 0;
+
 // 480;
 // 853;
 
@@ -122,7 +124,7 @@ function GameControl(io) {
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
-	
+
 	scaleX = io.canvas.width / window.innerWidth;
 	scaleY = io.canvas.height / window.innerHeight;
 	scaleToFit = Math.min(scaleX, scaleY);
@@ -139,8 +141,10 @@ function GameControl(io) {
 	io.addB2World(world);
 
 
-	sound.play();
+	bgMusicID = sound.play()._audioNode[0].id;
+	//sound.play();
 
+	//console.log();
 	if(muted == true){
 		sound.mute();
 	}else{
@@ -329,12 +333,12 @@ function GameControl(io) {
 		}
 		if(muteBtn && muteBtn.contains(newPos)){
 			if(muted == true){
-				sound.unmute();
+				sound.unmute(bgMusicID);
 				muted = false;
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
-				sound.mute();
+				sound.mute(bgMusicID);
 				muted = true;
 				//muteBtn.objs[0].img.src = 'img/star.png';
 				//localStorage["mute"] = true;
@@ -435,12 +439,12 @@ function GameControl(io) {
 
 		if(muteBtn && muteBtn.contains(newPos)){
 			if(muted == true){
-				sound.unmute();
+				sound.unmute(bgMusicID);
 				muted = false;
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
-				sound.mute();
+				sound.mute(bgMusicID);
 				muted = true;
 				//muteBtn.objs[0].img.src = 'img/star.png';
 				//localStorage["mute"] = true;
