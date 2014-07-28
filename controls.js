@@ -333,12 +333,12 @@ function GameControl(io) {
 		}
 		if(muteBtn && muteBtn.contains(newPos)){
 			if(muted == true){
-				sound.unmute(bgMusicID);
+				sound.play(bgMusicID);
 				muted = false;
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
-				sound.mute(bgMusicID);
+				sound.pause(bgMusicID);
 				muted = true;
 				//muteBtn.objs[0].img.src = 'img/star.png';
 				//localStorage["mute"] = true;
