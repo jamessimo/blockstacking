@@ -139,7 +139,6 @@ function GameControl(io) {
 	io.addB2World(world);
 
 
-
 	sound.play();
 
 	if(muted == true){
@@ -439,12 +438,12 @@ function GameControl(io) {
 				sound.unmute();
 				muted = false;
 				//muteBtn.objs[0].img.src = 'img/lock.png';
-				localStorage["mute"] = false;
+				//localStorage["mute"] = false;
 			}else{
 				sound.mute();
 				muted = true;
 				//muteBtn.objs[0].img.src = 'img/star.png';
-				localStorage["mute"] = true;
+				//localStorage["mute"] = true;
 			}
 		}
     });
