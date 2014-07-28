@@ -150,8 +150,8 @@ function GameControl(io) {
 	
 	//supports_html5_storage();
 	
-	//intro(io);
-	createWorld(io,1);
+	intro(io);
+	//createWorld(io,1);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -332,13 +332,13 @@ function GameControl(io) {
 			if(muted == true){
 				sound.unmute();
 				muted = false;
-				muteBtn.objs[0].img.src = 'img/lock.png';
-				localStorage["mute"] = false;
+				//muteBtn.objs[0].img.src = 'img/lock.png';
+				//localStorage["mute"] = false;
 			}else{
 				sound.mute();
 				muted = true;
-				muteBtn.objs[0].img.src = 'img/star.png';
-				localStorage["mute"] = true;
+				//muteBtn.objs[0].img.src = 'img/star.png';
+				//localStorage["mute"] = true;
 			}
 		}
 	
@@ -438,12 +438,12 @@ function GameControl(io) {
 			if(muted == true){
 				sound.unmute();
 				muted = false;
-				muteBtn.objs[0].img.src = 'img/lock.png';
+				//muteBtn.objs[0].img.src = 'img/lock.png';
 				localStorage["mute"] = false;
 			}else{
 				sound.mute();
 				muted = true;
-				muteBtn.objs[0].img.src = 'img/star.png';
+				//muteBtn.objs[0].img.src = 'img/star.png';
 				localStorage["mute"] = true;
 			}
 		}
