@@ -9,7 +9,7 @@ var canvasZoom = {
     y: 1
 }; 
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Band.mp3'],loop: true
+		urls: ['music/Monkey-Island-Band.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
