@@ -145,11 +145,11 @@ function GameControl(io) {
 	//sound.play();
 
 	//console.log();
-	if(muted == true){
+	/*if(muted == true){
 		sound.mute();
 	}else{
 		sound.unmute();
-	}
+	}*/
 	
 	//supports_html5_storage();
 	
@@ -333,7 +333,8 @@ function GameControl(io) {
 		}
 		if(muteBtn && muteBtn.contains(newPos)){
 			if(muted == true){
-				sound.play(bgMusicID);
+				//sound.play(bgMusicID);
+				sound.stop(bgMusicID);
 				muted = false;
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
