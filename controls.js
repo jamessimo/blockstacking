@@ -297,8 +297,11 @@ function GameControl(io) {
 		if (btn && btn.contains(newPos)){
 			createWorld(io);
 		}
-		if(pauseBtn && pauseBtn.contains(newPos)){
-			level.pause = true;
+		 if(pauseBtn && pauseBtn.contains(newPos)){
+       		pause(io);
+        }
+		if(unPauseBtn && unPauseBtn.contains(newPos)){
+			resume(io);	
 		}
 		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
 			createWorld(io, currentLvl);
@@ -323,6 +326,19 @@ function GameControl(io) {
 						return false;
 					}
 				}
+			}
+		}
+		if(muteBtn && muteBtn.contains(newPos)){
+			if(muted == true){
+				sound.unmute();
+				muted = false;
+				muteBtn.objs[0].img.src = 'img/lock.png';
+				localStorage["mute"] = false;
+			}else{
+				sound.mute();
+				muted = true;
+				muteBtn.objs[0].img.src = 'img/star.png';
+				localStorage["mute"] = true;
 			}
 		}
 	
