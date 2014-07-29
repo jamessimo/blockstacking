@@ -141,7 +141,15 @@ function GameControl(io) {
 	io.addB2World(world);
 
 
-	bgMusicID = sound.play()._audioNode[0].id;
+	sound.play(function(id){
+		bgMusicID = id;
+	});
+
+
+console.log(bgMusicID);
+
+
+
 	//sound.play();
 
 	//console.log();
@@ -334,12 +342,15 @@ function GameControl(io) {
 		if(muteBtn && muteBtn.contains(newPos)){
 			if(muted == true){
 				//sound.play(bgMusicID);
-				sound.stop(bgMusicID);
+				//sound.stop(bgMusicID);
 				muted = false;
+					sound.pause(bgMusicID);
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
-				sound.pause(bgMusicID);
+			
+				sound.mute(bgMusicID);
+
 				muted = true;
 				//muteBtn.objs[0].img.src = 'img/star.png';
 				//localStorage["mute"] = true;
