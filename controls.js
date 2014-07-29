@@ -344,7 +344,7 @@ console.log(bgMusicID);
 				//sound.play(bgMusicID);
 				//sound.stop(bgMusicID);
 				muted = false;
-					sound.pause(bgMusicID);
+					sound.unmute(bgMusicID);
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
