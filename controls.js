@@ -380,7 +380,7 @@ function GameControl(io) {
 				sound.play(function(id){
 					bgMusicID = id;
 				});
-				
+				muteBtn.objs[0].setAlpha(1);
 
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
@@ -389,6 +389,7 @@ function GameControl(io) {
 				sound.pause(bgMusicID);
 
 				muted = true;
+				muteBtn.objs[0].setAlpha(0.3);
 				//muteBtn.objs[0].img.src = 'img/star.png';
 				//localStorage["mute"] = true;
 			}
