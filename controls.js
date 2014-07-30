@@ -10,7 +10,7 @@ var canvasZoom = {
 }; 
 var fullscreen1Params;
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Band1.ogg'],loop: true
+		//urls: ['music/Monkey-Island-Band2.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
@@ -159,7 +159,7 @@ function GameControl(io) {
 
   // Pregame Fullscreen
 
-  if(CocoonJS.nativeExtensionObjectAvailable && 1==2){ 
+  if(CocoonJS.nativeExtensionObjectAvailable){ 
 	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
@@ -195,7 +195,7 @@ function GameControl(io) {
 	//supports_html5_storage();
 	
 	//intro(io);
-	createWorld(io);
+	createWorld(io,1);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -490,19 +490,16 @@ function GameControl(io) {
 		}
 
 		if(muteBtn && muteBtn.contains(newPos)){
-		if(muted == true){
+			if(muted == true){
 				muted = false;
 				sound.play(function(id){
 					bgMusicID = id;
 				});
-
-				muteBtn.objs[0].setAlpha(1);
-			
-		
+				//muteBtn.objs[0].setAlpha(1);
 			}else{
 				sound.pause(bgMusicID);
 				muted = true;	
-				muteBtn.objs[0].setAlpha(0.3);
+				//muteBtn.objs[0].setAlpha(0.3);
 			}
 		}
     });

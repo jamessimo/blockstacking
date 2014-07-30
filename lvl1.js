@@ -24,6 +24,7 @@ function lvl1(io){
 
 lvl1.prototype.setup = function(){
 
+console.log('lvl2loaded');
 	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl1.png'),-30);
 	
 	
@@ -115,6 +116,7 @@ lvl1.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
 
+	cosole.log('loadedlvl1');
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.5,true),pxConv(this.MAX_SIZE*1.5,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + 60,true),pxConv(this.cHeight - this.MAX_SIZE,true));
