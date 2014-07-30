@@ -122,7 +122,7 @@ lvl1.prototype.setup = function(){
 	
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(45,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));
-	this.prepShape(bodyDef, fixDef).setFillStyle(colors[5][0]).setStrokeStyle(colors[5][1],pxConv(2));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[11][0]).setStrokeStyle(colors[5][1],pxConv(2));
 
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - this.MAX_SIZE,true),pxConv(this.cHeight - (45),true));

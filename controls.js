@@ -10,7 +10,7 @@ var canvasZoom = {
 }; 
 var fullscreen1Params;
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Ba-nd.ogg'],loop: true
+		urls: ['music/Monkey-Island-Band1.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
@@ -194,8 +194,8 @@ function GameControl(io) {
 	
 	//supports_html5_storage();
 	
-	intro(io);
-	//createWorld(io,1);
+	//intro(io);
+	createWorld(io,2);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -494,11 +494,14 @@ function GameControl(io) {
 				sound.play(function(id){
 					bgMusicID = id;
 				});
+
+				muteBtn.objs[0].setAlpha(1);
 			
 		
 			}else{
 				sound.pause(bgMusicID);
 				muted = true;	
+				muteBtn.objs[0].setAlpha(0.3);
 			}
 		}
     });
@@ -540,24 +543,22 @@ function pause(io){
 		.setFillStyle(colors[3][0])
 		.setStrokeStyle(colors[3][1],pxConv(2)),20);
 
-	if(muted == true){
-		muteBtn.addObj(new iio.Rect().addImage('img/star.png')
-		.setImgSize(50,50)
-		.setAlpha(0.7));
-	}
+	muteBtn.addObj(new iio.Rect().addImage('img/sound.png')
+		.setImgSize(50,50));
 
-	if(muted == false){
-		muteBtn.addObj(new iio.Rect().addImage('img/lock.png')
-		.setImgSize(50,50)
-		.setAlpha(0.7));
+	if(muted){
+		muteBtn.objs[0].setAlpha(0.3);
+	}else{
+		muteBtn.objs[0].setAlpha(1);
 	}
+	
 
 	menuBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(70 * 2), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
-		.setFillStyle(colors[4][0])
-		.setStrokeStyle(colors[4][1],pxConv(2)),20);
+		.setFillStyle(colors[3][0])
+		.setStrokeStyle(colors[3][1],pxConv(2)),20).addObj(new iio.Rect().addImage('img/menu.png').setImgSize(50,50));
 
-	menuBtn.addObj(new iio.Rect().addImage('img/star.png').setImgSize(50,50));
+	
 
 	level.pause = true
 	gameOn = false;
@@ -799,8 +800,8 @@ function createWorld(io,levelNumber){
 		level = eval( "io.activateLevel"+levelNumber+"(io);" );
 		//ADD PAUSE BTN
 		pauseBtn = io.addObj(new iio.Rect(pxConv(25),pxConv(25), pxConv(40), pxConv(40))
-	    .setFillStyle(colors[12][0])
-	    .setStrokeStyle(colors[12][0],0));
+	  );
+	    pauseBtn.addObj(new iio.Rect().addImage('img/pause.png').setImgSize(45,45));
 	}else{
 		level = io.activateLevelSelect(io);
 	}
