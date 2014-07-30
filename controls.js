@@ -9,7 +9,7 @@ var canvasZoom = {
     y: 1
 }; 
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Band.ogg'],loop: true
+		urls: ['music/Monkey-Island-Band@.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
@@ -140,15 +140,24 @@ function GameControl(io) {
 
 	io.addB2World(world);
 
+	var fullscreen1Params = {
+	    "FullscreenAdTest": "f28daed244254154944ad407ba31ce99",
+	    "refresh": 20
+	};
+ if(!CocoonJS.nativeExtensionObjectAvailable){ console.log('fail')}else{console.log('woot!')};
+
+    var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+
+ 	
+  //  fullscreen1.refreshFullScreen();
+
+    console.log(CocoonJS.Ad.createFullscreen(fullscreen1Params));
 
 	sound.play(function(id){
 		bgMusicID = id;
 	});
 
-
-console.log(bgMusicID);
-
-
+	sound.pause(bgMusicID);
 
 	//sound.play();
 
@@ -344,7 +353,11 @@ console.log(bgMusicID);
 				//sound.play(bgMusicID);
 				//sound.stop(bgMusicID);
 				muted = false;
-				sound.play(bgMusicID);
+				sound.play(function(id){
+					bgMusicID = id;
+				});
+				
+
 				//muteBtn.objs[0].img.src = 'img/lock.png';
 				//localStorage["mute"] = false;
 			}else{
@@ -390,11 +403,13 @@ console.log(bgMusicID);
 		}
 		if (iio.keyCodeIs('m', this.event)){
 			if(muted == true){
-				sound.unmute();
+				sound.play(function(id){
+					bgMusicID = id;
+				});
 				muted =false;
 
 			}else{
-				sound.mute();
+				sound.pause(bgMusicID);
 				muted = true;
 			}
 		}
@@ -450,16 +465,16 @@ console.log(bgMusicID);
 		}
 
 		if(muteBtn && muteBtn.contains(newPos)){
-			if(muted == true){
-				sound.unmute(bgMusicID);
+		if(muted == true){
 				muted = false;
-				//muteBtn.objs[0].img.src = 'img/lock.png';
-				//localStorage["mute"] = false;
+				sound.play(function(id){
+					bgMusicID = id;
+				});
+			
+		
 			}else{
-				sound.mute(bgMusicID);
-				muted = true;
-				//muteBtn.objs[0].img.src = 'img/star.png';
-				//localStorage["mute"] = true;
+				sound.pause(bgMusicID);
+				muted = true;	
 			}
 		}
     });
