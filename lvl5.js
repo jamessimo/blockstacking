@@ -1,6 +1,6 @@
 (function(){
 
-function lvl1(io){
+function lvl5(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -20,11 +20,11 @@ function lvl1(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl1 = lvl1;
+}; iio.lvl5 = lvl5;
 
-lvl1.prototype.setup = function(){
+lvl5.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl1.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl5.png'),-30);
 	
 	
 	var fixDef = new b2FixtureDef;
@@ -34,7 +34,6 @@ lvl1.prototype.setup = function(){
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
 	
-
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(this.cWidth/2,true),pxConv(1,true));
@@ -144,7 +143,7 @@ lvl1.prototype.setup = function(){
 
 }//SETUP
 
-lvl1.prototype.step = function(){
+lvl5.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -179,7 +178,7 @@ lvl1.prototype.step = function(){
 	}
 	
 }//STEP
-lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
+lvl5.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';
 	}
@@ -193,8 +192,8 @@ lvl1.prototype.prepShape = function(bodyDef, fixDef,group,zIndex){
 	        .prepGraphics(this.io.b2Scale); 
 };
 
-iio.AppManager.prototype.activateLevel1 = function(io){
-	this.level = new iio.lvl1(io);
+iio.AppManager.prototype.activateLevel5 = function(io){
+	this.level = new iio.lvl5(io);
 	return this.level;
 }
 
