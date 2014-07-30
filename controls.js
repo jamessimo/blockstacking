@@ -9,7 +9,7 @@ var canvasZoom = {
     y: 1
 }; 
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Band@.ogg'],loop: true
+		urls: ['music/Monkey-Island-Band.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
@@ -144,7 +144,7 @@ function GameControl(io) {
 	    "FullscreenAdTest": "f28daed244254154944ad407ba31ce99",
 	    "refresh": 20
 	};
- if(!CocoonJS.nativeExtensionObjectAvailable){ console.log('fail')}else{console.log('woot!')};
+ //if(!CocoonJS.nativeExtensionObjectAvailable){ console.log('fail')}else{console.log('woot!')};
 
     var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 
