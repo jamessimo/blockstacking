@@ -159,7 +159,7 @@ function GameControl(io) {
 
   // Pregame Fullscreen
 
-  if(CocoonJS.nativeExtensionObjectAvailable){ 
+  if(CocoonJS.nativeExtensionObjectAvailable && 1==2){ 
 	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
@@ -195,7 +195,7 @@ function GameControl(io) {
 	//supports_html5_storage();
 	
 	//intro(io);
-	createWorld(io,2);
+	createWorld(io);
 	
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
