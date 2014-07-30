@@ -8,8 +8,9 @@ var canvasZoom = {
     x: 1,
     y: 1
 }; 
+var fullscreen1Params;
 var sound = new Howl({
-		urls: ['music/Monkey-Island-Band.ogg'],loop: true
+		urls: ['music/Monkey-Island-Ba-nd.ogg'],loop: true
 	});
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
@@ -140,18 +141,41 @@ function GameControl(io) {
 
 	io.addB2World(world);
 
-	var fullscreen1Params = {
-	    "FullscreenAdTest": "f28daed244254154944ad407ba31ce99",
-	    "refresh": 20
+	fullscreen1Params = {
+	    "FullscreenAdTest" : "f28daed244254154944ad407ba31ce99",
+	    "refresh" : 30
 	};
  //if(!CocoonJS.nativeExtensionObjectAvailable){ console.log('fail')}else{console.log('woot!')};
 
-    //var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+    //
 
  	
   //  fullscreen1.refreshFullScreen();
 
-    console.log(CocoonJS.Ad);
+
+   // CocoonJS.Ad.preloadFullScreen(fullscreen1Params);
+
+  //  var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+
+  // Pregame Fullscreen
+
+  if(CocoonJS.nativeExtensionObjectAvailable){ 
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+	    fullscreen1.onFullScreenShown.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenShown");
+	    });
+	    fullscreen1.onFullScreenHidden.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenHidden");
+	    });
+	    fullscreen1.onFullScreenReady.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenReady");
+	    });
+	    fullscreen1.refreshFullScreen();
+	}
+
 
 	sound.play(function(id){
 		bgMusicID = id;
