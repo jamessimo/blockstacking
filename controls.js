@@ -130,13 +130,14 @@ function GameControl(io) {
 	scaleY = io.canvas.height / window.innerHeight;
 	scaleToFit = Math.min(scaleX, scaleY);
 
-	//DEBUGGING
+	//DEBUGGING 
+	/*
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
 	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
 	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
-	
+	*/
 	localStorage["level.1"] = true;
 
 	io.addB2World(world);
