@@ -146,12 +146,12 @@ function GameControl(io) {
 	};
  //if(!CocoonJS.nativeExtensionObjectAvailable){ console.log('fail')}else{console.log('woot!')};
 
-    var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+    //var fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 
  	
   //  fullscreen1.refreshFullScreen();
 
-    console.log(CocoonJS.Ad.createFullscreen(fullscreen1Params));
+    console.log(CocoonJS.Ad);
 
 	sound.play(function(id){
 		bgMusicID = id;
