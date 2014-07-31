@@ -373,11 +373,11 @@ function GameControl(io) {
 		
 		if(testBtn && testBtn.contains(newPos)){
 			fullscreen1Params = {
-			    "FullscreenAdTest" : "f28daed244254154944ad407ba31ce99",
+			    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
 			    "refresh" : 30
 			};
 		
-		    fullscreen1 = CocoonJS.Ad.createFullscreen();
+		    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 		    
 			console.log(fullscreen1);
 			
