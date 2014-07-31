@@ -166,12 +166,13 @@ function GameControl(io) {
 
 		muted = true;
 		
-	}else if(localStorage["muted"] == 'false') {
+	} 
+	if(localStorage["muted"] == 'false') {
 		//sound._audioNode[0].paused = false;
 		sound.play(function(id){
 			bgMusicID = id;
 		});
-	
+
 
 		muted = false;
 
@@ -367,26 +368,7 @@ function GameControl(io) {
 			}
 		}
 		if(muteBtn && muteBtn.contains(newPos)){
-			if(muted == true){
-				//sound.play(bgMusicID);
-				//sound.stop(bgMusicID);
-				muted = false;
-				sound.play(function(id){
-					bgMusicID = id;
-				});
-				muteBtn.objs[0].setAlpha(1);
-
-				//muteBtn.objs[0].img.src = 'img/lock.png';
-				//localStorage["mute"] = false;
-			}else{
-			
-				sound.pause(bgMusicID);
-
-				muted = true;
-				muteBtn.objs[0].setAlpha(0.3);
-				//muteBtn.objs[0].img.src = 'img/star.png';
-				//localStorage["mute"] = true;
-			}
+			soundControl();
 		}
 		
 		if(testBtn && testBtn.contains(newPos)){
@@ -395,7 +377,7 @@ function GameControl(io) {
 			    "refresh" : 30
 			};
 		
-		    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+		    fullscreen1 = CocoonJS.Ad.createFullscreen();
 		    
 			console.log(fullscreen1);
 			
@@ -510,23 +492,7 @@ function GameControl(io) {
 		}
 
 		if(muteBtn && muteBtn.contains(newPos)){
-			if(muted == true){
-				muted = false;
-				sound.play(function(id){
-					bgMusicID = id;
-				});
-				localStorage["muted"] = false;
-				muteBtn.objs[0].setAlpha(1);
-				sound._audioNode[0].paused = false;
-				console.log(sound);
-
-
-			}else{
-				sound.pause(bgMusicID);
-				localStorage["muted"] = true;
-				muted = true;	
-				muteBtn.objs[0].setAlpha(0.3);
-			}
+			soundControl();
 		}
     });
 
@@ -845,7 +811,23 @@ function createWorld(io,levelNumber){
 	io.pauseFramerate(false);
 	
 }
+function soundControl(bool){
+	if(muted == true){
+		muted = false;
+		sound.play(function(id){
+			bgMusicID = id;
+		});
+		localStorage["muted"] = false;
+		muteBtn.objs[0].setAlpha(1);
+		sound._audioNode[0].paused = false;
 
+	}else{
+		sound.pause(bgMusicID);
+		localStorage["muted"] = true;
+		muted = true;	
+		muteBtn.objs[0].setAlpha(0.3);
+	}
+}
 function prepShape(io,bodyDef, fixDef,group,zIndex){
 	if(!group){
 		group = 'worldObj';
