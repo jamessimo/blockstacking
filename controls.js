@@ -12,7 +12,7 @@ var fullscreen1Params;
 var sound = new Howl({
 	urls: ['music/Monkey-Island-Band.ogg'],loop: true
 });
-var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,
+var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,testBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn;
 var touches = [];
 //load BOX2D classes
@@ -157,29 +157,8 @@ function GameControl(io) {
 
   // Pregame Fullscreen
 
- if(CocoonJS.nativeExtensionObjectAvailable && 1==2){ 
+ if(CocoonJS.nativeExtensionObjectAvailable || 1==2){ 
 
-	fullscreen1Params = {
-	    "FullscreenAdTest" : "f28daed244254154944ad407ba31ce99",
-	    "refresh" : 30
-	};
-
-    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-
-    fullscreen1.onFullScreenShown.addEventListener(function()
-    {
-        console.log("fullscreen1 onFullScreenShown");
-    });
-    fullscreen1.onFullScreenHidden.addEventListener(function()
-    {
-        console.log("fullscreen1 onFullScreenHidden");
-    });
-    fullscreen1.onFullScreenReady.addEventListener(function()
-    {
-        console.log("fullscreen1 onFullScreenReady");
-    });
-
-    fullscreen1.refreshFullScreen();
 }
 	
 	
@@ -409,6 +388,32 @@ function GameControl(io) {
 				//localStorage["mute"] = true;
 			}
 		}
+		
+		if(testBtn && testBtn.contains(newPos)){
+			fullscreen1Params = {
+			    "FullscreenAdTest" : "f28daed244254154944ad407ba31ce99",
+			    "refresh" : 30
+			};
+		
+		    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+		    
+			console.log(fullscreen1);
+			
+		    fullscreen1.onFullScreenShown.addEventListener(function()
+		    {
+		        console.log("fullscreen1 onFullScreenShown");
+		    });
+		    fullscreen1.onFullScreenHidden.addEventListener(function()
+		    {
+		        console.log("fullscreen1 onFullScreenHidden");
+		    });
+		    fullscreen1.onFullScreenReady.addEventListener(function()
+		    {
+		        console.log("fullscreen1 onFullScreenReady");
+		    });
+		
+		    fullscreen1.refreshFullScreen();
+		}
 	
 	});
 	io.canvas.addEventListener('touchmove', touchMove);
@@ -577,7 +582,10 @@ function pause(io){
 		.setFillStyle(colors[3][0])
 		.setStrokeStyle(colors[3][1],pxConv(2)),20).addObj(new iio.Rect().addImage('img/menu.png').setImgSize(50,50));
 
-	
+	testBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(65 * 3), pxConv(60), pxConv(30))
+		.setRoundingRadius(pxConv(2))
+		.setFillStyle(colors[11][0])
+		.setStrokeStyle(colors[11][1],pxConv(2)),20);
 
 	level.pause = true
 	gameOn = false;
