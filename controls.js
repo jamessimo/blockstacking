@@ -84,6 +84,8 @@ var scaleX = scaleY = scaleToFit = 0;
 var bgBlocks = 0;
 var MAXBGBLOCKS = 35;
 
+var loadResources = 0;
+
 var bgMusicID = 0;
 
 
@@ -138,35 +140,7 @@ function GameControl(io) {
 
 
 
- 	if(CocoonJS.nativeExtensionObjectAvailable){ 
-		fullscreen1Params = {
-		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
-		    "refresh" : 20
-		};
-	
-
-		//PUT THIS INTO A PROMISE 
-	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-
-
-		console.log('created fullscreen1');
-		
-	    fullscreen1.onFullScreenShown.addEventListener(function()
-	    {
-	        console.log("fullscreen1 onFullScreenShown");
-	    });
-	    fullscreen1.onFullScreenHidden.addEventListener(function()
-	    {
-	        console.log("fullscreen1 onFullScreenHidden");
-	        fullscreen1.refreshFullScreen();
-	    });
-	    fullscreen1.onFullScreenReady.addEventListener(function()
-	    {
-	        console.log("fullscreen1 onFullScreenReady");
-	       
-	    });
-	}
-
+ 	
 
 	localStorage["level.1"] = true;
 	
@@ -182,7 +156,8 @@ function GameControl(io) {
 
 	
 	intro(io);
-//	createWorld(io);
+	//createWorld(io);
+
 
 	io.canvas.width = io.canvas.width*PIXEL_RATIO;
 	io.canvas.height = io.canvas.height*PIXEL_RATIO;
@@ -194,6 +169,37 @@ function GameControl(io) {
 	
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
+
+
+
+	if(CocoonJS.nativeExtensionObjectAvailable){ 
+		fullscreen1Params = {
+		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
+		    "refresh" : 20
+		};
+	
+
+		//PUT THIS INTO A PROMISE 
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+		
+	    fullscreen1.onFullScreenShown.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenShown");
+	    });
+	    fullscreen1.onFullScreenHidden.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenHidden");
+	        fullscreen1.refreshFullScreen();
+	    });
+	    fullscreen1.onFullScreenReady.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenReady");
+	    });
+	}
+
+
+
+
 
 	io.setB2Framerate(FPS, function(){
 		if(gameOn){
@@ -697,20 +703,19 @@ function intro(io){
 	io.addB2World(world);
 
 
-	io.addToGroup('BACKGROUND',new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2),pxConv(GAMEWIDTH),pxConv(GAMEHEIGHT)).addImage('img/mountain.png'),-30);
-
-
+	io.addToGroup('BACKGROUND',new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2),pxConv(GAMEWIDTH),pxConv(GAMEHEIGHT)).addImage('img/mountain.png',function() {console.log('bgLoad');loadResources++}),-30);
 
 
 	//SHOW LOGO
 	var logo = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(207), pxConv(153))
-		.addImage('img/logo.png')
+		.addImage('img/logo.png',function() {console.log('logoLoad'); loadResources++})
 		,20);
 
 	//SHOW START BUTTON      		      
 	btn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(98), pxConv(94))
-		.addImage('img/startBtn.png')
+		.addImage('img/startBtn.png',function() {console.log('btnLoad'); loadResources++})
 		,20);
+
 
 	new TWEEN.Tween( { x:io.canvas.width/2, y: 0 } )
 		.to( { x: io.canvas.width/2,y: io.canvas.height/2 - logo.height/2}, 1000 )
@@ -732,7 +737,9 @@ function intro(io){
 			}
 		} )
 		.delay(2000)
-		.onComplete(function(){gameIntro = true;})
+		.onComplete(function(){
+			gameIntro = true;
+		})
 		.start();
 
 	var fixDef = new b2FixtureDef;
