@@ -138,8 +138,30 @@ function GameControl(io) {
 
 
 
- 	if(CocoonJS.nativeExtensionObjectAvailable || 1==2){ 
-
+ 	if(CocoonJS.nativeExtensionObjectAvailable){ 
+		fullscreen1Params = {
+		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
+		    "refresh" : 20
+		};
+	
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+	    
+		console.log('created fullscreen1');
+		
+	    fullscreen1.onFullScreenShown.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenShown");
+	    });
+	    fullscreen1.onFullScreenHidden.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenHidden");
+	        fullscreen1.refreshFullScreen();
+	    });
+	    fullscreen1.onFullScreenReady.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenReady");
+	       
+	    });
 	}
 
 
@@ -339,33 +361,9 @@ function GameControl(io) {
 		}
 		
 		if(testBtn && testBtn.contains(newPos)){
-			fullscreen1Params = {
-			    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
-			    "refresh" : 20
-			};
-		
-		    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-		    
-			console.log('created fullscreen1');
-			
-		    fullscreen1.onFullScreenShown.addEventListener(function()
-		    {
-		        console.log("fullscreen1 onFullScreenShown");
-		    });
-		    fullscreen1.onFullScreenHidden.addEventListener(function()
-		    {
-		        console.log("fullscreen1 onFullScreenHidden");
-		    });
-		    fullscreen1.onFullScreenReady.addEventListener(function()
-		    {
-		        console.log("fullscreen1 onFullScreenReady");
-		        fullscreen1.showFullScreen();
-
-		    });
-		
-		    fullscreen1.refreshFullScreen();
 
 
+		     fullscreen1.showFullScreen();
 		    //console.log(localStorage)
 		}
 	
@@ -707,7 +705,7 @@ function intro(io){
 
 	//SHOW START BUTTON      		      
 	btn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(98), pxConv(94))
-		.addImage('img/startBTN.png')
+		.addImage('img/startBtn.png')
 		,20);
 
 	new TWEEN.Tween( { x:io.canvas.width/2, y: 0 } )
