@@ -22,6 +22,8 @@ lvlSelect.prototype.setup = function(){
 	
 	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'mountain.png'),-30);
 	
+	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(25), pxConv(50), pxConv(50)).addImage('img/backBtn.png'),20)
+
 	this.lvlButtons.push(null);
 		
 	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[0][1],4)

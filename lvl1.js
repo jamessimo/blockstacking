@@ -24,7 +24,7 @@ function lvl1(io){
 
 lvl1.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl1.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl1.png'),-30);
 	
 	
 	var fixDef = new b2FixtureDef;
@@ -109,8 +109,8 @@ lvl1.prototype.setup = function(){
 	//SHAPES!
 	
 	fixDef = new b2FixtureDef;
-	fixDef.friction = 0.3;
-	fixDef.restitution = 0.5;
+	fixDef.friction = 0.5;
+	fixDef.restitution = 0.3;
 	fixDef.density = 5;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
