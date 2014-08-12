@@ -145,20 +145,11 @@ function GameControl(io) {
 		};
 	
 
-	//PUT THIS INTO A PROMICE 
-	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params).then(
-	    		function(){
+		//PUT THIS INTO A PROMISE 
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 
 
-	    				console.log('calling fullscreen1');
-
-
-	    		}
-	    	);
-	    //
-
-
-	
+		console.log('created fullscreen1');
 		
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
