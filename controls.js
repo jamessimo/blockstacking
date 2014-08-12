@@ -144,9 +144,21 @@ function GameControl(io) {
 		    "refresh" : 20
 		};
 	
-	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-	    
-		console.log('created fullscreen1');
+
+	//PUT THIS INTO A PROMICE 
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params).then(
+	    		function(){
+
+
+	    				console.log('calling fullscreen1');
+
+
+	    		}
+	    	);
+	    //
+
+
+	
 		
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
@@ -544,6 +556,7 @@ function resume(io){
 	unPauseBtn = undefined; //To remove its POS
 	muteBtn = undefined;
 	menuBtn = undefined;
+	testBtn = undefined;
 
 	pauseBtn.pos.x = +25; //show pause button
 
