@@ -109,12 +109,18 @@ lvl1.prototype.setup = function(){
 	//SHAPES!
 	
 	fixDef = new b2FixtureDef;
-	fixDef.friction = pxConv(0.5);
-	fixDef.restitution = pxConv(0.3);
-	fixDef.density = pxConv(5);
+	fixDef.friction = 0.5;
+	fixDef.restitution = 0.3;
+	fixDef.density = 5;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
 	
+
+	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.5,true),pxConv(this.MAX_SIZE*1.5,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 ,true),pxConv(this.cHeight/2 ,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[9][0]).setStrokeStyle(colors[9][1],pxConv(2));
+
+
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE*1.5,true),pxConv(this.MAX_SIZE*1.5,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 + 60,true),pxConv(this.cHeight - this.MAX_SIZE,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[1][0]).setStrokeStyle(colors[1][1],pxConv(2));

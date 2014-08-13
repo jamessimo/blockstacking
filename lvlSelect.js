@@ -70,6 +70,36 @@ lvlSelect.prototype.setup = function(){
 
 	}
 
+	
+	if(CocoonJS.nativeExtensionObjectAvailable){ 
+		fullscreen1Params = {
+		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
+		    "refresh" : 20
+		};
+	
+
+		//PUT THIS INTO A PROMISE 
+		if(!adReady)
+	    	fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+		else
+			fullscreen1.refreshFullScreen();
+		
+	    fullscreen1.onFullScreenShown.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenShown");
+	    });
+	    fullscreen1.onFullScreenHidden.addEventListener(function()
+	    {
+	        console.log("fullscreen1 onFullScreenHidden");
+	        //fullscreen1.refreshFullScreen();
+	    });
+	    fullscreen1.onFullScreenReady.addEventListener(function()
+	    {
+	    	adReady = true;
+	        console.log("fullscreen1 onFullScreenReady");
+	    });
+	}
+
 }
 lvlSelect.prototype.step = function(){
 }

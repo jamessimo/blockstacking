@@ -93,6 +93,12 @@ var bgMusicID = 0;
 
 function GameControl(io) {
 
+
+	if(window.innerHeight > 480){
+		GAMEHEIGHT = 568;
+	}
+
+
 	PIXEL_RATIO = (function () {
 	    var ctx = io.context,
 	        dpr = window.devicePixelRatio || 1,
@@ -118,7 +124,6 @@ function GameControl(io) {
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
 
-		console.log('resizecales')
 	};
 	
 	//Debugging 
@@ -158,42 +163,15 @@ function GameControl(io) {
 		muted = false;
 	}
 
-
 	
 	//intro(io);
 	createWorld(io,2);
 
-	
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 
 
-	if(CocoonJS.nativeExtensionObjectAvailable){ 
-		fullscreen1Params = {
-		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
-		    "refresh" : 20
-		};
-	
-
-		//PUT THIS INTO A PROMISE 
-	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-		
-	    fullscreen1.onFullScreenShown.addEventListener(function()
-	    {
-	        console.log("fullscreen1 onFullScreenShown");
-	    });
-	    fullscreen1.onFullScreenHidden.addEventListener(function()
-	    {
-	        console.log("fullscreen1 onFullScreenHidden");
-	        //fullscreen1.refreshFullScreen();
-	    });
-	    fullscreen1.onFullScreenReady.addEventListener(function()
-	    {
-	    	adReady = true;
-	        console.log("fullscreen1 onFullScreenReady");
-	    });
-	}
 
 
 
@@ -699,7 +677,7 @@ function intro(io){
 
 
 
-	world = new b2World(new b2Vec2(0, 30),true); //make into function
+	world = new b2World(new b2Vec2(0, 20*PIXEL_RATIO),true); //make into function
 
 	io.addB2World(world);
 
@@ -784,7 +762,7 @@ function createWorld(io,levelNumber){
 	btn = restartLvlBtn = nextLvlBtn = backBtn = nextBtn = undefined;    
     //create the box2d world
 	world = io.addB2World(new b2World(
-    new b2Vec2(0, 30*PIXEL_RATIO)    //gravity
+    new b2Vec2(0, 25*PIXEL_RATIO)    //gravity
    	,true                 //allow sleep
 	));
 
@@ -894,7 +872,7 @@ function createBlock(io){
 
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(height, width);
+	fixDef.shape.SetAsBox(pxConv(height), pxConv(width));
 
 	color = iio.getRandomNum(0,colors.length-1)
 	color = Math.round(color)

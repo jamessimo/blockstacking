@@ -24,7 +24,7 @@ function lvl2(io){
 
 lvl2.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(this.cWidth/2,this.cHeight/2,this.cWidth,this.cHeight).addImage(this.imgPath+'lvl2.png'),-30);
+		this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl2.png'),-30);
 	
 	
 	
@@ -120,6 +120,11 @@ lvl2.prototype.setup = function(){
 	fixDef.userData = 'blocks';
 	fixDef.shape = new b2PolygonShape;
 
+
+fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE *1.5,true),pxConv(this.MAX_SIZE,true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 + 50,true),pxConv(this.cHeight - this.MAX_SIZE,true));
+	this.prepShape(bodyDef, fixDef).setFillStyle(colors[0][0]).setStrokeStyle(colors[0][1],pxConv(2));
+
 	fixDef.shape.SetAsBox(pxConv(this.MAX_SIZE,true),pxConv(this.MAX_SIZE,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - this.MAX_SIZE,true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[2][0]).setStrokeStyle(colors[2][1],pxConv(2));
@@ -132,7 +137,7 @@ lvl2.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 45,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[4][0]).setStrokeStyle(colors[4][1],pxConv(2));
 	
-	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/2,true));
+	fixDef.shape.SetAsBox(pxConv(45,true),pxConv(this.MAX_SIZE/1.5,true));
 	bodyDef.position.Set(pxConv(this.cWidth/2 - 80,true),pxConv(this.cHeight - (45),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[6][0]).setStrokeStyle(colors[6][1],pxConv(2));
 	
@@ -146,7 +151,7 @@ lvl2.prototype.setup = function(){
 		new b2Vec2(pxConv(140,true)/4, pxConv(140,true)/4), 
 		new b2Vec2(pxConv(-140,true)/4, pxConv(140,true)/4)
 	]);
-	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
+	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE + 50),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[9][0]).setStrokeStyle(colors[9][1],2);   
 
 }//SETUP
