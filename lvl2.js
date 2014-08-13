@@ -141,10 +141,10 @@ lvl2.prototype.setup = function(){
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[7][0]).setStrokeStyle(colors[7][1],pxConv(2));
 
 	fixDef.shape.SetAsArray([
-		new b2Vec2(pxConv(-80,true)/4, pxConv(-0,true)/4), 
-		new b2Vec2(pxConv(80,true)/4, pxConv(-0,true)/4), 
-		new b2Vec2(pxConv(120,true)/4, pxConv(120,true)/4), 
-		new b2Vec2(pxConv(-120,true)/4, pxConv(120,true)/4)
+		new b2Vec2(pxConv(-100,true)/4, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(100,true)/4, pxConv(-0,true)/4), 
+		new b2Vec2(pxConv(140,true)/4, pxConv(140,true)/4), 
+		new b2Vec2(pxConv(-140,true)/4, pxConv(140,true)/4)
 	]);
 	bodyDef.position.Set(pxConv(this.cWidth/2 + this.MAX_SIZE,true),pxConv(this.cHeight - (this.MAX_SIZE),true));
 	this.prepShape(bodyDef, fixDef).setFillStyle(colors[9][0]).setStrokeStyle(colors[9][1],2);   

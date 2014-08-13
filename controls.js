@@ -70,6 +70,8 @@ var world = new b2World(new b2Vec2(0, 30),true);
 var listener = new b2Listener;
 var level = null;
 
+var adReady = false;
+
 var gameOn = false;
 var gameIntro = false;
 
@@ -115,11 +117,13 @@ function GameControl(io) {
 		
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
+
+		console.log('resizecales')
 	};
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 1;
+	PIXEL_RATIO = 2;
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
@@ -154,18 +158,11 @@ function GameControl(io) {
 		muted = false;
 	}
 
-	
-	intro(io);
-	//createWorld(io);
 
+	
+	//intro(io);
+	createWorld(io,2);
 
-	io.canvas.width = io.canvas.width*PIXEL_RATIO;
-	io.canvas.height = io.canvas.height*PIXEL_RATIO;
-		
-	io.canvas.style.width = window.innerWidth + 'px';
-	io.canvas.style.height = window.innerHeight + 'px';
-	
-	
 	
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
@@ -189,10 +186,11 @@ function GameControl(io) {
 	    fullscreen1.onFullScreenHidden.addEventListener(function()
 	    {
 	        console.log("fullscreen1 onFullScreenHidden");
-	        fullscreen1.refreshFullScreen();
+	        //fullscreen1.refreshFullScreen();
 	    });
 	    fullscreen1.onFullScreenReady.addEventListener(function()
 	    {
+	    	adReady = true;
 	        console.log("fullscreen1 onFullScreenReady");
 	    });
 	}
@@ -370,10 +368,8 @@ function GameControl(io) {
 		}
 		
 		if(testBtn && testBtn.contains(newPos)){
-
-
+			if(adReady)
 		     fullscreen1.showFullScreen();
-		    //console.log(localStorage)
 		}
 	
 	});
@@ -432,7 +428,7 @@ function GameControl(io) {
 	io.canvas.addEventListener('mouseup', mouseUp);
 	io.canvas.addEventListener('mousedown', function(e){
 		mouseDown(e);
-		 var newPos = io.getEventPosition(e);
+		var newPos = io.getEventPosition(e);
 		newPos.x = pxConv(io.getEventPosition(e).x)*scaleX;
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
         if (btn && btn.contains(newPos)){
@@ -480,6 +476,11 @@ function GameControl(io) {
 		if(testBtn && testBtn.contains(newPos)){
 
 		    console.log(localStorage);
+		    if(PIXEL_RATIO == 2)
+		    	PIXEL_RATIO = 1;
+			else
+				PIXEL_RATIO = 2;
+		    createWorld(io,currentLvl)
 		}
     });
 
@@ -771,6 +772,11 @@ function createWorld(io,levelNumber){
 	//DO INTRO ANIMATION	
 	gameOn = true;
 
+
+
+	io.canvas.width = GAMEWIDTH;
+	io.canvas.height = GAMEHEIGHT;
+
 	if ( world != null )
 		world = null;
 		
@@ -778,7 +784,7 @@ function createWorld(io,levelNumber){
 	btn = restartLvlBtn = nextLvlBtn = backBtn = nextBtn = undefined;    
     //create the box2d world
 	world = io.addB2World(new b2World(
-    new b2Vec2(0, 30 * PIXEL_RATIO)    //gravity
+    new b2Vec2(0, 30*PIXEL_RATIO)    //gravity
    	,true                 //allow sleep
 	));
 
@@ -803,6 +809,23 @@ function createWorld(io,levelNumber){
 
 	io.pauseB2World(false);
 	io.pauseFramerate(false);
+
+
+
+	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
+	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
+		
+
+
+	io.canvas.style.width = window.innerWidth + 'px';
+	io.canvas.style.height = window.innerHeight + 'px';
+
+
+	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
+	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
+	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
+	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
+	console.log('pixel_ratio = ' + PIXEL_RATIO);
 	
 }
 function soundControl(bool){

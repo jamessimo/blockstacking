@@ -109,9 +109,9 @@ lvl1.prototype.setup = function(){
 	//SHAPES!
 	
 	fixDef = new b2FixtureDef;
-	fixDef.friction = 0.5;
-	fixDef.restitution = 0.3;
-	fixDef.density = 5;
+	fixDef.friction = pxConv(0.5);
+	fixDef.restitution = pxConv(0.3);
+	fixDef.density = pxConv(5);
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
 	

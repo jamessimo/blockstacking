@@ -90,6 +90,8 @@ lvl4.prototype.setup = function(){
 
 
 	//PLATFORM
+		fixDef.friction = 1;
+
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.cWidth/2,true),pxConv(this.cHeight - (10 + 100),true));	
 	fixDef.shape = new b2PolygonShape;
@@ -137,7 +139,6 @@ lvl4.prototype.setup = function(){
 		new b2Vec2(pxConv(1.1), pxConv(0)), 
 		new b2Vec2(pxConv(0.55), pxConv(0.95)), 
 		new b2Vec2(pxConv(-0.55), pxConv(0.95)),
-
 		new b2Vec2(pxConv(-1.1), pxConv(0)), 
 		new b2Vec2(pxConv(-0.55), pxConv(-0.95)), 
 		new b2Vec2(pxConv(0.55), pxConv(-0.95))
