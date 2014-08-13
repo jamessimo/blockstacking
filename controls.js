@@ -128,7 +128,7 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 2;
+	PIXEL_RATIO = 1.5;
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
@@ -748,7 +748,7 @@ function intro(io){
 	prepShape(io,bodyDef, fixDef).setFillStyle(colors[2][0]);
 
 
-	
+
 
 	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
 	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
