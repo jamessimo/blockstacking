@@ -164,8 +164,8 @@ function GameControl(io) {
 	}
 
 	
-	//intro(io);
-	createWorld(io,2);
+	intro(io);
+	//createWorld(io,2);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
@@ -667,6 +667,8 @@ function gameOver(io){
 
 function intro(io){
 
+	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
+	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
 	gameIntro = false;
 	gameOn = false;
 
@@ -744,6 +746,18 @@ function intro(io){
 	fixDef.shape.SetAsBox(pxConv(10,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
 	prepShape(io,bodyDef, fixDef).setFillStyle(colors[2][0]);
+
+
+	
+
+	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
+	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
+		
+
+
+	io.canvas.style.width = window.innerWidth + 'px';
+	io.canvas.style.height = window.innerHeight + 'px';
+
 
 }
 function createWorld(io,levelNumber){
