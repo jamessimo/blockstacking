@@ -79,8 +79,13 @@ var muted = false;
 var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
 var MAX_LEVELS = 5
+
 var GAMEHEIGHT = 480;
 var GAMEWIDTH = 320;
+
+var PXDIFF = 0;
+
+
 var scaleX = scaleY = scaleToFit = 0;
 
 var bgBlocks = 0;
@@ -96,6 +101,7 @@ function GameControl(io) {
 
 	if(window.innerHeight > 480){
 		GAMEHEIGHT = 568;
+		PXDIFF = 6;
 	}
 
 
@@ -110,6 +116,13 @@ function GameControl(io) {
 	
 	    return dpr / bsr;
 	})();
+
+
+	if(PIXEL_RATIO > 1){
+		PIXEL_RATIO = 1.5;
+	}else{
+		PIXEL_RATIO = 1;
+	}
 	
 	this.onResize = function(event){
 		io.canvas.width = GAMEWIDTH;
@@ -128,7 +141,7 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 1.5;
+	//PIXEL_RATIO = 1;
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
@@ -164,8 +177,8 @@ function GameControl(io) {
 	}
 
 	
-	intro(io);
-	//createWorld(io,2);
+	//intro(io);
+	createWorld(io);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
@@ -854,7 +867,9 @@ function prepShape(io,bodyDef, fixDef,group,zIndex){
 function pxConv(x,box2dconv){
 	x = x * PIXEL_RATIO;
 	if(box2dconv == true){
+		
 		x = x / PTM;
+
 	}
 	return x;
 }

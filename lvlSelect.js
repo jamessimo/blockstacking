@@ -79,10 +79,13 @@ lvlSelect.prototype.setup = function(){
 	
 
 		//PUT THIS INTO A PROMISE 
-		if(!adReady)
+		if(!adReady){
+			console.log('loading ad');
 	    	fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
-		else
+		}else{
+			console.log('refreshing ad');
 			fullscreen1.refreshFullScreen();
+		}
 		
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
