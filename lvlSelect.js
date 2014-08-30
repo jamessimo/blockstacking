@@ -26,22 +26,22 @@ lvlSelect.prototype.setup = function(){
 
 	this.lvlButtons.push(null);
 		
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[0][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['red'][1],4)
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[1][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['burgundy'][1],4)
 	));
 	
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[2][1],4) 
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['blue'][1],4) 
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[3][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['turquoise'][1],4)
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[3][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['purple'][1],4)
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors[3][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['navy'][1],4)
 	));
 
 
