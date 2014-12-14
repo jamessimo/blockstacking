@@ -34,20 +34,9 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
 
 var colors = new Array();
 
-/*colors[0] = ['#DB4437','#D3362D'];
-colors[1] = ['#F05722','#E3421E'];
-colors[2] = ['#E7981D','#E05C16'];
-colors[3] = ['#F4DF3B','#EBC12C'];
-colors[4] = ['#CDDC39','#B9C246'];
-colors[5] = ['#65B045','#4F8742'];
-colors[6] = ['#11A9CC','#1B7DB1'];
-colors[7] = ['#4285F4','#355BD8'];
-colors[8] = ['#3F5CA9','#34318A'];
-colors[9] = ['#7E3794','#491F81'];
-colors[10] = ['#A61D4C','#720D37'];
-colors[11] = ['#795548','#451F14'];
-colors[12] = ['#4D4D4D','#151515'];*/
-
+var newBlock = {};
+var newBlocks = [];
+var recordObjects = false;
 
 var colors = {		
 	'red' 		: 	['#DB4437','#c82a23'],
@@ -66,9 +55,6 @@ var colors = {
 };
 
 //for( var i = colors.length; i--; console.log( colors[ i ] ) );
-
-
-
 
 //Object.keys(colors);
 //colors.indexOf('navy');
@@ -109,11 +95,10 @@ var gameIntro = false;
 var muted = false;
 var PIXEL_RATIO = 1;
 var WORLD_SCALE = 1;
-var MAX_LEVELS = 5
+var MAX_LEVELS = 24;
 
 var GAMEHEIGHT = 480;
 var GAMEWIDTH = 320;
-
 
 var scaleX = scaleY = scaleToFit = 0;
 
@@ -132,7 +117,7 @@ function GameControl(io) {
 	lio = io;
 
 	if(window.innerHeight > 480){
-		GAMEHEIGHT = 568;
+		//GAMEHEIGHT = 568;
 	}
 
 
@@ -191,10 +176,6 @@ function GameControl(io) {
 	*/
 	
 
-
-
- 	
-
 	localStorage["level.1"] = true;
 	
 	if(	localStorage["muted"] == 'true'){
@@ -209,13 +190,10 @@ function GameControl(io) {
 
 	
 	//intro(io);
-	createWorld(io,1);
+	createWorld(io,5);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
-
-
-
 
 
 
@@ -315,6 +293,18 @@ function GameControl(io) {
     function mouseDown(e){
        e.preventDefault();
        isMouseDown = true;
+
+       if(recordObjects){
+
+        	console.log(Math.round(mouseX));
+			console.log(Math.round(mouseY));
+		  io.addToGroup('EDITOREDGE', new iio.Circle(mouseX*PTM, mouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
+
+
+		  newBlock.vertexs.push( new b2Vec2(Math.round(mouseX*100)/100 ,Math.round(mouseY*100)/100));
+
+       }
+       	
        mouseMove(e);
     }
     function touchStart(e){
@@ -350,6 +340,10 @@ function GameControl(io) {
 		newPos.y = pxConv(e.touches[0].pageY)*scaleY;
 		
 		if (btn && btn.contains(newPos)){
+			unPauseBtn = undefined; //To remove its POS
+			muteBtn = undefined;
+			menuBtn = undefined;
+			testBtn = undefined;
 			createWorld(io);
 		}
 		 if(pauseBtn && pauseBtn.contains(newPos)){
@@ -369,7 +363,9 @@ function GameControl(io) {
 		}
 		if(menuBtn && menuBtn.contains(newPos)){
 			createWorld(io);
+			muteBtn = undefined;
 			menuBtn = undefined;
+			testBtn = undefined;
 		}
 		if(level){
 			if(level.lvlButtons){
@@ -400,11 +396,65 @@ function GameControl(io) {
 	window.addEventListener('keydown', function(event){
 		if (iio.keyCodeIs('up arrow', this.event)){
 			if(level.gameEnd == true)
-				level.gameEnd = false
+				level.gameEnd = false;
 			else 
-				level.gameEnd = true
+				level.gameEnd = true;
 		
 		}
+
+		if (iio.keyCodeIs('o', this.event)){
+			if(recordObjects == true){
+				newBlock.numberEdges = newBlock.vertexs.length;
+				console.log(newBlock);
+
+				var bodyDef = new b2BodyDef;
+
+				var fixDef = new b2FixtureDef;
+				fixDef.friction = 0.5;
+				fixDef.restitution = 0.3;
+				fixDef.density = 5;
+				bodyDef.type = b2Body.b2_dynamicBody;
+				fixDef.shape = new b2PolygonShape;
+
+				fixDef.shape.SetAsArray(newBlock.vertexs);
+				
+
+				//console.log(fixDef);
+
+				//console.log(fixDef.shape);
+				var color = iio.getRandomNum(0,Object.keys(colors).length-1);
+				color = Math.round(color)
+
+				var currentColor = getColor(color);
+				newBlock.color = currentColor;
+
+				var xPos = iio.getRandomNum(-7,7);
+
+				prepShape(bodyDef, fixDef).setFillStyle(currentColor[0]).setStrokeStyle(currentColor[1],2);  
+
+
+				newBlock.pos = new b2Vec2(xPos,0);
+
+
+				newBlocks.push(newBlock);
+				console.log(newBlocks)
+				
+				
+				newBlock = {};
+				recordObjects = false;
+				io.rmvFromGroup('EDITOREDGE');
+			}else{
+				recordObjects = true;
+				newBlock = {vertexs: [], numberEdges: 0}
+			}
+		}
+
+		if (iio.keyCodeIs('k', this.event)){
+			var url = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(newBlocks));
+				window.open(url, '_blank');
+				window.focus();
+		}
+
 		if (iio.keyCodeIs('g', this.event)){
 			if(level.gameOver == true)
 				level.gameOver = false
@@ -452,6 +502,10 @@ function GameControl(io) {
 		newPos.x = pxConv(io.getEventPosition(e).x)*scaleX;
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
         if (btn && btn.contains(newPos)){
+        	unPauseBtn = undefined; //To remove its POS
+			muteBtn = undefined;
+			menuBtn = undefined;
+			testBtn = undefined;
         	createWorld(io);
         }
         if(pauseBtn && pauseBtn.contains(newPos)){
@@ -471,7 +525,9 @@ function GameControl(io) {
 		}
 		if(menuBtn && menuBtn.contains(newPos)){
 			createWorld(io);
+			muteBtn = undefined;
 			menuBtn = undefined;
+			testBtn = undefined;
 		}
 		if(gameOn && level.lvlButtons){
 			for(var i = 1; i < level.lvlButtons.length ; i++){
@@ -486,6 +542,10 @@ function GameControl(io) {
 		}
 		if(gameOn && level.backBtn){
 			if(level.backBtn && level.backBtn.contains(newPos)){
+				unPauseBtn = undefined; //To remove its POS
+				muteBtn = undefined;
+				menuBtn = undefined;
+				testBtn = undefined;
 				intro(io);
 			}
 		}
@@ -496,10 +556,10 @@ function GameControl(io) {
 		if(testBtn && testBtn.contains(newPos)){
 
 		    console.log(localStorage);
-		    if(PIXEL_RATIO == 2)
+		    if(PIXEL_RATIO == 1.5)
 		    	PIXEL_RATIO = 1;
 			else
-				PIXEL_RATIO = 2;
+				PIXEL_RATIO = 1.5;
 		    createWorld(io,currentLvl)
 		}
     });
@@ -522,9 +582,9 @@ function pause(io){
 		.setStrokeStyle(colors['orange'][1],pxConv(2)),20);
 		
 	unPauseBtn.addObj(new iio.Rect().addImage('img/nextBtn.png')
-		.setImgSize(50,50));
+		.setImgSize(pxConv(50),pxConv(50)));
 
-	pauseBtn.pos.x = -50; //hide pause button;
+	pauseBtn.pos.x = pxConv(-50); //hide pause button;
 
 	muteBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(70), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
@@ -532,7 +592,7 @@ function pause(io){
 		.setStrokeStyle(colors['orange'][1],pxConv(2)),20);
 
 	muteBtn.addObj(new iio.Rect().addImage('img/sound.png')
-		.setImgSize(50,50));
+		.setImgSize(pxConv(50),pxConv(50)));
 
 	if(muted){
 		muteBtn.objs[0].setAlpha(0.3);
@@ -544,12 +604,18 @@ function pause(io){
 	menuBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(70 * 2), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['orange'][0])
-		.setStrokeStyle(colors['orange'][1],pxConv(2)),20).addObj(new iio.Rect().addImage('img/menu.png').setImgSize(50,50));
+		.setStrokeStyle(colors['orange'][1],pxConv(2)),20).addObj(new iio.Rect().addImage('img/menu.png').setImgSize(pxConv(50),pxConv(50)));
 
 	testBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(65 * 3), pxConv(60), pxConv(30))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['purple'][0])
 		.setStrokeStyle(colors['purple'][1],pxConv(2)),20);
+
+	testBtn.text = io.addToGroup('MENU', new iio.Text('AntiAlias',testBtn.pos)
+		.setFont(pxConv(20)+'px OpenSans')
+		.setTextAlign('center')
+		.setFillStyle('white'),20);
+
 
 	level.pause = true
 	gameOn = false;
@@ -563,7 +629,7 @@ function pause(io){
 function resume(io){
 
 	gameoverText = null;
-	unPauseBtn.pos.x = -50;
+	unPauseBtn.pos.x = pxConv(-50);
 	io.rmvFromGroup('MENU');
 
 
@@ -572,7 +638,7 @@ function resume(io){
 	menuBtn = undefined;
 	testBtn = undefined;
 
-	pauseBtn.pos.x = +25; //show pause button
+	pauseBtn.pos.x = pxConv(25); //show pause button
 
 	level.pause = false;
 	gameOn = true;
@@ -941,4 +1007,31 @@ function getColor(iGet){
 				return colors[index];
 		}
 
+}
+
+
+function decimalAdjust(type, value, exp) {
+	// If the exp is undefined or zero...
+	if (typeof exp === 'undefined' || +exp === 0) {
+		return Math[type](value);
+	}
+	value = +value;
+	exp = +exp;
+	// If the value is not a number or the exp is not an integer...
+	if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+		return NaN;
+	}
+	// Shift
+	value = value.toString().split('e');
+	value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+	// Shift back
+	value = value.toString().split('e');
+	return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+// Decimal round
+if (!Math.round10) {
+	Math.round10 = function(value, exp) {
+		return decimalAdjust('round', value, exp);
+	};
 }

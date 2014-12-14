@@ -112,27 +112,6 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 ,true),pxConv(this.cHeight/2 ,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['navy'][0]).setStrokeStyle(colors['navy'][1],pxConv(2));
 
-	fixDef.shape.SetAsBox(pxConv(0.7),pxConv(0.7));
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (2 * PTM) ,true),pxConv(this.cHeight - (1 * PTM) ,true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['sunset'][0]).setStrokeStyle(colors['sunset'][1],pxConv(2));
-	
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(1.5));
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (4 * PTM),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['blue'][0]).setStrokeStyle(colors['blue'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
-	bodyDef.position.Set(pxConv(this.cWidth/2 - (25),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['red'][0]).setStrokeStyle(colors['red'][1],pxConv(2));
-	
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(1.2));
-	bodyDef.angle = -0.5;
-	bodyDef.position.Set(pxConv(this.cWidth/2 - (80),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['turquoise'][0]).setStrokeStyle(colors['turquoise'][1],pxConv(2));
-	
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
-	bodyDef.angle = 0;
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (25),true),pxConv(this.cHeight - (25),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['purple'][0]).setStrokeStyle(colors['purple'][1],pxConv(2));  
 
 
 	/*fixDef.shape.SetAsArray([

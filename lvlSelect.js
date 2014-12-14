@@ -11,7 +11,14 @@ function lvlSelect(io){
 	this.loadResources = 0;
 	this.totalResources = 5;
 	
-	this.btnSize = 80;
+
+	this.btnSpaceX = 40;
+	this.btnMargin = 80;
+
+	this.btnSpaceY = 40;
+
+
+	this.btnSize = 65;
 	
 	//Levels
 	this.lvlButtons =  new Array();
@@ -22,29 +29,48 @@ lvlSelect.prototype.setup = function(){
 	
 	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'mountain.png'),-30);
 	
-	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(25), pxConv(50), pxConv(50)).addImage('img/backBtn.png'),20)
+	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(25), pxConv(this.btnSpaceX), pxConv(this.btnSpaceX)).addImage('img/backBtn.png'),20)
 
 	this.lvlButtons.push(null);
+	var j = 0;
+	var k = 0;
+	var colorNum = 0;
+	var color = getColor(colorNum);
+	console.log(color);
+
+	for(var i = 0; i < MAX_LEVELS ; i++){
+			if(i % 4 === 0){
+				colorNum++;
+				j++;
+				color = getColor(colorNum);
+				k = 0;
+
+			}
+		this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX + this.btnMargin *k ),pxConv(this.btnSpaceY + (this.btnMargin *j)), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(color[1],pxConv(3))));	
+		k++;
+	}
 		
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['red'][1],4)
+	/*this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['red'][1],4)
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['burgundy'][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['burgundy'][1],4)
 	));
 	
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['blue'][1],4) 
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*2 + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['blue'][1],4) 
 	));
 
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['turquoise'][1],4)
-	));
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['purple'][1],4)
-	));
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(90*2 + 50),pxConv(130 + 90 ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['navy'][1],4)
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*3 + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['turquoise'][1],4)
 	));
 
 
+
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX),pxConv(this.btnSpaceY + this.btnMargin ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['purple'][1],4)
+	));
+
+	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*2 + this.btnSpaceX),pxConv(this.btnSpaceY + this.btnMargin ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['navy'][1],4)
+	));
+
+*/
 
 	//Paint all 
 
@@ -57,14 +83,14 @@ lvlSelect.prototype.setup = function(){
 			.setFillStyle(this.lvlButtons[i].styles.strokeStyle));
 
 			var btnPos = new iio.Vec(this.lvlButtons[i].pos);
-			btnPos.y += 11;
+			btnPos.y += pxConv(13);
 			this.lvlButtons[i].objs[0].pos = btnPos;
 		}else{
 			this.lvlButtons[i].addObj(new iio.Rect().addImage('img/lock.png')
-			.setImgSize(65,75)
+			.setImgSize(pxConv(32),pxConv(37))
 			.setAlpha(0.7));
 
-			this.lvlButtons[i].setStrokeStyle(colors[12][0]).setAlpha(0.7);
+			//this.lvlButtons[i].setStrokeStyle(colors['black'][1][0]).setAlpha(0.7);
 
 		}
 
