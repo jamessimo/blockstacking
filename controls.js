@@ -117,7 +117,7 @@ function GameControl(io) {
 	lio = io;
 
 	if(window.innerHeight > 480){
-		//GAMEHEIGHT = 568;
+		GAMEHEIGHT = 568;
 	}
 
 
@@ -157,7 +157,7 @@ function GameControl(io) {
 	
 	//Debugging 
 	//scaleX = scaleY = 1;
-	PIXEL_RATIO = 1;
+	//PIXEL_RATIO = 1;
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
@@ -189,8 +189,8 @@ function GameControl(io) {
 	}
 
 	
-	//intro(io);
-	createWorld(io,5);
+	intro(io);
+	//createWorld(io,5);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
