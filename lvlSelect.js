@@ -16,9 +16,16 @@ function lvlSelect(io){
 	this.btnMargin = 80;
 
 	this.btnSpaceY = 40;
-
+	this.cols = 4;
 
 	this.btnSize = 65;
+	
+	if(GAMEHEIGHT != 568){
+		this.btnSpaceX = 52;
+		this.btnMargin = 70;
+		this.btnSpaceY = 20;	
+		this.btnSize = 60;
+	}
 	
 	//Levels
 	this.lvlButtons =  new Array();
@@ -29,7 +36,7 @@ lvlSelect.prototype.setup = function(){
 	
 	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'mountain.png'),-30);
 	
-	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(25), pxConv(this.btnSpaceX), pxConv(this.btnSpaceX)).addImage('img/backBtn.png'),20)
+	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(30), pxConv(35), pxConv(35)).addImage('img/backBtn.png'),20)
 
 	this.lvlButtons.push(null);
 	var j = 0;
@@ -39,7 +46,7 @@ lvlSelect.prototype.setup = function(){
 	console.log(color);
 
 	for(var i = 0; i < MAX_LEVELS ; i++){
-			if(i % 4 === 0){
+			if(i % this.cols === 0){
 				colorNum++;
 				j++;
 				color = getColor(colorNum);
@@ -50,28 +57,6 @@ lvlSelect.prototype.setup = function(){
 		k++;
 	}
 		
-	/*this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['red'][1],4)
-	));
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['burgundy'][1],4)
-	));
-	
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*2 + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['blue'][1],4) 
-	));
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*3 + this.btnSpaceX),pxConv(this.btnSpaceY), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['turquoise'][1],4)
-	));
-
-
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX),pxConv(this.btnSpaceY + this.btnMargin ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['purple'][1],4)
-	));
-
-	this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnMargin*2 + this.btnSpaceX),pxConv(this.btnSpaceY + this.btnMargin ), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(colors['navy'][1],4)
-	));
-
-*/
-
 	//Paint all 
 
 

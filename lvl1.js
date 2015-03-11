@@ -16,6 +16,7 @@ function lvl1(io){
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
 	this.gameWin = 
+	this.gameWinAnim =
 	this.gameEnd = false;
 	   
 }; iio.lvl1 = lvl1;
@@ -95,11 +96,29 @@ lvl1.prototype.setup = function(){
 	fixDef.isSensor = true;
 	fixDef.userData = 'goal';
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(62/2,true),pxConv(59/2,true));
-	bodyDef.position.Set(pxConv(this.goalPos.x,true), pxConv(this.goalPos.y/PIXEL_RATIO,true));
-	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.goalPos.x),pxConv(this.goalPos.y/PIXEL_RATIO),0).setFillStyle('rgba(255,255,255,0.4)'));
-	prepShape(bodyDef, fixDef).addImage(this.imgPath + 'star.png')
+
+	this.goalEffect = this.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(this.goalPos.x),pxConv(this.goalPos.y/PIXEL_RATIO),0).setFillStyle('rgba(244, 223, 59,0.3)').setStrokeStyle('rgba(233, 195, 53,0.3)',pxConv(2)));
+		
+	bodyDef.angle = Math.PI/1;
+	fixDef.shape.SetAsArray([
+			new b2Vec2(pxConv(0.94), pxConv(0.30)), 
+			new b2Vec2(pxConv(0.34), pxConv(0.47)), 
+			new b2Vec2(pxConv(-0.00), pxConv(0.99)), 
+			new b2Vec2(pxConv(-0.34), pxConv(0.47)),
 	
+			new b2Vec2(pxConv(-0.94), pxConv(0.30)),
+			new b2Vec2(pxConv(-0.56), pxConv(-0.18)),
+			new b2Vec2(pxConv(-0.58), pxConv(-0.80)),
+			new b2Vec2(pxConv(0.00), pxConv(-0.59)),
+	
+			new b2Vec2(pxConv(0.58), pxConv(-0.80)),
+			new b2Vec2(pxConv(0.56), pxConv(-0.18))
+		]);
+		bodyDef.position.Set(pxConv(this.goalPos.x,true), pxConv(this.goalPos.y/PIXEL_RATIO,true));
+		prepShape(bodyDef, fixDef).setFillStyle(colors['orange'][0]).setStrokeStyle(colors['orange'][1],pxConv(2));   
+	
+	
+
 	//SHAPES!
 	fixDef = new b2FixtureDef;
 	fixDef.friction = 0.5;
@@ -129,29 +148,14 @@ lvl1.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 - (80),true),pxConv(this.cHeight - (45),true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['turquoise'][0]).setStrokeStyle(colors['turquoise'][1],pxConv(2));
 	
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
+	fixDef.shape.SetAsBox(pxConv(1),pxConv(1));
 	bodyDef.angle = 0;
 	bodyDef.position.Set(pxConv(this.cWidth/2 + (25),true),pxConv(this.cHeight - (25),true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['purple'][0]).setStrokeStyle(colors['purple'][1],pxConv(2));  
 
 
-	/*fixDef.shape.SetAsArray([
-		new b2Vec2(pxConv(0.94), pxConv(0.30)), 
-		new b2Vec2(pxConv(0.34), pxConv(0.47)), 
-		new b2Vec2(pxConv(-0.00), pxConv(0.99)), 
-		new b2Vec2(pxConv(-0.34), pxConv(0.47)),
 
-		new b2Vec2(pxConv(-0.94), pxConv(0.30)),
-		new b2Vec2(pxConv(-0.56), pxConv(-0.18)),
-		new b2Vec2(pxConv(-0.58), pxConv(-0.80)),
-		new b2Vec2(pxConv(0.00), pxConv(-0.59)),
 
-		new b2Vec2(pxConv(0.58), pxConv(-0.80)),
-		new b2Vec2(pxConv(0.56), pxConv(-0.18))
-	]);
-	bodyDef.position.Set(pxConv(this.cWidth/2 + 25,true),pxConv(this.cHeight - (25 + 350),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]).setStrokeStyle(colors['brown'][1],2);   
-*/
 
 }//SETUP
 
@@ -162,11 +166,37 @@ lvl1.prototype.step = function(){
 	}
 	
 	if(this.goalTouchTime >= this.goalTime){
-		this.gameWin = true;
+		var fixDef = new b2FixtureDef;
+		var bodyDef = new b2BodyDef;
+		
+		fixDef.friction = 0.5;
+		fixDef.restitution = 0.3;
+		fixDef.density = 5;
+		bodyDef.type = b2Body.b2_dynamicBody;
+		fixDef.shape = new b2PolygonShape;
+		
+		if(this.gameWinAnim == false){
+			world.m_gravity.y = 0;
+			for (var i=0; i<40; i++){
+				fixDef.shape.SetAsBox(iio.getRandomNum(pxConv(0.05),pxConv(0.1)),iio.getRandomNum(pxConv(0.05),pxConv(0.1)));
+				bodyDef.position.Set(pxConv(this.goalPos.x +iio.getRandomNum(-20,20) ,true),pxConv(this.goalPos.y/PIXEL_RATIO+iio.getRandomNum(-20,20),true));
+				bodyDef.linearVelocity.Set(pxConv(iio.getRandomNum(-30,30)),pxConv(iio.getRandomNum(-30,30)));
+				prepShape(bodyDef, fixDef).setFillStyle(colors['orange'][0]).setStrokeStyle(colors['orange'][1],pxConv(2));
+			}
+		}
+		if(this.gameWinAnim){
+			world.DestroyBody(lio.goal.GetBody());	 
+		}
+ 
+        this.gameWinAnim = true;
+		setTimeout(function(){
+		  lio.gameWin = true;
+		}, 1000)
+		
 	}
 
 	if(this.goalTouch){
-		if(this.goalTouch.GetBody() != selectedBody){
+		if(this.goalTouch.GetBody() != selectedBody && this.goalTouchTime <= this.goalTime){
 			this.goalEffect.radius = this.goalTouchTime;
 			this.goalTouchTime++;
 		}else{
@@ -179,6 +209,7 @@ lvl1.prototype.step = function(){
 		if(contact.GetFixtureB().GetUserData() == 'goal'){
 			lio.goalTouch = contact.GetFixtureA();
 			lio.goal = contact.GetFixtureB();
+
 		}
 	}
 	listener.EndContact = function(contact) {
@@ -191,7 +222,7 @@ lvl1.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activateLevel1 = function(io){
+iio.AppManager.prototype.activatelvl1 = function(io){
 	this.level = new iio.lvl1(io);
 	return this.level;
 }

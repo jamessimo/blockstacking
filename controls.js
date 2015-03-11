@@ -54,32 +54,6 @@ var colors = {
 	'black' 	: 	['#4D4D4D','#151515']
 };
 
-//for( var i = colors.length; i--; console.log( colors[ i ] ) );
-
-//Object.keys(colors);
-//colors.indexOf('navy');
-//console.log(colors);
-/*
-for (var x in colors) {
-    console.log(x + ": " + colors[x]);
-}
-*/
-
-	/*this.red = '#DB4437';
-	this.sunset = '#F05722';
-	this.orange = '#E7981D';
-	this.yellow = '#F4DF3B';
-	this.lime = '#CDDC39';
-	this.green = '#65B045';
-	this.turquoise = '#11A9CC';
-	this.blue = '#4285F4';
-	this.navy = '#3F5CA9';
-	this.purple = '#7E3794';
-	this.burgundy = '#A61D4C';
-	this.brown = '#795548';
-	this.white = '#F9F9F9';
-	this.black = '#4D4D4D';
-	this.grey = '#CCCCCC';*/
 
 var PTM = 30;
 var FPS = 60;
@@ -140,6 +114,16 @@ function GameControl(io) {
 		PIXEL_RATIO = 1;
 	}
 	
+	var TEST = true;
+	
+	if(TEST){
+		PIXEL_RATIO = 1;
+		GAMEHEIGHT = 480;
+	    muted = true;
+	   	    
+	    
+	}
+	
 	this.onResize = function(event){
 		io.canvas.width = GAMEWIDTH;
 		io.canvas.height = GAMEHEIGHT;
@@ -155,9 +139,8 @@ function GameControl(io) {
 
 	};
 	
-	//Debugging 
-	//scaleX = scaleY = 1;
-	//PIXEL_RATIO = 1;
+
+
 	
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
@@ -166,15 +149,6 @@ function GameControl(io) {
 	scaleY = io.canvas.height / window.innerHeight;
 	scaleToFit = Math.min(scaleX, scaleY);
 
-	//DEBUGGING 
-	/*
-	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
-	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
-	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
-	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
-	console.log('pixel_ratio = ' + PIXEL_RATIO);
-	*/
-	
 
 	localStorage["level.1"] = true;
 	
@@ -189,28 +163,33 @@ function GameControl(io) {
 	}
 
 	
-	intro(io);
-	//createWorld(io,5);
+	//intro(io);
+	createWorld(io,1);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 
+      
 
-
-
-	io.setB2Framerate(FPS, function(){
+	io.setB2Framerate(FPS,function(){
+	
+		
 		if(gameOn){
 			if(level.gameOver==true){
 				gameOver(io);
 			}
 			else if(level.gameWin==true){
+			
 				winGame(io);
+			
 			}
 			else{
 				//io.context.scale(canvasZoom.x,canvasZoom.y);
 				//io.context.translate(canvasOffset.x, canvasOffset.y);
 				level.step();
+				
+				
 			}
 		}else{
 			if (gameIntro && bgBlocks < MAXBGBLOCKS && Math.random()<.03){
@@ -218,6 +197,11 @@ function GameControl(io) {
 		        	createBlock(io);
 		        	bgBlocks++;
 		        }
+		    }else if(level.gameWin==true){
+		    
+	
+		    
+		    
 		    }
 		}
 	
@@ -296,12 +280,12 @@ function GameControl(io) {
 
        if(recordObjects){
 
-        	console.log(Math.round(mouseX));
-			console.log(Math.round(mouseY));
+        	console.log(Math.round(mouseX,0.1));
+			console.log(Math.round(mouseY,1));
 		  io.addToGroup('EDITOREDGE', new iio.Circle(mouseX*PTM, mouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
 
 
-		  newBlock.vertexs.push( new b2Vec2(Math.round(mouseX*100)/100 ,Math.round(mouseY*100)/100));
+		  newBlock.vertexs.push( new b2Vec2(Math.round(mouseX,1) ,Math.round(mouseY,1)));
 
        }
        	
@@ -620,7 +604,6 @@ function pause(io){
 	level.pause = true
 	gameOn = false;
 		
-		//io.pauseFramerate();
 
 	io.pauseB2World(true);
 	io.pauseFramerate(true);
@@ -655,6 +638,8 @@ function resume(io){
 
 
 function winGame(io){
+
+
 	gameOn = false;
 
  	if (supports_html5_storage() != false) { 
@@ -664,16 +649,16 @@ function winGame(io){
    
 	//SHOW WIN TEXT
 
-	var gameoverText = io.addToGroup('MENU',(new iio.Text('Level ' + currentLvl + ' Clear!',iio.Vec.add(io.canvas.width/2,-pxConv(60),0,0)))
+	var winText = io.addToGroup('MENU',(new iio.Text('Level ' + currentLvl + ' Clear!',iio.Vec.add(io.canvas.width/2,-pxConv(60),0,0)))
 		.setFont(pxConv(40)+'px OpenSans')
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
 	  
 	//SHOW NEXT LEVEL BUTTON      		      
-	nextLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
+	nextLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(50))
 		.setRoundingRadius(10)
-		.setStrokeStyle('#4385f6').setLineWidth(2)
-		.setFillStyle('#4385f6'),20);
+		.setStrokeStyle(colors['sunset'][1]).setLineWidth(2)
+		.setFillStyle(colors['sunset'][0]),20);
 	nextLvlBtn.text = io.addToGroup('MENU', new iio.Text('Next Level',nextLvlBtn.pos)
 		.setFont(pxConv(20)+'px OpenSans')
 		.setTextAlign('center')
@@ -693,7 +678,7 @@ function winGame(io){
 		.onUpdate( function () {
 			topCurtain.height = this.y;
 			bottomCurtain.height = this.y;
-			gameoverText.pos.y = this.y/2 - 20;
+			winText.pos.y = this.y/2 - 20;
 		} )
 		.delay(1000)
 		.start();
@@ -705,14 +690,18 @@ function winGame(io){
 			if(nextLvlBtn){
 				nextLvlBtn.pos.y = this.y+50;
 				nextLvlBtn.text.pos.y = this.y+50;
-				nextLvlBtn.text.pos.y = nextLvlBtn.pos.y + pxConv(9);
+				nextLvlBtn.text.pos.y = nextLvlBtn.pos.y + pxConv(8);
 			}
 		} )
 		.delay(1000)
 		.start();
 
-	io.pauseB2World(true);
-	io.pauseFramerate(true);
+var dataURL = io.canvas.toDataURL();
+console.log(dataURL);
+
+	setTimeout(function(){io.pauseB2World(true);}, 2000)
+	
+	//io.pauseFramerate(true);
 
 }
 function gameOver(io){
@@ -758,7 +747,7 @@ function gameOver(io){
 		.onUpdate( function () {
 			if(restartLvlBtn){
 				restartLvlBtn.pos.y = this.y+50;
-				restartLvlBtn.text.pos.y = restartLvlBtn.pos.y + pxConv(9);
+				restartLvlBtn.text.pos.y = restartLvlBtn.pos.y + pxConv(8);
 
 			}
 		} )
@@ -821,7 +810,7 @@ function intro(io){
 				btn.pos.y = this.y;
 			}
 		} )
-		.delay(2000)
+		.delay(1700)
 		.onComplete(function(){
 			gameIntro = true;
 		})
@@ -885,7 +874,7 @@ function createWorld(io,levelNumber){
 
 	if(levelNumber){
 		currentLvl = levelNumber;
-		level = eval( "io.activateLevel"+levelNumber+"(io);" );
+		level = eval( "io.activatelvl"+levelNumber+"(io);" );
 		//ADD PAUSE BTN
 		pauseBtn = io.addObj(new iio.Rect(pxConv(25),pxConv(25), pxConv(40), pxConv(40))
 	  );
@@ -970,6 +959,10 @@ function supports_html5_storage() {
     return false;
   }
 }
+
+function createParticle(io){
+}
+
 
 //create a block
 function createBlock(io){

@@ -1,6 +1,6 @@
 (function(){
 
-function lvl5(io){
+function lvl6(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -18,11 +18,11 @@ function lvl5(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl5 = lvl5;
+}; iio.lvl6 = lvl6;
 
-lvl5.prototype.setup = function(){
+lvl6.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl5.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl6.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
 		.setFillStyle('rgba(0,0,0,0.0)')
@@ -109,15 +109,7 @@ lvl5.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 
-	blocksList = [{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":-1.5252033490687609,"y":0}},
-	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
-	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
-	{"vertexs":[{"x":9.30,"y":15.78},{"x":7.70,"y":15.78},{"x":7.70,"y":13.95},{"x":9.30,"y":13.95}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-2.2934139845892787,"y":0}},
-	{"vertexs":[{"x":1.79,"y":15.59},{"x":0.33,"y":15.49},{"x":0.41,"y":13.92},{"x":1.77,"y":13.92}],"numberEdges":4,"color":["#DB4437","#c82a23"],"pos":{"x":-3.7640923066064715,"y":0}},
-	{"vertexs":[{"x":2,"y":14.05},{"x":0.5,"y":14.03},{"x":0.58,"y":12.27},{"x":1.77,"y":12.27}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-6.113739041145891,"y":0}},
-	{"vertexs":[{"x":2.15,"y":13.51},{"x":0.83,"y":13.3},{"x":1.07,"y":11.76},{"x":2.27,"y":12.05}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":3.873320756945759,"y":0}},
-	{"vertexs":[{"x":7.3,"y":14.11},{"x":6.33,"y":13.46},{"x":7.45,"y":12.73}],"numberEdges":3,"color":["#3F5CA9","#34318A"],"pos":{"x":-0.024253061041235924,"y":0}}
-	];
+	blocksList = [{"vertexs":[{"x":10.19,"y":15.38},{"x":7.87,"y":15.41},{"x":7.79,"y":13.14},{"x":9.89,"y":13.23}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":2.394964179955423,"y":0}},{"vertexs":[{"x":7.41,"y":15.61},{"x":4.35,"y":15.69},{"x":4.35,"y":14.91},{"x":7.31,"y":14.6}],"numberEdges":4,"color":["#4285F4","#355BD8"],"pos":{"x":-6.012471902184188,"y":0}},{"vertexs":[{"x":6.96,"y":14.15},{"x":4.99,"y":14.29},{"x":4.91,"y":13.06}],"numberEdges":3,"color":["#795548","#451F14"],"pos":{"x":4.756325294263661,"y":0}},{"vertexs":[{"x":4.05,"y":15.64},{"x":2.11,"y":15.69},{"x":3.97,"y":14.15}],"numberEdges":3,"color":["#7E3794","#491F81"],"pos":{"x":-1.1407891130074859,"y":0}},{"vertexs":[{"x":3.28,"y":14.04},{"x":1.04,"y":14.57},{"x":0.61,"y":13.39},{"x":2.83,"y":12.47}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-2.562040526419878,"y":0}},{"vertexs":[{"x":2.85,"y":13.03},{"x":0.88,"y":13.7},{"x":0.77,"y":11.99},{"x":2.27,"y":12.11}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-2.8514663535170257,"y":0}},{"vertexs":[{"x":7.12,"y":14.54},{"x":5.71,"y":13.79},{"x":5.71,"y":13.23},{"x":7.09,"y":13.34}],"numberEdges":4,"color":["#4285F4","#355BD8"],"pos":{"x":0.9886818793602288,"y":0}},{"vertexs":[{"x":4.59,"y":13.59},{"x":3.25,"y":13.84},{"x":4.37,"y":12.81}],"numberEdges":3,"color":["#F05722","#E3421E"],"pos":{"x":1.5878062257543206,"y":0}}];
 
 	for(var i = 0; i < blocksList.length ; i++){
 		for(index in blocksList[i].vertexs){
@@ -135,7 +127,7 @@ lvl5.prototype.setup = function(){
 
 }//SETUP
 
-lvl5.prototype.step = function(){
+lvl6.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -171,8 +163,8 @@ lvl5.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activatelvl5 = function(io){
-	this.level = new iio.lvl5(io);
+iio.AppManager.prototype.activatelvl6 = function(io){
+	this.level = new iio.lvl6(io);
 	return this.level;
 }
 

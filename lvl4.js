@@ -160,7 +160,7 @@ lvl4.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activateLevel4 = function(io){
+iio.AppManager.prototype.activatelvl4 = function(io){
 	this.level = new iio.lvl4(io);
 	return this.level;
 }

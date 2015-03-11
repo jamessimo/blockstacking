@@ -87,7 +87,7 @@ lvl3.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.platformPos.x,true),pxConv(this.platformPos.y/PIXEL_RATIO,true));	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5,true),pxConv(5,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.1,true),pxConv(5,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]);
 
 	//GOAL
@@ -108,16 +108,8 @@ lvl3.prototype.setup = function(){
 	bodyDef.type = b2Body.b2_dynamicBody;
 	fixDef.shape = new b2PolygonShape;
 	
-
-	blocksList = [{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":-1.5252033490687609,"y":0}},
-	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
-	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
-	{"vertexs":[{"x":9.30,"y":15.78},{"x":7.70,"y":15.78},{"x":7.70,"y":13.95},{"x":9.30,"y":13.95}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-2.2934139845892787,"y":0}},
-	{"vertexs":[{"x":1.79,"y":15.59},{"x":0.33,"y":15.49},{"x":0.41,"y":13.92},{"x":1.77,"y":13.92}],"numberEdges":4,"color":["#DB4437","#c82a23"],"pos":{"x":-3.7640923066064715,"y":0}},
-	{"vertexs":[{"x":2,"y":14.05},{"x":0.5,"y":14.03},{"x":0.58,"y":12.27},{"x":1.77,"y":12.27}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-6.113739041145891,"y":0}},
-	{"vertexs":[{"x":2.15,"y":13.51},{"x":0.83,"y":13.3},{"x":1.07,"y":11.76},{"x":2.27,"y":12.05}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":3.873320756945759,"y":0}},
-	{"vertexs":[{"x":7.3,"y":14.11},{"x":6.33,"y":13.46},{"x":7.45,"y":12.73}],"numberEdges":3,"color":["#3F5CA9","#34318A"],"pos":{"x":-0.024253061041235924,"y":0}}
-	];
+	
+	blocksList = [{"vertexs":[{"x":9.71,"y":15.54},{"x":8.16,"y":15.46},{"x":8.16,"y":14.35},{"x":9.65,"y":14.35}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-3.5953768752515316,"y":0}},{"vertexs":[{"x":7.6,"y":15.51},{"x":4.83,"y":15.57},{"x":5.55,"y":14.3},{"x":6.93,"y":14.27}],"numberEdges":4,"color":["#3F5CA9","#34318A"],"pos":{"x":-6.071510925423354,"y":0}},{"vertexs":[{"x":5.39,"y":14.46},{"x":4.43,"y":15.65},{"x":2.03,"y":15.62},{"x":3.47,"y":14.35}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":3.1594052924774587,"y":0}},{"vertexs":[{"x":6.77,"y":14.05},{"x":4.83,"y":14.11},{"x":4.8,"y":12.86},{"x":6.64,"y":12.81}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":-3.389222521800548,"y":0}},{"vertexs":[{"x":1.68,"y":15.59},{"x":0.19,"y":15.59},{"x":0.08,"y":12.73},{"x":1.57,"y":12.81}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":3.456070863176137,"y":0}},{"vertexs":[{"x":10.37,"y":14.08},{"x":7.95,"y":14.27},{"x":7.65,"y":12.08},{"x":10.21,"y":12.05}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-5.263228894677013,"y":0}}]
 
 	for(var i = 0; i < blocksList.length ; i++){
 		for(index in blocksList[i].vertexs){
@@ -129,6 +121,7 @@ lvl3.prototype.setup = function(){
 		bodyDef.position.Set(0,0);
 		prepShape(bodyDef, fixDef).setFillStyle(blocksList[i].color[0]).setStrokeStyle(blocksList[i].color[1],2);  
 	}
+
 
 	
 
@@ -171,7 +164,7 @@ lvl3.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activateLevel3 = function(io){
+iio.AppManager.prototype.activatelvl3 = function(io){
 	this.level = new iio.lvl3(io);
 	return this.level;
 }
