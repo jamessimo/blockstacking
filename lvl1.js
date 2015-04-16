@@ -177,7 +177,7 @@ lvl1.prototype.step = function(){
 		
 		if(this.gameWinAnim == false){
 			world.m_gravity.y = 0;
-			for (var i=0; i<40; i++){
+			for (var i=0; i<25; i++){
 				fixDef.shape.SetAsBox(iio.getRandomNum(pxConv(0.05),pxConv(0.1)),iio.getRandomNum(pxConv(0.05),pxConv(0.1)));
 				bodyDef.position.Set(pxConv(this.goalPos.x +iio.getRandomNum(-20,20) ,true),pxConv(this.goalPos.y/PIXEL_RATIO+iio.getRandomNum(-20,20),true));
 				bodyDef.linearVelocity.Set(pxConv(iio.getRandomNum(-30,30)),pxConv(iio.getRandomNum(-30,30)));

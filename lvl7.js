@@ -109,7 +109,7 @@ lvl7.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [];
+	blocksList = [{"vertexs":[{"x":8,"y":15},{"x":3,"y":15},{"x":3,"y":14},{"x":8,"y":14}],"numberEdges":4,"color":["#4285F4","#355BD8"],"pos":{"x":0.8487437143921852,"y":0}},{"vertexs":[{"x":10,"y":16},{"x":8,"y":16},{"x":8,"y":14},{"x":10,"y":14}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-3.90156781533733,"y":0}},{"vertexs":[{"x":2,"y":16},{"x":1,"y":16},{"x":1,"y":13},{"x":2,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":5.948243487626314,"y":0}}];
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){

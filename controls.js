@@ -283,9 +283,11 @@ function GameControl(io) {
         	console.log(Math.round(mouseX,0.1));
 			console.log(Math.round(mouseY,1));
 		  io.addToGroup('EDITOREDGE', new iio.Circle(mouseX*PTM, mouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
-
-
-		  newBlock.vertexs.push( new b2Vec2(Math.round(mouseX,1) ,Math.round(mouseY,1)));
+if(TEST)
+	 newBlock.vertexs.push( new b2Vec2(Math.round(mouseX,1) ,Math.round(mouseY,1)));
+else
+	
+			  newBlock.vertexs.push( new b2Vec2(mouseX ,mouseY));
 
        }
        	
