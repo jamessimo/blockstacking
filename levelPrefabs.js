@@ -1,3 +1,19 @@
+
+levelBuilder = {
+	setup : function(stage,level){
+		console.log('called stage');
+	},
+	step : function(){
+		console.log('called step');
+
+	}
+
+}
+
+
+
+
+
 lol = function(lawl){
 
 
