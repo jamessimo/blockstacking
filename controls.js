@@ -122,7 +122,9 @@ function GameControl(io) {
 	    muted = true;
 	   	    
 	    
+
 	}
+
 	
 	this.onResize = function(event){
 		io.canvas.width = GAMEWIDTH;
@@ -164,15 +166,18 @@ function GameControl(io) {
 
 	
 	//intro(io);
-	createWorld(io,1);
+	createWorld(io,24);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 
-      
+    
+	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
 
-	io.setB2Framerate(FPS,function(){
+		io.addObj(grid);
+
+		io.setB2Framerate(FPS,function(){
 	
 		
 		if(gameOn){
@@ -278,18 +283,32 @@ function GameControl(io) {
        e.preventDefault();
        isMouseDown = true;
 
-       if(recordObjects){
 
-        	console.log(Math.round(mouseX,0.1));
-			console.log(Math.round(mouseY,1));
-		  io.addToGroup('EDITOREDGE', new iio.Circle(mouseX*PTM, mouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
-if(TEST)
-	 newBlock.vertexs.push( new b2Vec2(Math.round(mouseX,1) ,Math.round(mouseY,1)));
-else
-	
-			  newBlock.vertexs.push( new b2Vec2(mouseX ,mouseY));
 
-       }
+
+
+    	if(recordObjects){
+
+			console.log(+mouseX.toFixed(1));
+
+		
+
+			if(TEST){
+				recMouseX = Math.round(mouseX);//+0.30;
+				recMouseY = Math.round(mouseY);//(+mouseY.toFixed(1));
+
+			}
+			else{
+				recMouseX = mouseX;
+				recMouseY = mouseY;//(+mouseY.toFixed(1));
+
+			}
+			io.addToGroup('EDITOREDGE', new iio.Circle(recMouseX*PTM, recMouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
+
+			newBlock.vertexs.push( new b2Vec2(recMouseX ,recMouseY));
+
+
+    	}
        	
        mouseMove(e);
     }
@@ -488,6 +507,7 @@ else
 		newPos.x = pxConv(io.getEventPosition(e).x)*scaleX;
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
         if (btn && btn.contains(newPos)){
+
         	unPauseBtn = undefined; //To remove its POS
 			muteBtn = undefined;
 			menuBtn = undefined;
@@ -514,8 +534,8 @@ else
 			muteBtn = undefined;
 			menuBtn = undefined;
 			testBtn = undefined;
-		}
-		if(gameOn && level.lvlButtons){
+		}else{ //HAD TO IGNORE IF IN MENU
+			if(gameOn && level.lvlButtons){
 			for(var i = 1; i < level.lvlButtons.length ; i++){
 
 				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
@@ -526,6 +546,9 @@ else
 				}
 			}
 		}
+		}
+
+		
 		if(gameOn && level.backBtn){
 			if(level.backBtn && level.backBtn.contains(newPos)){
 				unPauseBtn = undefined; //To remove its POS
@@ -558,6 +581,8 @@ else
 function pause(io){
 		
 	//grey screen
+
+
 
 	io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, io.canvas.width , io.canvas.height)
 	.setFillStyle('rgba(0,0,0,0.7)'),20);

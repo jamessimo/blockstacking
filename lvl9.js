@@ -25,7 +25,6 @@ lvl9.prototype.setup = function(){
 	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl9.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
-		.setFillStyle('rgba(0,0,0,0.0)')
 		,-20);
 
 	this.goalPos = new iio.Vec(this.cWidth/2, GAMEAREA.pos.y-(GAMEAREA.height/2));
@@ -82,12 +81,12 @@ lvl9.prototype.setup = function(){
 	prepShape(bodyDef, fixDef);
 	
 	//PLATFORM
-	fixDef.friction = 1;
+	fixDef.friction = 0.1;
 	bodyDef.angle = 0;
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.platformPos.x,true),pxConv(this.platformPos.y/PIXEL_RATIO,true));	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.1,true),pxConv(5,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth,true),pxConv(5,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]);
 
 	//GOAL
@@ -109,7 +108,7 @@ lvl9.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [];
+	blocksList = [{"vertexs":[{"x":2,"y":12},{"x":0,"y":12},{"x":0,"y":10},{"x":2,"y":10}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":-2.878496031742543,"y":0}},{"vertexs":[{"x":2,"y":10},{"x":0,"y":10},{"x":0,"y":9},{"x":2,"y":9}],"numberEdges":4,"color":["#DB4437","#c82a23"],"pos":{"x":6.166093253064901,"y":0}},{"vertexs":[{"x":2,"y":9},{"x":0,"y":9},{"x":0,"y":8},{"x":2,"y":8}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":5.816400242969394,"y":0}},{"vertexs":[{"x":3,"y":8},{"x":0,"y":8},{"x":0,"y":7},{"x":3,"y":7}],"numberEdges":4,"color":["#A61D4C","#720D37"],"pos":{"x":0.6955089848488569,"y":0}},{"vertexs":[{"x":2,"y":7},{"x":0,"y":7},{"x":0,"y":5},{"x":2,"y":5}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":2.2678276244550943,"y":0}},{"vertexs":[{"x":2,"y":5},{"x":0,"y":5},{"x":0,"y":4},{"x":2,"y":4}],"numberEdges":4,"color":["#A61D4C","#720D37"],"pos":{"x":0.5624864813871682,"y":0}},{"vertexs":[{"x":2,"y":4},{"x":0,"y":4},{"x":1,"y":2}],"numberEdges":3,"color":["#4285F4","#355BD8"],"pos":{"x":-6.559089124202728,"y":0}}];
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){

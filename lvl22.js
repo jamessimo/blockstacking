@@ -1,6 +1,6 @@
 (function(){
 
-function lvl8(io){
+function lvl22(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -18,11 +18,11 @@ function lvl8(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl8 = lvl8;
+}; iio.lvl22 = lvl22;
 
-lvl8.prototype.setup = function(){
+lvl22.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl8.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl1.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
 		.setFillStyle('rgba(0,0,0,0.0)')
@@ -109,7 +109,7 @@ lvl8.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [{"vertexs":[{"x":9.5,"y":16},{"x":9,"y":16},{"x":9,"y":13},{"x":9.5,"y":13}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":0.8247582884505391,"y":0}},{"vertexs":[{"x":8.5,"y":16},{"x":8,"y":16},{"x":8,"y":13},{"x":8.5,"y":13}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-5.901198758278042,"y":0}},{"vertexs":[{"x":7.5,"y":16},{"x":7,"y":16},{"x":7,"y":13},{"x":7.5,"y":13}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":6.32668329635635,"y":0}},{"vertexs":[{"x":6.5,"y":16},{"x":6,"y":16},{"x":6,"y":13},{"x":6.5,"y":13}],"numberEdges":4,"color":["#F05722","#E3421E"],"pos":{"x":0.8903111326508224,"y":0}},{"vertexs":[{"x":5.5,"y":16},{"x":5,"y":16},{"x":5,"y":13},{"x":5.5,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-5.048419460188597,"y":0}},{"vertexs":[{"x":4.5,"y":16},{"x":4,"y":16},{"x":4,"y":13},{"x":4.5,"y":13}],"numberEdges":4,"color":["#CDDC39","#B9C246"],"pos":{"x":5.948863944970071,"y":0}},{"vertexs":[{"x":3.5,"y":16},{"x":3,"y":16},{"x":3,"y":13},{"x":3.5,"y":13}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":-3.6652134945616126,"y":0}}];
+	blocksList = [{"vertexs":[{"x":7.3,"y":12},{"x":5.3,"y":12},{"x":6.3,"y":10}],"numberEdges":3,"color":["#F4DF3B","#EBC12C"],"pos":{"x":5.133328300900757,"y":0}},{"vertexs":[{"x":5.3,"y":12},{"x":3.3,"y":12},{"x":4.3,"y":10}],"numberEdges":3,"color":["#A61D4C","#720D37"],"pos":{"x":4.899156054016203,"y":0}},{"vertexs":[{"x":6,"y":16},{"x":4,"y":16},{"x":5,"y":14}],"numberEdges":3,"color":["#4D4D4D","#151515"],"pos":{"x":-2.34790251031518,"y":0}},{"vertexs":[{"x":9,"y":13},{"x":9,"y":14},{"x":7,"y":14},{"x":7,"y":13}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":1.743916557636112,"y":0}},{"vertexs":[{"x":3,"y":13},{"x":3,"y":15},{"x":1,"y":15},{"x":1,"y":13}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-3.1923416825011373,"y":0}},{"vertexs":[{"x":9,"y":13},{"x":9,"y":15},{"x":8,"y":15},{"x":8,"y":13}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":4.949524604249746,"y":0}},{"vertexs":[{"x":8,"y":13},{"x":8,"y":15},{"x":7,"y":15},{"x":7,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-1.0114777232520282,"y":0}}];
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){
@@ -126,7 +126,7 @@ lvl8.prototype.setup = function(){
 
 }//SETUP
 
-lvl8.prototype.step = function(){
+lvl22.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -162,8 +162,8 @@ lvl8.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activatelvl8 = function(io){
-	this.level = new iio.lvl8(io);
+iio.AppManager.prototype.activatelvl22 = function(io){
+	this.level = new iio.lvl22(io);
 	return this.level;
 }
 

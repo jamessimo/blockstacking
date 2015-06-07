@@ -1,6 +1,6 @@
 (function(){
 
-function lvl8(io){
+function lvl15(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -18,11 +18,11 @@ function lvl8(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl8 = lvl8;
+}; iio.lvl15 = lvl15;
 
-lvl8.prototype.setup = function(){
+lvl15.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl8.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl2.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
 		.setFillStyle('rgba(0,0,0,0.0)')
@@ -109,7 +109,7 @@ lvl8.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [{"vertexs":[{"x":9.5,"y":16},{"x":9,"y":16},{"x":9,"y":13},{"x":9.5,"y":13}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":0.8247582884505391,"y":0}},{"vertexs":[{"x":8.5,"y":16},{"x":8,"y":16},{"x":8,"y":13},{"x":8.5,"y":13}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-5.901198758278042,"y":0}},{"vertexs":[{"x":7.5,"y":16},{"x":7,"y":16},{"x":7,"y":13},{"x":7.5,"y":13}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":6.32668329635635,"y":0}},{"vertexs":[{"x":6.5,"y":16},{"x":6,"y":16},{"x":6,"y":13},{"x":6.5,"y":13}],"numberEdges":4,"color":["#F05722","#E3421E"],"pos":{"x":0.8903111326508224,"y":0}},{"vertexs":[{"x":5.5,"y":16},{"x":5,"y":16},{"x":5,"y":13},{"x":5.5,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-5.048419460188597,"y":0}},{"vertexs":[{"x":4.5,"y":16},{"x":4,"y":16},{"x":4,"y":13},{"x":4.5,"y":13}],"numberEdges":4,"color":["#CDDC39","#B9C246"],"pos":{"x":5.948863944970071,"y":0}},{"vertexs":[{"x":3.5,"y":16},{"x":3,"y":16},{"x":3,"y":13},{"x":3.5,"y":13}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":-3.6652134945616126,"y":0}}];
+	blocksList = [{"vertexs":[{"x":10.466666666666667,"y":14.8},{"x":10.466666666666667,"y":15.766666666666667},{"x":7.2,"y":15.7},{"x":7.2,"y":14.933333333333334}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-6.323907852638513,"y":0}},{"vertexs":[{"x":10.133333333333333,"y":14.566666666666666},{"x":6.433333333333334,"y":15.033333333333333},{"x":9.866666666666667,"y":13.2}],"numberEdges":3,"color":["#4285F4","#355BD8"],"pos":{"x":1.6066229557618499,"y":0}},{"vertexs":[{"x":9.933333333333334,"y":13.4},{"x":6.366666666666666,"y":15.033333333333333},{"x":6.4,"y":13.866666666666667}],"numberEdges":3,"color":["#DB4437","#c82a23"],"pos":{"x":4.911625725682825,"y":0}},{"vertexs":[{"x":6.866666666666666,"y":13.733333333333333},{"x":5.333333333333333,"y":13.933333333333334},{"x":5.166666666666667,"y":12.766666666666667},{"x":6.466666666666667,"y":12.566666666666666}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":4.433656694833189,"y":0}},{"vertexs":[{"x":4.7,"y":13},{"x":3.7,"y":15.033333333333333},{"x":3.066666666666667,"y":13.966666666666667},{"x":3.1,"y":12.7}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-2.5393718471750617,"y":0}},{"vertexs":[{"x":3.2333333333333334,"y":13.1},{"x":1.5333333333333334,"y":14.966666666666667},{"x":0.7333333333333333,"y":13.933333333333334},{"x":2.533333333333333,"y":12.666666666666666}],"numberEdges":4,"color":["#3F5CA9","#34318A"],"pos":{"x":-3.212263201829046,"y":0}},{"vertexs":[{"x":2.533333333333333,"y":12.766666666666667},{"x":1.0666666666666667,"y":13.2},{"x":0.8,"y":12},{"x":1.9333333333333333,"y":11.6}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":-6.7592192236334085,"y":0}},{"vertexs":[{"x":2.8666666666666667,"y":12.866666666666667},{"x":1.9333333333333333,"y":13.266666666666667},{"x":1.3666666666666667,"y":12.333333333333334},{"x":2.566666666666667,"y":12.033333333333333}],"numberEdges":4,"color":["#CDDC39","#B9C246"],"pos":{"x":5.197994842194021,"y":0}},{"vertexs":[{"x":6.933333333333334,"y":13.033333333333333},{"x":5.9,"y":13.933333333333334},{"x":5.233333333333333,"y":13.233333333333333},{"x":6.033333333333333,"y":12.6}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":0.00029913289472460747,"y":0}}];
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){
@@ -126,7 +126,7 @@ lvl8.prototype.setup = function(){
 
 }//SETUP
 
-lvl8.prototype.step = function(){
+lvl15.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -162,8 +162,8 @@ lvl8.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activatelvl8 = function(io){
-	this.level = new iio.lvl8(io);
+iio.AppManager.prototype.activatelvl15 = function(io){
+	this.level = new iio.lvl15(io);
 	return this.level;
 }
 

@@ -1,6 +1,6 @@
 (function(){
 
-function lvl8(io){
+function lvl14(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -18,11 +18,11 @@ function lvl8(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl8 = lvl8;
+}; iio.lvl14 = lvl14;
 
-lvl8.prototype.setup = function(){
+lvl14.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl8.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl14.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
 		.setFillStyle('rgba(0,0,0,0.0)')
@@ -109,7 +109,8 @@ lvl8.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [{"vertexs":[{"x":9.5,"y":16},{"x":9,"y":16},{"x":9,"y":13},{"x":9.5,"y":13}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":0.8247582884505391,"y":0}},{"vertexs":[{"x":8.5,"y":16},{"x":8,"y":16},{"x":8,"y":13},{"x":8.5,"y":13}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-5.901198758278042,"y":0}},{"vertexs":[{"x":7.5,"y":16},{"x":7,"y":16},{"x":7,"y":13},{"x":7.5,"y":13}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":6.32668329635635,"y":0}},{"vertexs":[{"x":6.5,"y":16},{"x":6,"y":16},{"x":6,"y":13},{"x":6.5,"y":13}],"numberEdges":4,"color":["#F05722","#E3421E"],"pos":{"x":0.8903111326508224,"y":0}},{"vertexs":[{"x":5.5,"y":16},{"x":5,"y":16},{"x":5,"y":13},{"x":5.5,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-5.048419460188597,"y":0}},{"vertexs":[{"x":4.5,"y":16},{"x":4,"y":16},{"x":4,"y":13},{"x":4.5,"y":13}],"numberEdges":4,"color":["#CDDC39","#B9C246"],"pos":{"x":5.948863944970071,"y":0}},{"vertexs":[{"x":3.5,"y":16},{"x":3,"y":16},{"x":3,"y":13},{"x":3.5,"y":13}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":-3.6652134945616126,"y":0}}];
+	blocksList = [{"vertexs":[{"x":10.5,"y":14.8},{"x":10.5,"y":15.8},{"x":9.266666666666667,"y":15.8},{"x":9.266666666666667,"y":14.766666666666667}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":0.1998001467436552,"y":0}},{"vertexs":[{"x":8.333333333333334,"y":14.666666666666666},{"x":8.3,"y":15.9},{"x":6.966666666666667,"y":15.966666666666667},{"x":6.9,"y":14.7}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":2.50854915054515,"y":0}},{"vertexs":[{"x":6.8,"y":14.766666666666667},{"x":6.8,"y":15.9},{"x":5.666666666666667,"y":15.9},{"x":5.666666666666667,"y":14.8}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-1.1801214264705777,"y":0}},{"vertexs":[{"x":5.466666666666667,"y":14.6},{"x":5.466666666666667,"y":15.833333333333334},{"x":4.333333333333333,"y":15.8},{"x":4.333333333333333,"y":14.633333333333333}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":0.4925124002620578,"y":0}},{"vertexs":[{"x":4,"y":14.733333333333333},{"x":4.033333333333333,"y":15.933333333333334},{"x":2.8333333333333335,"y":15.9},{"x":2.8333333333333335,"y":14.8}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":2.837339877616614,"y":0}},{"vertexs":[{"x":2.6666666666666665,"y":14.633333333333333},{"x":2.6666666666666665,"y":15.9},{"x":1.5,"y":15.866666666666667},{"x":1.5,"y":14.7}],"numberEdges":4,"color":["#A61D4C","#720D37"],"pos":{"x":6.108398129232228,"y":0}},{"vertexs":[{"x":1.2333333333333334,"y":14.733333333333333},{"x":1.2333333333333334,"y":15.9},{"x":0.06666666666666667,"y":15.833333333333334},{"x":0.13333333333333333,"y":14.633333333333333}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-6.989775681402534,"y":0}},{"vertexs":[{"x":10.333333333333334,"y":14.4},{"x":8.866666666666667,"y":14.433333333333334},{"x":9.533333333333333,"y":12.566666666666666}],"numberEdges":3,"color":["#4285F4","#355BD8"],"pos":{"x":-5.034772368147969,"y":0}}];
+
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){
@@ -126,7 +127,7 @@ lvl8.prototype.setup = function(){
 
 }//SETUP
 
-lvl8.prototype.step = function(){
+lvl14.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -162,8 +163,8 @@ lvl8.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activatelvl8 = function(io){
-	this.level = new iio.lvl8(io);
+iio.AppManager.prototype.activatelvl14 = function(io){
+	this.level = new iio.lvl14(io);
 	return this.level;
 }
 

@@ -1,6 +1,6 @@
 (function(){
 
-function lvl8(io){
+function lvl24(io){
 	//CANVAS VARS
 	this.io = io;
 	this.cHeight = io.canvas.height;
@@ -18,17 +18,17 @@ function lvl8(io){
 	this.gameWin = 
 	this.gameEnd = false;
 	   
-}; iio.lvl8 = lvl8;
+}; iio.lvl24 = lvl24;
 
-lvl8.prototype.setup = function(){
+lvl24.prototype.setup = function(){
 
-	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl8.png'),-30);
+	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'lvl4.png'),-30);
 
 	GAMEAREA = this.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2 - 20),pxConv(this.cWidth/2),pxConv(300))
-		.setFillStyle('rgba(0,0,0,0.0)')
+		.setFillStyle('rgba(0,0,0,0.5)')
 		,-20);
 
-	this.goalPos = new iio.Vec(this.cWidth/2, GAMEAREA.pos.y-(GAMEAREA.height/2));
+	this.goalPos = new iio.Vec(240, GAMEAREA.pos.y-(GAMEAREA.height/2));
 	this.platformPos = new iio.Vec(this.cWidth/2, GAMEAREA.pos.y+(GAMEAREA.height/2));
 
 	var fixDef = new b2FixtureDef;
@@ -82,12 +82,12 @@ lvl8.prototype.setup = function(){
 	prepShape(bodyDef, fixDef);
 	
 	//PLATFORM
-	fixDef.friction = 1;
+	fixDef.friction = 0.1;
 	bodyDef.angle = 0;
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.Set(pxConv(this.platformPos.x,true),pxConv(this.platformPos.y/PIXEL_RATIO,true));	
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(this.cWidth/5.1,true),pxConv(5,true));
+	fixDef.shape.SetAsBox(pxConv(this.cWidth,true),pxConv(5,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]);
 
 	//GOAL
@@ -109,7 +109,7 @@ lvl8.prototype.setup = function(){
 	fixDef.shape = new b2PolygonShape;
 	
 	
-	blocksList = [{"vertexs":[{"x":9.5,"y":16},{"x":9,"y":16},{"x":9,"y":13},{"x":9.5,"y":13}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":0.8247582884505391,"y":0}},{"vertexs":[{"x":8.5,"y":16},{"x":8,"y":16},{"x":8,"y":13},{"x":8.5,"y":13}],"numberEdges":4,"color":["#E7981D","#E05C16"],"pos":{"x":-5.901198758278042,"y":0}},{"vertexs":[{"x":7.5,"y":16},{"x":7,"y":16},{"x":7,"y":13},{"x":7.5,"y":13}],"numberEdges":4,"color":["#4D4D4D","#151515"],"pos":{"x":6.32668329635635,"y":0}},{"vertexs":[{"x":6.5,"y":16},{"x":6,"y":16},{"x":6,"y":13},{"x":6.5,"y":13}],"numberEdges":4,"color":["#F05722","#E3421E"],"pos":{"x":0.8903111326508224,"y":0}},{"vertexs":[{"x":5.5,"y":16},{"x":5,"y":16},{"x":5,"y":13},{"x":5.5,"y":13}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-5.048419460188597,"y":0}},{"vertexs":[{"x":4.5,"y":16},{"x":4,"y":16},{"x":4,"y":13},{"x":4.5,"y":13}],"numberEdges":4,"color":["#CDDC39","#B9C246"],"pos":{"x":5.948863944970071,"y":0}},{"vertexs":[{"x":3.5,"y":16},{"x":3,"y":16},{"x":3,"y":13},{"x":3.5,"y":13}],"numberEdges":4,"color":["#F4DF3B","#EBC12C"],"pos":{"x":-3.6652134945616126,"y":0}}];
+	blocksList = [{"vertexs":[{"x":3,"y":12},{"x":1,"y":12},{"x":1,"y":10},{"x":3,"y":10}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":1.3741784524172544,"y":0}},{"vertexs":[{"x":3,"y":10},{"x":1,"y":10},{"x":1,"y":9},{"x":3,"y":9}],"numberEdges":4,"color":["#3F5CA9","#34318A"],"pos":{"x":-4.92613615328446,"y":0}},{"vertexs":[{"x":3,"y":9},{"x":1,"y":9},{"x":1,"y":8},{"x":3,"y":8}],"numberEdges":4,"color":["#DB4437","#c82a23"],"pos":{"x":-4.805752871092409,"y":0}},{"vertexs":[{"x":3,"y":8},{"x":1,"y":8},{"x":1,"y":7},{"x":3,"y":7}],"numberEdges":4,"color":["#7E3794","#491F81"],"pos":{"x":5.492640750017017,"y":0}},{"vertexs":[{"x":3,"y":7},{"x":1,"y":7},{"x":1,"y":6},{"x":3,"y":6}],"numberEdges":4,"color":["#3F5CA9","#34318A"],"pos":{"x":-2.7753267721273005,"y":0}},{"vertexs":[{"x":2,"y":6},{"x":1,"y":6},{"x":1,"y":5},{"x":2,"y":5}],"numberEdges":4,"color":["#795548","#451F14"],"pos":{"x":-3.484142794739455,"y":0}},{"vertexs":[{"x":2,"y":5},{"x":1,"y":5},{"x":1,"y":4},{"x":2,"y":4}],"numberEdges":4,"color":["#F05722","#E3421E"],"pos":{"x":-2.4578227647580206,"y":0}},{"vertexs":[{"x":2,"y":4},{"x":1,"y":4},{"x":1,"y":3},{"x":2,"y":3}],"numberEdges":4,"color":["#4285F4","#355BD8"],"pos":{"x":-4.926261013373733,"y":0}},{"vertexs":[{"x":2,"y":3},{"x":1,"y":3},{"x":2,"y":2}],"numberEdges":3,"color":["#3F5CA9","#34318A"],"pos":{"x":-6.464052169583738,"y":0}}];
 
 	if(blocksList){
 		for(var i = 0; i < blocksList.length ; i++){
@@ -126,7 +126,7 @@ lvl8.prototype.setup = function(){
 
 }//SETUP
 
-lvl8.prototype.step = function(){
+lvl24.prototype.step = function(){
 	var lio = this;
 	
 	if(this.gameEnd == true){
@@ -162,8 +162,8 @@ lvl8.prototype.step = function(){
 	
 }//STEP
 
-iio.AppManager.prototype.activatelvl8 = function(io){
-	this.level = new iio.lvl8(io);
+iio.AppManager.prototype.activatelvl24 = function(io){
+	this.level = new iio.lvl24(io);
 	return this.level;
 }
 
