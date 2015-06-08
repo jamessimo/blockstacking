@@ -166,7 +166,7 @@ function GameControl(io) {
 
 	
 	//intro(io);
-	createWorld(io,1);
+	createWorld(io);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
@@ -175,7 +175,7 @@ function GameControl(io) {
     
 	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
 
-		//io.addObj(grid);
+		io.addObj(grid);
 
 		io.setB2Framerate(FPS,function(){
 	
