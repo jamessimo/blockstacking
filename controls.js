@@ -114,7 +114,7 @@ function GameControl(io) {
 		PIXEL_RATIO = 1;
 	}
 	
-	var TEST = true;
+	var TEST = false;
 	
 	if(TEST){
 		PIXEL_RATIO = 1;
@@ -173,9 +173,9 @@ function GameControl(io) {
 
 
     
-	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
+//	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
 
-		io.addObj(grid);
+//		io.addObj(grid);
 
 		io.setB2Framerate(FPS,function(){
 	
@@ -361,7 +361,7 @@ function GameControl(io) {
 			createWorld(io, currentLvl);
 		}
 		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
-			if(currentLvl <= 5)
+			if(currentLvl <= MAX_LEVELS)
 				createWorld(io, currentLvl+1);
 			else
 				createWorld(io, currentLvl);
@@ -371,8 +371,7 @@ function GameControl(io) {
 			muteBtn = undefined;
 			menuBtn = undefined;
 			testBtn = undefined;
-		}
-		if(level){
+		}else{
 			if(level.lvlButtons){
 				for(var i = 1; i < level.lvlButtons.length ; i++){
 					if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
