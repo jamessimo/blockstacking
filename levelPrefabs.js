@@ -7,7 +7,7 @@ levelBuilder = {
 	stage.io.addToGroup('BACKGROUND',
 		new iio.Rect(pxConv(stage.cWidth/2),pxConv(stage.cHeight/2),
 			pxConv(stage.cWidth),pxConv(stage.cHeight))
-	.addImage(imgPath+level),-30);
+	.addImage(imgPath+level+'.png'),-30);
 
 	GAMEAREA = stage.io.addToGroup('GAMEAREA',new iio.Rect(pxConv(stage.cWidth/2),pxConv(stage.cHeight/2 - 20),pxConv(stage.cWidth/2),pxConv(300))
 		.setFillStyle('rgba(0,0,0,0.0)')
