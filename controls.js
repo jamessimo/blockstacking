@@ -56,7 +56,7 @@ var colors = {
 
 
 var PTM = 30;
-var FPS = 60;
+var FPS = 50;
 var world = new b2World(new b2Vec2(0, 30),true);
 var listener = new b2Listener;
 var level = null;
@@ -114,7 +114,7 @@ function GameControl(io) {
 		PIXEL_RATIO = 1;
 	}
 	
-	var TEST = false;
+	var TEST = true;
 	
 	if(TEST){
 		PIXEL_RATIO = 1;
@@ -166,18 +166,50 @@ function GameControl(io) {
 
 	
 	//intro(io);
-	createWorld(io);
+	createWorld(io,5);
 
 //	io.context.scale(0.6,0.6);
 	io.context.translate(canvasOffset.x, canvasOffset.y);
 
 
     
-//	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
+	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
 
-//		io.addObj(grid);
+		io.addObj(grid);
+/*
+io.setFramerate(20,function(){
+		if(gameOn){
+			if(level.gameOver==true){
+				gameOver(io);
+			}
+			else if(level.gameWin==true){
+			
+				winGame(io);
+			
+			}
+			else{
+				//io.context.scale(canvasZoom.x,canvasZoom.y);
+				//io.context.translate(canvasOffset.x, canvasOffset.y);
+				level.step();
+				
+				
+			}
+		}else{
+			if (gameIntro && bgBlocks < MAXBGBLOCKS && Math.random()<.03){
+		        if (Math.random()<.5){
+		        	createBlock(io);
+		        	bgBlocks++;
+		        }
+		    }else if(level.gameWin==true){
+		    
+	
+		    
+		    
+		    }
+		}
+});*/
 
-		io.setB2Framerate(FPS,function(){
+	io.setB2Framerate(50,function(){
 	
 		
 		if(gameOn){
@@ -209,7 +241,6 @@ function GameControl(io) {
 		    
 		    }
 		}
-	
 
 		if(isMouseDown && (!mouseJoint) && world) {
 		  var body = getB2BodyAt(mouseX,mouseY);
