@@ -5,26 +5,26 @@ function lvl10(io){
 	this.io = io;
 	this.cHeight = io.canvas.height;
 	this.cWidth = io.canvas.width;
-	
+
 	//GAME VARS
 	this.goal =
 	this.goalTouch =
 	this.goalEffect = undefined;
 	this.goalTime = 150;
 	this.goalTouchTime = 0;
-	this.gameWin = 
+	this.gameWin =
 	this.gameWinAnim =
 	this.gameEnd = false;
-	   
-	   
+
+
 }; iio.lvl10 = lvl10;
 
 lvl10.prototype.setup = function(){
 
 	levelBuilder.setup(this,'lvl5');
 
-	levelBuilder.blockBuilder([{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":-1.5252033490687609,"y":0}},
-	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
+	levelBuilder.blockBuilder([{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":colors.sunset,"pos":{"x":-1.5252033490687609,"y":0}},
+	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":colors.green,"pos":{"x":0,"y":0}},
 	{"vertexs":[{"x":5.49,"y":15.62},{"x":3.31,"y":15.54},{"x":4.51,"y":13.65}],"numberEdges":3,"color":["#CDDC39","#B9C246"],"pos":{"x":0,"y":0}},
 	{"vertexs":[{"x":9.30,"y":15.78},{"x":7.70,"y":15.78},{"x":7.70,"y":13.95},{"x":9.30,"y":13.95}],"numberEdges":4,"color":["#11A9CC","#1B7DB1"],"pos":{"x":-2.2934139845892787,"y":0}},
 	{"vertexs":[{"x":1.79,"y":15.59},{"x":0.33,"y":15.49},{"x":0.41,"y":13.92},{"x":1.77,"y":13.92}],"numberEdges":4,"color":["#DB4437","#c82a23"],"pos":{"x":-3.7640923066064715,"y":0}},

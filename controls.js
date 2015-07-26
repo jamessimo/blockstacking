@@ -3,14 +3,14 @@ var currentLvl = null;
 var canvasOffset = {
     x: 0,
     y: 0
-}; 
+};
 var canvasZoom = {
     x: 1,
     y: 1
-}; 
+};
 var fullscreen1Params;
 var sound = new Howl({ urls: ['music/Monkey-Island-Band.ogg'],loop: true });
-var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,btn, pauseBtn, unPauseBtn, menuBtn,testBtn,
+var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,startBtn, pauseBtn, unPauseBtn, menuBtn,testBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn, backBtn;
 var touches = [];
 //load BOX2D classes
@@ -38,7 +38,7 @@ var newBlock = {};
 var newBlocks = [];
 var recordObjects = false;
 
-var colors = {		
+var colors = {
 	'red' 		: 	['#DB4437','#c82a23'],
 	'sunset' 	: 	['#F05722','#E3421E'],
 	'orange' 	: 	['#E7981D','#E05C16'],
@@ -53,10 +53,11 @@ var colors = {
 	'brown' 	: 	['#795548','#451F14'],
 	'black' 	: 	['#4D4D4D','#151515']
 };
-
+tempLvl = 23;
+var TEST = false;
 
 var PTM = 30;
-var FPS = 50;
+var FPS = 60;
 var world = new b2World(new b2Vec2(0, 30),true);
 var listener = new b2Listener;
 var level = null;
@@ -103,7 +104,7 @@ function GameControl(io) {
 	              ctx.msBackingStorePixelRatio ||
 	              ctx.oBackingStorePixelRatio ||
 	              ctx.backingStorePixelRatio || 1;
-	
+
 	    return dpr / bsr;
 	})();
 
@@ -113,19 +114,14 @@ function GameControl(io) {
 	}else{
 		PIXEL_RATIO = 1;
 	}
-	
-	var TEST = true;
-	
+
+
 	if(TEST){
 		PIXEL_RATIO = 1;
 		GAMEHEIGHT = 480;
-	    muted = true;
-	   	    
-	    
-
+	  muted = true;
 	}
 
-	
 	this.onResize = function(event){
 		io.canvas.width = GAMEWIDTH;
 		io.canvas.height = GAMEHEIGHT;
@@ -135,15 +131,15 @@ function GameControl(io) {
 
 		io.canvas.width = io.canvas.width*PIXEL_RATIO;
 		io.canvas.height = io.canvas.height*PIXEL_RATIO;
-		
+
 		io.canvas.style.width = window.innerWidth + 'px';
 		io.canvas.style.height = window.innerHeight + 'px';
 
 	};
-	
 
 
-	
+
+
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
 
@@ -151,12 +147,11 @@ function GameControl(io) {
 	scaleY = io.canvas.height / window.innerHeight;
 	scaleToFit = Math.min(scaleX, scaleY);
 
-
 	localStorage["level.1"] = true;
-	
+
 	if(	localStorage["muted"] == 'true'){
 		muted = true;
-	} 
+	}
 	if(localStorage["muted"] == 'false') {
 		sound.play(function(id){
 			bgMusicID = id;
@@ -164,35 +159,35 @@ function GameControl(io) {
 		muted = false;
 	}
 
-	
-	//intro(io);
-	createWorld(io,5);
 
-//	io.context.scale(0.6,0.6);
-	io.context.translate(canvasOffset.x, canvasOffset.y);
+intro(io);
+//	createWorld(io,tempLvl);
+
+  //io.context.scale(0.6,0.6);
+	//io.context.translate(100, 200);
 
 
-    
-	var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,PTM);
+if(TEST){
+  var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
+io.addObj(grid);
+}
 
-		io.addObj(grid);
-/*
-io.setFramerate(20,function(){
+/*io.setFramerate(20,function(){
 		if(gameOn){
 			if(level.gameOver==true){
 				gameOver(io);
 			}
 			else if(level.gameWin==true){
-			
+
 				winGame(io);
-			
+
 			}
 			else{
 				//io.context.scale(canvasZoom.x,canvasZoom.y);
 				//io.context.translate(canvasOffset.x, canvasOffset.y);
 				level.step();
-				
-				
+
+
 			}
 		}else{
 			if (gameIntro && bgBlocks < MAXBGBLOCKS && Math.random()<.03){
@@ -201,50 +196,39 @@ io.setFramerate(20,function(){
 		        	bgBlocks++;
 		        }
 		    }else if(level.gameWin==true){
-		    
-	
-		    
-		    
+
+
+
+
 		    }
 		}
 });*/
 
-	io.setB2Framerate(50,function(){
-	
-		
+	io.setB2Framerate(FPS,function(){
 		if(gameOn){
 			if(level.gameOver==true){
 				gameOver(io);
 			}
 			else if(level.gameWin==true){
-			
 				winGame(io);
-			
 			}
 			else{
 				//io.context.scale(canvasZoom.x,canvasZoom.y);
 				//io.context.translate(canvasOffset.x, canvasOffset.y);
 				level.step();
-				
-				
 			}
-		}else{
+		} else {
 			if (gameIntro && bgBlocks < MAXBGBLOCKS && Math.random()<.03){
 		        if (Math.random()<.5){
 		        	createBlock(io);
 		        	bgBlocks++;
 		        }
-		    }else if(level.gameWin==true){
-		    
-	
-		    
-		    
 		    }
 		}
 
 		if(isMouseDown && (!mouseJoint) && world) {
 		  var body = getB2BodyAt(mouseX,mouseY);
-		
+
 		  if(body) {
 		     var md = new b2MouseJointDef();
 		     md.bodyA = world.GetGroundBody();
@@ -253,9 +237,9 @@ io.setFramerate(20,function(){
 		     md.collideConnected = true;
 		     md.maxForce = 600.0 * body.GetMass();
 		     mouseJoint = world.CreateJoint(md);
-		     
+
 		     clickedObjCenter = md.bodyB.m_xf.position
-		     
+
 		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.4)'));
 		     new TWEEN.Tween( {y: 0 } )
 		     	.to( { x:pxConv(50)}, 1000 )
@@ -264,17 +248,17 @@ io.setFramerate(20,function(){
 		     		jointEffect.radius = this.x;
 		     	})
 		     	.start();
-		     
-	
+
+
 		     body.SetAwake(true);
 		  }
 		}
 		if(mouseJoint) {
 		  if(isMouseDown) {
 		    mouseJoint.SetTarget(new b2Vec2(mouseX, mouseY));
-		     
+
 		   	jointEffect.pos = new b2Vec2(mouseX*PTM, mouseY*PTM);
-		   
+
 		  } else {
 		     world.DestroyJoint(mouseJoint);
 		     io.rmvObj(mouseJoint);
@@ -286,7 +270,7 @@ io.setFramerate(20,function(){
 		TWEEN.update();
     });
 
-	
+
     function getB2BodyAt(callback,v,y) {
     	if(world){
 			if (typeof v.x =='undefined')
@@ -309,30 +293,25 @@ io.setFramerate(20,function(){
        }
        return true;
     }
- 
+
     function mouseDown(e){
        e.preventDefault();
        isMouseDown = true;
 
-
-
-
-
     	if(recordObjects){
 
-			console.log(+mouseX.toFixed(1));
+		//	console.log(+mouseX.toFixed(1));
 
-		
+
 
 			if(TEST){
-				recMouseX = Math.round(mouseX);//+0.30;
-				recMouseY = Math.round(mouseY);//(+mouseY.toFixed(1));
-
+				recMouseX = Math.round(mouseX * 2) / 2;
+				recMouseY = Math.round(mouseY * 2) / 2;
+        console.log(recMouseX);
 			}
 			else{
 				recMouseX = mouseX;
 				recMouseY = mouseY;//(+mouseY.toFixed(1));
-
 			}
 			io.addToGroup('EDITOREDGE', new iio.Circle(recMouseX*PTM, recMouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
 
@@ -340,7 +319,7 @@ io.setFramerate(20,function(){
 
 
     	}
-       	
+
        mouseMove(e);
     }
     function touchStart(e){
@@ -353,16 +332,16 @@ io.setFramerate(20,function(){
        mouseX = undefined;
        mouseY = undefined;
     }
-    
+
     function touchEnd(e){
        isMouseDown = false;
        mouseX = undefined;
        mouseY = undefined;
     }
-    
+
     function mouseMove(e){
       	mouseX = pxConv(io.getEventPosition(e).x*scaleX,true);
-       	mouseY = pxConv(io.getEventPosition(e).y*scaleY,true); 
+       	mouseY = pxConv(io.getEventPosition(e).y*scaleY,true);
     }
     function touchMove(e){
     	mouseX = pxConv(e.touches[0].pageX*scaleX,true);
@@ -374,67 +353,86 @@ io.setFramerate(20,function(){
 		var newPos = io.getEventPosition(e);
 		newPos.x = pxConv(e.touches[0].pageX)*scaleX;
 		newPos.y = pxConv(e.touches[0].pageY)*scaleY;
-		
-		if (btn && btn.contains(newPos)){
-			unPauseBtn = undefined; //To remove its POS
-			muteBtn = undefined;
-			menuBtn = undefined;
-			testBtn = undefined;
-			createWorld(io);
-		}
-		 if(pauseBtn && pauseBtn.contains(newPos)){
-       		pause(io);
+
+     if (startBtn && startBtn.contains(newPos)){
+
+      unPauseBtn = undefined; //To remove its POS
+      menuBtn = undefined;
+      testBtn = undefined;
+       muteBtn = undefined;
+       restartLvlBtn = undefined;
+       setTimeout(function(){
+          createWorld(io);
+       },100);
+
+     }
+     if(pauseBtn && pauseBtn.contains(newPos)){
+        pause(io);
+     }
+    if(unPauseBtn && unPauseBtn.contains(newPos)){
+      resume(io);
+      restartLvlBtn = undefined;
+
+    }
+    if(restartLvlBtn && restartLvlBtn.contains(newPos)){
+      createWorld(io, currentLvl);
+    }
+    if(nextLvlBtn && nextLvlBtn.contains(newPos)){
+      if(currentLvl <= MAX_LEVELS)
+        createWorld(io, currentLvl+1);
+      else
+        createWorld(io, currentLvl);
+    }
+    if(menuBtn && menuBtn.contains(newPos)){
+      createWorld(io);
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
+      restartLvlBtn = undefined;
+    }else{ //HAD TO IGNORE IF IN MENU
+      if (gameOn && level.lvlButtons) {
+         for(var i = 1; i < level.lvlButtons.length ; i++){
+          if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
+            if(localStorage["level." + i] == "true"){
+              createWorld(io,i);
+            }
+            return false;
+          }
         }
-		if(unPauseBtn && unPauseBtn.contains(newPos)){
-			resume(io);	
-		}
-		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
-			createWorld(io, currentLvl);
-		}
-		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
-			if(currentLvl <= MAX_LEVELS)
-				createWorld(io, currentLvl+1);
-			else
-				createWorld(io, currentLvl);
-		}
-		if(menuBtn && menuBtn.contains(newPos)){
-			createWorld(io);
-			muteBtn = undefined;
-			menuBtn = undefined;
-			testBtn = undefined;
-		}else{
-			if(level.lvlButtons){
-				for(var i = 1; i < level.lvlButtons.length ; i++){
-					if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-						if(localStorage["level." + i] == "true"){
-							createWorld(io,i);
-						}
-						return false;
-					}
-				}
-			}
-		}
-		if(muteBtn && muteBtn.contains(newPos)){
-			soundControl();
-		}
-		
+      }
+    }
+
+
+    if(gameOn && level.backBtn){
+      if(level.backBtn && level.backBtn.contains(newPos)){
+        unPauseBtn = undefined; //To remove its POS
+        muteBtn = undefined;
+        menuBtn = undefined;
+        testBtn = undefined;
+        intro(io);
+      }
+    }
+    if(muteBtn && muteBtn.contains(newPos)){
+      soundControl();
+    }
+
 		if(testBtn && testBtn.contains(newPos)){
-			if(adReady)
-		     fullscreen1.showFullScreen();
+			if(adReady){
+       fullscreen1.showFullScreen();
+      }
 		}
-	
 	});
 	io.canvas.addEventListener('touchmove', touchMove);
 	io.canvas.addEventListener('touchend', touchEnd);
-	
+
 	//DEBUGGING
 	window.addEventListener('keydown', function(event){
 		if (iio.keyCodeIs('up arrow', this.event)){
 			if(level.gameEnd == true)
 				level.gameEnd = false;
-			else 
+			else
 				level.gameEnd = true;
-		
+
 		}
 
 		if (iio.keyCodeIs('o', this.event)){
@@ -452,7 +450,7 @@ io.setFramerate(20,function(){
 				fixDef.shape = new b2PolygonShape;
 
 				fixDef.shape.SetAsArray(newBlock.vertexs);
-				
+
 
 				//console.log(fixDef);
 
@@ -465,16 +463,14 @@ io.setFramerate(20,function(){
 
 				var xPos = iio.getRandomNum(-7,7);
 
-				prepShape(bodyDef, fixDef).setFillStyle(currentColor[0]).setStrokeStyle(currentColor[1],2);  
+				prepShape(bodyDef, fixDef).setFillStyle(currentColor[0]).setStrokeStyle(currentColor[1],2);
 
 
 				newBlock.pos = new b2Vec2(xPos,0);
 
 
 				newBlocks.push(newBlock);
-				console.log(newBlocks)
-				
-				
+
 				newBlock = {};
 				recordObjects = false;
 				io.rmvFromGroup('EDITOREDGE');
@@ -493,13 +489,13 @@ io.setFramerate(20,function(){
 		if (iio.keyCodeIs('g', this.event)){
 			if(level.gameOver == true)
 				level.gameOver = false
-			else 
+			else
 				level.gameOver = true
 		}
 		if (iio.keyCodeIs('w', this.event)){
 			if(level.gameWin == true)
 				level.gameWin = false
-			else 
+			else
 				level.gameWin = true
 		}
 		if (iio.keyCodeIs('r', this.event)){
@@ -522,33 +518,40 @@ io.setFramerate(20,function(){
 		}
 		if (iio.keyCodeIs('p', this.event)){
 			if(level.pause == true)
-				resume(io);	
-			else 
-				pause(io);	
+				resume(io);
+			else
+				pause(io);
 		}
-		
+
 	});
 	//CLICK EVENTS
-	io.canvas.addEventListener('mousemove', mouseMove);         
+	io.canvas.addEventListener('mousemove', mouseMove);
 	io.canvas.addEventListener('mouseup', mouseUp);
 	io.canvas.addEventListener('mousedown', function(e){
 		mouseDown(e);
 		var newPos = io.getEventPosition(e);
 		newPos.x = pxConv(io.getEventPosition(e).x)*scaleX;
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
-        if (btn && btn.contains(newPos)){
+    if (startBtn && startBtn.contains(newPos)){
 
-        	unPauseBtn = undefined; //To remove its POS
+    	unPauseBtn = undefined; //To remove its POS
 			muteBtn = undefined;
 			menuBtn = undefined;
 			testBtn = undefined;
+      restartLvlBtn = undefined;
+      setTimeout(function(){
         	createWorld(io);
-        }
-        if(pauseBtn && pauseBtn.contains(newPos)){
-       		pause(io);
-        }
+      },100);
+
+
+
+    }
+    if(pauseBtn && pauseBtn.contains(newPos)){
+   		pause(io);
+    }
 		if(unPauseBtn && unPauseBtn.contains(newPos)){
-			resume(io);	
+			resume(io);
+      restartLvlBtn = undefined;
 		}
 		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
 			createWorld(io, currentLvl);
@@ -564,27 +567,29 @@ io.setFramerate(20,function(){
 			muteBtn = undefined;
 			menuBtn = undefined;
 			testBtn = undefined;
+      restartLvlBtn = undefined;
 		}else{ //HAD TO IGNORE IF IN MENU
-			if(gameOn && level.lvlButtons){
-			for(var i = 1; i < level.lvlButtons.length ; i++){
+			if (gameOn && level.lvlButtons) {
+        for(var i = 1; i < level.lvlButtons.length ; i++){
 
-				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
-					if(localStorage["level." + i] == "true"){
-						createWorld(io,i);
-					}
-					return false;
-				}
-			}
-		}
+  				if(level.lvlButtons[i] && level.lvlButtons[i].contains(newPos)){
+  					if(localStorage["level." + i] == "true"){
+  						createWorld(io,i);
+  					}
+  					return false;
+  				}
+  			}
+  		}
 		}
 
-		
+
 		if(gameOn && level.backBtn){
 			if(level.backBtn && level.backBtn.contains(newPos)){
 				unPauseBtn = undefined; //To remove its POS
 				muteBtn = undefined;
 				menuBtn = undefined;
 				testBtn = undefined;
+        restartLvlBtn = undefined;
 				intro(io);
 			}
 		}
@@ -609,7 +614,7 @@ io.setFramerate(20,function(){
 };
 
 function pause(io){
-		
+
 	//grey screen
 
 
@@ -617,17 +622,17 @@ function pause(io){
 	io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, io.canvas.width , io.canvas.height)
 	.setFillStyle('rgba(0,0,0,0.7)'),20);
 
-	unPauseBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, pxConv(60), pxConv(60))
+	unPauseBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 - pxConv(80), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['orange'][0])
 		.setStrokeStyle(colors['orange'][1],pxConv(2)),20);
-		
+
 	unPauseBtn.addObj(new iio.Rect().addImage('img/nextBtn.png')
 		.setImgSize(pxConv(50),pxConv(50)));
 
 	pauseBtn.pos.x = pxConv(-50); //hide pause button;
 
-	muteBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(70), pxConv(60), pxConv(60))
+	muteBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(60), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['orange'][0])
 		.setStrokeStyle(colors['orange'][1],pxConv(2)),20);
@@ -640,14 +645,22 @@ function pause(io){
 	}else{
 		muteBtn.objs[0].setAlpha(1);
 	}
-	
 
-	menuBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(70 * 2), pxConv(60), pxConv(60))
+restartLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 - pxConv(10), pxConv(60), pxConv(60))
+  .setRoundingRadius(pxConv(2))
+  .setFillStyle(colors['orange'][0])
+  .setStrokeStyle(colors['orange'][1],pxConv(2)),20);
+
+restartLvlBtn.addObj(new iio.Rect().addImage('img/restart.png')
+  .setImgSize(pxConv(50),pxConv(50)));
+
+
+	menuBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(130), pxConv(60), pxConv(60))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['orange'][0])
 		.setStrokeStyle(colors['orange'][1],pxConv(2)),20).addObj(new iio.Rect().addImage('img/menu.png').setImgSize(pxConv(50),pxConv(50)));
 
-	testBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(65 * 3), pxConv(60), pxConv(30))
+	testBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2 + pxConv(65 * 99), pxConv(60), pxConv(30))
 		.setRoundingRadius(pxConv(2))
 		.setFillStyle(colors['purple'][0])
 		.setStrokeStyle(colors['purple'][1],pxConv(2)),20);
@@ -660,7 +673,7 @@ function pause(io){
 
 	level.pause = true
 	gameOn = false;
-		
+
 
 	io.pauseB2World(true);
 	io.pauseFramerate(true);
@@ -699,19 +712,19 @@ function winGame(io){
 
 	gameOn = false;
 
- 	if (supports_html5_storage() != false) { 
+ 	if (supports_html5_storage() != false) {
  		var saveLvl = currentLvl + 1;
  		localStorage["level." + saveLvl] = true;
  	}
-   
+
 	//SHOW WIN TEXT
 
 	var winText = io.addToGroup('MENU',(new iio.Text('Level ' + currentLvl + ' Clear!',iio.Vec.add(io.canvas.width/2,-pxConv(60),0,0)))
 		.setFont(pxConv(40)+'px OpenSans')
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
-	  
-	//SHOW NEXT LEVEL BUTTON      		      
+
+	//SHOW NEXT LEVEL BUTTON
 	nextLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(50))
 		.setRoundingRadius(10)
 		.setStrokeStyle(colors['sunset'][1]).setLineWidth(2)
@@ -720,15 +733,15 @@ function winGame(io){
 		.setFont(pxConv(20)+'px OpenSans')
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
-		
-		
+
+
 	var topCurtain = io.addToGroup('UIEFFECTS',(new iio.Rect(io.canvas.width/2,0,io.canvas.width,1))
 		.setFillStyle('rgba(0,0,0,0.5)'),20);
-		
+
 	var bottomCurtain = io.addToGroup('UIEFFECTS',(new iio.Rect(io.canvas.width/2,io.canvas.height,io.canvas.width,1))
 		.setFillStyle('rgba(0,0,0,0.5)'),20);
-			
-			
+
+
 	new TWEEN.Tween( {y: 0 } )
 		.to( { y:io.canvas.height}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
@@ -739,7 +752,7 @@ function winGame(io){
 		} )
 		.delay(1000)
 		.start();
-		
+
 	new TWEEN.Tween( {y: io.canvas.height } )
 		.to( { y:io.canvas.height/2}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
@@ -757,20 +770,20 @@ var dataURL = io.canvas.toDataURL();
 console.log(dataURL);
 
 	setTimeout(function(){io.pauseB2World(true);}, 2000)
-	
+
 	//io.pauseFramerate(true);
 
 }
 function gameOver(io){
 	gameOn = false;
-	
+
 	//SHOW GAME OVER TEXT
 	var gameoverText = io.addToGroup('MENU',(new iio.Text('Game Over!',iio.Vec.add(io.canvas.width/2,-pxConv(60),0,0)))
 		.setFont(pxConv(40)+'px OpenSans')
 		.setTextAlign('center')
 		.setFillStyle('white'),20);
-	  
-	//SHOW GAMEOVER BUTTON      		      
+
+	//SHOW GAMEOVER BUTTON
 	restartLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(120), pxConv(40))
 		.setRoundingRadius(10)
 		.setStrokeStyle('#4385f6').setLineWidth(2)
@@ -778,15 +791,15 @@ function gameOver(io){
 	restartLvlBtn.text = io.addToGroup('MENU', new iio.Text('Restart',restartLvlBtn.pos)
 		.setFont(pxConv(20)+'px OpenSans')
 		.setTextAlign('center')
-		.setFillStyle('white'),20);	
+		.setFillStyle('white'),20);
 		restartLvlBtn.text.pos.y = restartLvlBtn.pos.y + pxConv(9);
-	
+
 	var topCurtain = io.addToGroup('UIEFFECTS',(new iio.Rect(io.canvas.width/2,0,io.canvas.width,1))
 		.setFillStyle('rgba(0,0,0,0.5)'),20);
-		
+
 	var bottomCurtain = io.addToGroup('UIEFFECTS',(new iio.Rect(io.canvas.width/2,io.canvas.height,io.canvas.width,1))
 		.setFillStyle('rgba(0,0,0,0.5)'),20);
-					
+
 	new TWEEN.Tween( {y: 0 } )
 		.to( { y:io.canvas.height}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
@@ -797,7 +810,7 @@ function gameOver(io){
 		} )
 		.delay(1000)
 		.start();
-		
+
 	new TWEEN.Tween( {y: io.canvas.height } )
 		.to( { y:io.canvas.height/2}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
@@ -824,7 +837,7 @@ function intro(io){
 
 	if ( world != null )
 		world = null;
-		
+
 	io.rmvAll();
 
 
@@ -842,9 +855,9 @@ function intro(io){
 		.addImage('img/logo.png',function() {console.log('logoLoad'); loadResources++})
 		,20);
 
-	//SHOW START BUTTON      		      
-	btn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(98), pxConv(94))
-		.addImage('img/startBtn.png',function() {console.log('btnLoad'); loadResources++})
+	//SHOW START BUTTON
+	startBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(98), pxConv(94))
+		.addImage('img/startBtn.png',function() {console.log('startBtnLoad'); loadResources++})
 		,20);
 
 
@@ -858,13 +871,13 @@ function intro(io){
 		} )
 		.delay(1000)
 		.start();
-				
+
 	new TWEEN.Tween( { x: 0, y:0})
 		.to( { x: io.canvas.width/2,y: io.canvas.height/2 + 50}, 1000 )
 		.easing( TWEEN.Easing.Bounce.Out)
 		.onUpdate( function () {
-			if(btn){
-				btn.pos.y = this.y;
+			if(startBtn){
+				startBtn.pos.y = this.y;
 			}
 		} )
 		.delay(1700)
@@ -876,10 +889,10 @@ function intro(io){
 	var fixDef = new b2FixtureDef;
 	fixDef.friction = 1;
 	fixDef.restitution = 0.5;
-	
+
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
-	
+
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(1,true));
@@ -891,7 +904,7 @@ function intro(io){
 	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT/2,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['yellow'][0]);
-	
+
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
@@ -902,7 +915,7 @@ function intro(io){
 
 	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
 	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
-		
+
 
 
 	io.canvas.style.width = window.innerWidth + 'px';
@@ -911,7 +924,7 @@ function intro(io){
 
 }
 function createWorld(io,levelNumber){
-	//DO INTRO ANIMATION	
+	//DO INTRO ANIMATION
 	gameOn = true;
 
 
@@ -920,9 +933,9 @@ function createWorld(io,levelNumber){
 
 	if ( world != null )
 		world = null;
-		
+
 	io.rmvAll();
-	btn = restartLvlBtn = nextLvlBtn = backBtn = nextBtn = undefined;    
+	startBtn = restartLvlBtn = nextLvlBtn = backBtn = nextBtn = undefined;
     //create the box2d world
 	world = io.addB2World(new b2World(
     new b2Vec2(0, 25*PIXEL_RATIO)    //gravity
@@ -939,13 +952,13 @@ function createWorld(io,levelNumber){
 	}else{
 		level = io.activateLevelSelect(io);
 	}
-	
+
 	world.SetContactListener(listener);
 	if(level)
 		level.setup();
 	else
 		level = null;
-	
+
 	gameIntro = false;
 
 	io.pauseB2World(false);
@@ -966,7 +979,7 @@ function createWorld(io,levelNumber){
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
 	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
-	
+
 }
 function soundControl(bool){
 	if(muted == true){
@@ -981,7 +994,7 @@ function soundControl(bool){
 	}else{
 		sound.pause(bgMusicID);
 		localStorage["muted"] = true;
-		muted = true;	
+		muted = true;
 		muteBtn.objs[0].setAlpha(0.3);
 	}
 }
@@ -996,13 +1009,13 @@ function prepShape(bodyDef, fixDef,group,zIndex){
 	return  lio.addToGroup(group,world.CreateBody(bodyDef),zIndex)
 	        .CreateFixture(fixDef)
 	        .GetShape()
-	        .prepGraphics(lio.b2Scale); 
+	        .prepGraphics(lio.b2Scale);
 };
 
 function pxConv(x,box2dconv){
 	x = x * PIXEL_RATIO;
 	if(box2dconv == true){
-		
+
 		x = x / PTM;
 
 	}

@@ -10,7 +10,7 @@ function lvlSelect(io){
 	this.imgPath = 'img/';
 	this.loadResources = 0;
 	this.totalResources = 5;
-	
+
 
 	this.btnSpaceX = 40;
 	this.btnMargin = 80;
@@ -19,23 +19,23 @@ function lvlSelect(io){
 	this.cols = 4;
 
 	this.btnSize = 65;
-	
+
 	if(GAMEHEIGHT != 568){
 		this.btnSpaceX = 52;
 		this.btnMargin = 70;
-		this.btnSpaceY = 20;	
+		this.btnSpaceY = 20;
 		this.btnSize = 60;
 	}
-	
+
 	//Levels
 	this.lvlButtons =  new Array();
-	   
+
 }; iio.lvlSelect = lvlSelect;
 
 lvlSelect.prototype.setup = function(){
-	
+
 	this.io.addToGroup('BACKGROUND',new iio.Rect(pxConv(this.cWidth/2),pxConv(this.cHeight/2),pxConv(this.cWidth),pxConv(this.cHeight)).addImage(this.imgPath+'mountain.png'),-30);
-	
+
 	this.backBtn = this.io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(30), pxConv(35), pxConv(35)).addImage('img/backBtn.png'),20)
 
 	this.lvlButtons.push(null);
@@ -43,7 +43,6 @@ lvlSelect.prototype.setup = function(){
 	var k = 0;
 	var colorNum = 0;
 	var color = getColor(colorNum);
-	console.log(color);
 
 	for(var i = 0; i < MAX_LEVELS ; i++){
 			if(i % this.cols === 0){
@@ -53,11 +52,11 @@ lvlSelect.prototype.setup = function(){
 				k = 0;
 
 			}
-		this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX + this.btnMargin *k ),pxConv(this.btnSpaceY + (this.btnMargin *j)), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(color[1],pxConv(3))));	
+		this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX + this.btnMargin *k ),pxConv(this.btnSpaceY + (this.btnMargin *j)), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(color[1],pxConv(3))));
 		k++;
 	}
-		
-	//Paint all 
+
+	//Paint all
 
 
 	for(var i = 1 ; i < this.lvlButtons.length ; i++){
@@ -81,23 +80,23 @@ lvlSelect.prototype.setup = function(){
 
 	}
 
-	
-	if(CocoonJS.nativeExtensionObjectAvailable){ 
+
+	if(CocoonJS.nativeExtensionObjectAvailable){
 		fullscreen1Params = {
 		    "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
 		    "refresh" : 20
 		};
-	
 
-		//PUT THIS INTO A PROMISE 
+
+		//PUT THIS INTO A PROMISE
 		if(!adReady){
 			console.log('loading ad');
-	    	fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+	    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
 		}else{
 			console.log('refreshing ad');
 			fullscreen1.refreshFullScreen();
 		}
-		
+
 	    fullscreen1.onFullScreenShown.addEventListener(function()
 	    {
 	        console.log("fullscreen1 onFullScreenShown");
@@ -109,9 +108,13 @@ lvlSelect.prototype.setup = function(){
 	    });
 	    fullscreen1.onFullScreenReady.addEventListener(function()
 	    {
-	    	adReady = true;
+	    		adReady = true;
 	        console.log("fullscreen1 onFullScreenReady");
 	    });
+	}
+
+	if(adReady){
+	 fullscreen1.showFullScreen();
 	}
 
 }
