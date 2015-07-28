@@ -14,6 +14,7 @@ var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJo
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn, backBtn;
 var touches = [];
 //load BOX2D classes
+
 var   b2Vec2 = Box2D.Common.Math.b2Vec2
 ,  	b2BodyDef = Box2D.Dynamics.b2BodyDef
 ,  	b2Body = Box2D.Dynamics.b2Body
@@ -21,15 +22,15 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
 ,  	b2World = Box2D.Dynamics.b2World
 ,  	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
 ,  	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
-,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
+,	  b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
 ,   b2RopeJointDef = Box2D.Dynamics.Joints.b2RopeJointDef
 ,   b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
-,	b2RevoluteJoint = Box2D.Dynamics.Joints.b2RevoluteJoint
-,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+,	  b2RevoluteJoint = Box2D.Dynamics.Joints.b2RevoluteJoint
+,	  b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
 ,   b2DebugDraw = Box2D.Dynamics.b2DebugDraw
 ,   b2Fixture = Box2D.Dynamics.b2Fixture
-,	b2Listener = Box2D.Dynamics.b2ContactListener
-,	b2WorldManifold = Box2D.Collision.b2WorldManifold
+,	  b2Listener = Box2D.Dynamics.b2ContactListener
+,	  b2WorldManifold = Box2D.Collision.b2WorldManifold
 ,   b2AABB = Box2D.Collision.b2AABB;
 
 var colors = new Array();
@@ -172,6 +173,39 @@ if(TEST){
 io.addObj(grid);
 }
 
+
+if(CocoonJS.nativeExtensionObjectAvailable){
+  fullscreen1Params = {
+      "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
+      "refresh" : 20
+  };
+
+
+  //PUT THIS INTO A PROMISE
+  if(!adReady){
+    console.log('loading ad');
+    fullscreen1 = CocoonJS.Ad.createFullscreen(fullscreen1Params);
+  }else{
+    console.log('refreshing ad');
+    fullscreen1.refreshFullScreen();
+  }
+
+    fullscreen1.onFullScreenShown.addEventListener(function()
+    {
+        console.log("fullscreen1 onFullScreenShown");
+    });
+    fullscreen1.onFullScreenHidden.addEventListener(function()
+    {
+        console.log("fullscreen1 onFullScreenHidden");
+        fullscreen1.refreshFullScreen();
+    });
+    fullscreen1.onFullScreenReady.addEventListener(function()
+    {
+        adReady = true;
+        console.log("fullscreen1 onFullScreenReady");
+    });
+}
+
 /*io.setFramerate(20,function(){
 		if(gameOn){
 			if(level.gameOver==true){
@@ -203,6 +237,8 @@ io.addObj(grid);
 		    }
 		}
 });*/
+
+
 
 	io.setB2Framerate(FPS,function(){
 		if(gameOn){
@@ -371,10 +407,16 @@ io.addObj(grid);
      }
     if(unPauseBtn && unPauseBtn.contains(newPos)){
       resume(io);
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
       restartLvlBtn = undefined;
-
     }
     if(restartLvlBtn && restartLvlBtn.contains(newPos)){
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
+      restartLvlBtn = undefined;
       createWorld(io, currentLvl);
     }
     if(nextLvlBtn && nextLvlBtn.contains(newPos)){
@@ -551,9 +593,16 @@ io.addObj(grid);
     }
 		if(unPauseBtn && unPauseBtn.contains(newPos)){
 			resume(io);
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
       restartLvlBtn = undefined;
 		}
 		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
+      restartLvlBtn = undefined;
 			createWorld(io, currentLvl);
 		}
 		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
@@ -768,6 +817,10 @@ function winGame(io){
 
 var dataURL = io.canvas.toDataURL();
 console.log(dataURL);
+
+if(adReady){
+ fullscreen1.showFullScreen();
+}
 
 	setTimeout(function(){io.pauseB2World(true);}, 2000)
 
