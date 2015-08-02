@@ -59,7 +59,7 @@ var colors = {
 	'black' 	: 	['#4D4D4D','#151515']
 };
 tempLvl = 23;
-var TEST = true;
+var TEST = false;
 
 var PTM = 30;
 var FPS = 60;
