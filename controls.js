@@ -10,6 +10,10 @@ var canvasZoom = {
 };
 var fullscreen1Params;
 var sound = new Howl({ urls: ['music/Monkey-Island-Band.ogg'],loop: true });
+var touchSound = new Howl({ urls: ['music/click.wav'],loop: false,volume:0.8});
+var smashSound = new Howl({ urls: ['music/smash.mp3'],loop: false,volume:0.5});
+
+
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,startBtn, pauseBtn, unPauseBtn, menuBtn,testBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn, backBtn;
 var touches = [];
@@ -55,7 +59,7 @@ var colors = {
 	'black' 	: 	['#4D4D4D','#151515']
 };
 tempLvl = 23;
-var TEST = false;
+var TEST = true;
 
 var PTM = 30;
 var FPS = 60;
@@ -274,7 +278,9 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 		     md.maxForce = 600.0 * body.GetMass();
 		     mouseJoint = world.CreateJoint(md);
 
-		     clickedObjCenter = md.bodyB.m_xf.position
+
+touchSound.play();
+		     clickedObjCenter = md.bodyB.m_xf.position;
 
 		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.4)'));
 		     new TWEEN.Tween( {y: 0 } )
@@ -292,7 +298,6 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 		if(mouseJoint) {
 		  if(isMouseDown) {
 		    mouseJoint.SetTarget(new b2Vec2(mouseX, mouseY));
-
 		   	jointEffect.pos = new b2Vec2(mouseX*PTM, mouseY*PTM);
 
 		  } else {
@@ -420,6 +425,11 @@ if(CocoonJS.nativeExtensionObjectAvailable){
       createWorld(io, currentLvl);
     }
     if(nextLvlBtn && nextLvlBtn.contains(newPos)){
+
+      if(adReady){
+       fullscreen1.showFullScreen();
+      }
+
       if(currentLvl <= MAX_LEVELS)
         createWorld(io, currentLvl+1);
       else
@@ -606,6 +616,11 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 			createWorld(io, currentLvl);
 		}
 		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
+
+      if(adReady){
+       fullscreen1.showFullScreen();
+      }
+
 			if(currentLvl <= MAX_LEVELS)
 				createWorld(io, currentLvl+1);
 			else
@@ -665,9 +680,6 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 function pause(io){
 
 	//grey screen
-
-
-
 	io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, io.canvas.width , io.canvas.height)
 	.setFillStyle('rgba(0,0,0,0.7)'),20);
 
@@ -818,9 +830,6 @@ function winGame(io){
 var dataURL = io.canvas.toDataURL();
 console.log(dataURL);
 
-if(adReady){
- fullscreen1.showFullScreen();
-}
 
 	setTimeout(function(){io.pauseB2World(true);}, 2000)
 

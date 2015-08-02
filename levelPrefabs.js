@@ -146,6 +146,8 @@ levelBuilder = {
 			}
 		}
 		if(stage.gameWinAnim){
+			smashSound.play();
+
 			world.DestroyBody(lio.goal.GetBody());
 		}
 
