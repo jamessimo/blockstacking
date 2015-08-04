@@ -11,7 +11,7 @@ var canvasZoom = {
 var fullscreen1Params;
 var sound = new Howl({ urls: ['music/Monkey-Island-Band.ogg'],loop: true });
 var touchSound = new Howl({ urls: ['music/click.ogg'],loop: false,volume:0.8});
-var smashSound = new Howl({ urls: ['music/smash.mp3'],loop: false,volume:0.5});
+var smashSound = new Howl({ urls: ['music/smash.ogg'],loop: false,volume:0.5});
 
 
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,startBtn, pauseBtn, unPauseBtn, menuBtn,testBtn,
