@@ -40,25 +40,25 @@ levelBuilder = {
 
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(stage.cWidth/2,true),pxConv(1,true));
+	fixDef.shape.SetAsBox(pxConv(stage.cWidth/2,true),pxConv(0,true));
 	bodyDef.position.Set(pxConv(stage.cWidth/2,true),pxConv(stage.cHeight,true));
-	prepShape(bodyDef, fixDef);
+	prepShape(bodyDef, fixDef).setFillStyle('red');
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
-	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(stage.cHeight - 75,true));
+	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(stage.cHeight - 70,true));
 	prepShape(bodyDef, fixDef);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
-	bodyDef.position.Set(pxConv(stage.cWidth - 0,true),pxConv(stage.cHeight - 75,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
+	bodyDef.position.Set(pxConv(stage.cWidth - 0,true),pxConv(stage.cHeight - 70,true));
 	prepShape(bodyDef, fixDef);
 
 	//WORLD BOUNDRIES
 	fixDef.friction = 0;
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(201,true));
 	bodyDef.angle=-Math.PI/6;
 	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(stage.cHeight - 320,true));
 	prepShape(bodyDef, fixDef);
@@ -90,17 +90,21 @@ levelBuilder = {
 	fixDef.shape.SetAsBox(platformWidth,pxConv(5,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]);
 
+
 	//GOAL
-	bodyDef.type = b2Body.b2_staticBody;
-	fixDef.isSensor = true;
-	fixDef.userData = 'goal';
-	fixDef.shape = new b2PolygonShape;
+	var	goalBodyDef = new b2BodyDef;
+	goalBodyDef.type = b2Body.b2_kinematicBody;
+
+	var goalFixDef = new b2FixtureDef;
+	goalFixDef.isSensor = true;
+	goalFixDef.userData = 'goal';
+  goalFixDef.shape = new b2PolygonShape;
 
 	stage.goalEffect = stage.io.addToGroup('GOALEFFECTS', new iio.Circle(pxConv(stage.goalPos.x),pxConv(stage.goalPos.y/PIXEL_RATIO),0)
 		.setFillStyle('rgba(244, 223, 59,0.3)').setStrokeStyle('rgba(233, 195, 53,0.3)',pxConv(2)));
 
-	bodyDef.angle = Math.PI/1;
-	fixDef.shape.SetAsArray([
+	goalBodyDef.angle = Math.PI/1;
+	goalFixDef.shape.SetAsArray([
 			new b2Vec2(pxConv(0.94), pxConv(0.30)),
 			new b2Vec2(pxConv(0.34), pxConv(0.47)),
 			new b2Vec2(pxConv(-0.00), pxConv(0.99)),
@@ -114,14 +118,41 @@ levelBuilder = {
 			new b2Vec2(pxConv(0.58), pxConv(-0.80)),
 			new b2Vec2(pxConv(0.56), pxConv(-0.18))
 		]);
-		bodyDef.position.Set(pxConv(stage.goalPos.x,true), pxConv(stage.goalPos.y/PIXEL_RATIO,true));
-		prepShape(bodyDef, fixDef).setFillStyle(colors['orange'][0]).setStrokeStyle(colors['orange'][1],pxConv(2));
+		goalBodyDef.position.Set(pxConv(stage.goalPos.x,true), pxConv(stage.goalPos.y/PIXEL_RATIO,true));
 
+
+		//prepShape(goalBodyDef, goalFixDef).setFillStyle(colors['orange'][0]).setStrokeStyle(colors['orange'][1],pxConv(2));
+		goalObj = stage.io.addObj(world.CreateBody(goalBodyDef)).CreateFixture(goalFixDef);
+
+		goalObj.GetShape().prepGraphics(stage.io.b2Scale)
+				.setFillStyle(colors['orange'][0])
+				.setStrokeStyle(colors['orange'][1],pxConv(2));
 
 
 	},
+	tick : 0,
 	step : function(stage){
 		var lio = stage;
+
+
+		var shake = 2;
+
+		if(levelBuilder.tick == 1.5000){
+			shake = 1;
+		}else if(levelBuilder.tick == -1.5000) {
+			shake = 2;
+		}
+
+		if(shake == 2){
+			levelBuilder.tick += 0.02;
+		}
+	  if(shake == 1){
+			levelBuilder.tick -= 0.02;
+		}
+
+console.log(shake);
+console.log(levelBuilder.tick)
+goalObj.GetBody().SetAngle(levelBuilder.tick);
 
 	if(stage.gameEnd == true){
 	}

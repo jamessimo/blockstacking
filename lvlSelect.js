@@ -52,7 +52,9 @@ lvlSelect.prototype.setup = function(){
 				k = 0;
 
 			}
-		this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX + this.btnMargin *k ),pxConv(this.btnSpaceY + (this.btnMargin *j)), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(color[1],pxConv(3))));
+		this.lvlButtons.push(this.io.addToGroup('LEVELBTNS',new iio.Rect(pxConv(this.btnSpaceX + this.btnMargin *k ),pxConv(this.btnSpaceY + (this.btnMargin *j)), pxConv(this.btnSize), pxConv(this.btnSize)).setStrokeStyle(color[1],pxConv(3))
+	.setFillStyle(color[0])
+));
 		k++;
 	}
 
@@ -64,7 +66,8 @@ lvlSelect.prototype.setup = function(){
 		if(localStorage["level." + i] == "true"){
 			this.lvlButtons[i].addObj(new iio.Text(i).setFont(pxConv(40)+'px KGWhattheTeacherWants')
 			.setTextAlign('center')
-			.setFillStyle(this.lvlButtons[i].styles.strokeStyle));
+			.setFillStyle(this.lvlButtons[i].styles.strokeStyle)
+		.setStrokeStyle(colors['black'][0],pxConv(2)));
 
 			var btnPos = new iio.Vec(this.lvlButtons[i].pos);
 			btnPos.y += pxConv(13);

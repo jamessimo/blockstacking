@@ -58,7 +58,7 @@ var colors = {
 	'brown' 	: 	['#795548','#451F14'],
 	'black' 	: 	['#4D4D4D','#151515']
 };
-tempLvl = 23;
+tempLvl = 1;
 var TEST = false;
 
 var PTM = 30;
@@ -165,11 +165,11 @@ function GameControl(io) {
 	}
 
 
-intro(io);
-//	createWorld(io,tempLvl);
+//intro(io);
+	createWorld(io,tempLvl);
 
   //io.context.scale(0.6,0.6);
-	//io.context.translate(100, 200);
+	//io.context.translate(150, 200);
 
 
 if(TEST){
@@ -712,7 +712,7 @@ restartLvlBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.h
   .setFillStyle(colors['orange'][0])
   .setStrokeStyle(colors['orange'][1],pxConv(2)),20);
 
-restartLvlBtn.addObj(new iio.Rect().addImage('img/restart.png')
+restartLvlBtn.addObj(new iio.Rect().addImage('img/restartBtn.png')
   .setImgSize(pxConv(50),pxConv(50)));
 
 
