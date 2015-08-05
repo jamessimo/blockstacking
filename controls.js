@@ -165,8 +165,8 @@ function GameControl(io) {
 	}
 
 
-//intro(io);
-	createWorld(io,tempLvl);
+intro(io);
+//	createWorld(io,tempLvl);
 
   //io.context.scale(0.6,0.6);
 	//io.context.translate(150, 200);
