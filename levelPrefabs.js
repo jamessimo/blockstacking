@@ -135,24 +135,9 @@ levelBuilder = {
 		var lio = stage;
 
 
-		var shake = 2;
-
-		if(levelBuilder.tick == 1.5000){
-			shake = 1;
-		}else if(levelBuilder.tick == -1.5000) {
-			shake = 2;
-		}
-
-		if(shake == 2){
-			levelBuilder.tick += 0.02;
-		}
-	  if(shake == 1){
-			levelBuilder.tick -= 0.02;
-		}
-
-console.log(shake);
-console.log(levelBuilder.tick)
-goalObj.GetBody().SetAngle(levelBuilder.tick);
+//console.log(Math.round(levelBuilder.tick));
+//console.log(goalObj.GetBody().GetAngle());
+//goalObj.GetBody().SetAngle(levelBuilder.tick);
 
 	if(stage.gameEnd == true){
 	}

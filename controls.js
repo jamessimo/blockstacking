@@ -142,9 +142,6 @@ function GameControl(io) {
 
 	};
 
-
-
-
 	io.canvas.width = GAMEWIDTH;
 	io.canvas.height = GAMEHEIGHT;
 
@@ -165,25 +162,24 @@ function GameControl(io) {
 	}
 
 
-intro(io);
-//	createWorld(io,tempLvl);
+//intro(io);
+	createWorld(io,tempLvl);
 
   //io.context.scale(0.6,0.6);
 	//io.context.translate(150, 200);
 
 
-if(TEST){
-  var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
-io.addObj(grid);
-}
+  if(TEST){
+    var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
+    io.addObj(grid);
+  }
 
 
-if(CocoonJS.nativeExtensionObjectAvailable){
+  if(CocoonJS.nativeExtensionObjectAvailable){
   fullscreen1Params = {
       "fullscreenAdUnit" : "f28daed244254154944ad407ba31ce99",
       "refresh" : 20
   };
-
 
   //PUT THIS INTO A PROMISE
   if(!adReady){
@@ -248,11 +244,9 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 		if(gameOn){
 			if(level.gameOver==true){
 				gameOver(io);
-			}
-			else if(level.gameWin==true){
+			}else if(level.gameWin==true){
 				winGame(io);
-			}
-			else{
+			}else{
 				//io.context.scale(canvasZoom.x,canvasZoom.y);
 				//io.context.translate(canvasOffset.x, canvasOffset.y);
 				level.step();
@@ -278,8 +272,7 @@ if(CocoonJS.nativeExtensionObjectAvailable){
 		     md.maxForce = 600.0 * body.GetMass();
 		     mouseJoint = world.CreateJoint(md);
 
-
-touchSound.play();
+         touchSound.play();
 		     clickedObjCenter = md.bodyB.m_xf.position;
 
 		     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(mouseX*PTM, mouseY*PTM,0).setFillStyle('rgba(255,255,255,0.4)'));
@@ -1008,9 +1001,12 @@ function createWorld(io,levelNumber){
 		currentLvl = levelNumber;
 		level = eval( "io.activatelvl"+levelNumber+"(io);" );
 		//ADD PAUSE BTN
-		pauseBtn = io.addObj(new iio.Rect(pxConv(25),pxConv(25), pxConv(40), pxConv(40))
-	  );
-	    pauseBtn.addObj(new iio.Rect().addImage('img/pause.png').setImgSize(pxConv(45)));
+		pauseBtn = io.addObj(new iio.Rect(pxConv(25),pxConv(25), pxConv(40), pxConv(40)));
+	  pauseBtn.addObj(new iio.Rect().addImage('img/pause.png').setImgSize(pxConv(45)));
+
+    if(levelNumber == 1){
+      tutorial(io);
+    }
 	}else{
 		level = io.activateLevelSelect(io);
 	}
@@ -1041,6 +1037,71 @@ function createWorld(io,levelNumber){
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
 	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
+
+}
+function tutorial(io){
+  var finger = io.addObj(new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2), pxConv(80), pxConv(80)).addImage('img/Point.png').setImgSize(pxConv(90)).setAlpha(0.8));
+
+
+  //Move Finger to first block
+  new TWEEN.Tween( {x: finger.pos.x , y: finger.pos.y } )
+   .to( { x:pxConv(90), y: pxConv(540)}, 2000 )
+   .easing( TWEEN.Easing.Quadratic.In)
+   .onUpdate( function () {
+     finger.pos.x = this.x;
+     finger.pos.y = this.y;
+   })
+   .delay(000)
+   .onComplete(function() {
+     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(pxConv(80), pxConv(520),0).setFillStyle('rgba(255,255,255,0.4)'),10);
+     touchSound.play();
+     finger.addImage('img/Press_Hold.png').setImgSize(pxConv(90));
+
+     new TWEEN.Tween( {y: 0 } )
+      .to( { x:pxConv(50)}, 1000 )
+      .easing( TWEEN.Easing.Back.Out)
+      .onUpdate( function () {
+        jointEffect.radius = this.x;
+      })
+      .onComplete(function(){
+        new TWEEN.Tween( {fx: finger.pos.x, fy: finger.pos.y,jx: jointEffect.pos.x, jy:jointEffect.pos.y} )
+         .to( { fx: pxConv(170), fy: pxConv(280),jx: pxConv(150), jy:pxConv(260)}, 1000 )
+         .easing( TWEEN.Easing.Quadratic.In)
+         .onUpdate( function () {
+
+           finger.pos.x = this.fx;
+           finger.pos.y = this.fy;
+            jointEffect.pos.x = this.jx;
+            jointEffect.pos.y = this.jy;
+         })
+        .delay(100)
+        .onComplete(function(){
+          finger.addImage('img/Point.png').setImgSize(pxConv(90));
+          io.rmvObj(jointEffect);
+          setTimeout(function(){
+
+            io.rmvObj(finger);
+
+
+          },1000)
+
+        })
+
+         .start();
+
+      })
+         .delay(0)
+
+      .start();
+
+   })
+   .start();
+
+
+
+
+
+
 
 }
 function soundControl(bool){

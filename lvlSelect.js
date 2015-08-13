@@ -67,7 +67,7 @@ lvlSelect.prototype.setup = function(){
 			this.lvlButtons[i].addObj(new iio.Text(i).setFont(pxConv(40)+'px KGWhattheTeacherWants')
 			.setTextAlign('center')
 			.setFillStyle(this.lvlButtons[i].styles.strokeStyle)
-		.setStrokeStyle(colors['black'][0],pxConv(2)));
+		.setStrokeStyle('rgba(0,0,0,0.3)',pxConv(2)));
 
 			var btnPos = new iio.Vec(this.lvlButtons[i].pos);
 			btnPos.y += pxConv(13);
