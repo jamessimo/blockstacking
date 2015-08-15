@@ -161,9 +161,8 @@ function GameControl(io) {
 		muted = false;
 	}
 
-
-//intro(io);
-	createWorld(io,tempLvl);
+intro(io);
+	//createWorld(io,tempLvl);
 
   //io.context.scale(0.6,0.6);
 	//io.context.translate(150, 200);
@@ -1051,7 +1050,7 @@ function tutorial(io){
      finger.pos.x = this.x;
      finger.pos.y = this.y;
    })
-   .delay(000)
+   .delay(0)
    .onComplete(function() {
      jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(pxConv(80), pxConv(520),0).setFillStyle('rgba(255,255,255,0.4)'),10);
      touchSound.play();
@@ -1079,8 +1078,7 @@ function tutorial(io){
           finger.addImage('img/Point.png').setImgSize(pxConv(90));
           io.rmvObj(jointEffect);
           setTimeout(function(){
-
-            io.rmvObj(finger);
+          io.rmvObj(finger);
 
 
           },1000)
