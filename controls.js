@@ -1,4 +1,10 @@
 
+/*todotoday
+Unmute
+Finish  DONE
+preloader
+rocking star with tween DONE!
+*/
 var currentLvl = null;
 var canvasOffset = {
     x: 0,
@@ -12,8 +18,7 @@ var fullscreen1Params;
 var sound = new Howl({ urls: ['music/Monkey-Island-Band.ogg'],loop: true });
 var touchSound = new Howl({ urls: ['music/click.ogg'],loop: false,volume:0.8});
 var smashSound = new Howl({ urls: ['music/smash.ogg'],loop: false,volume:0.5});
-
-
+var tutorialTween;
 var mouseX, mouseY,touchX, touchY, mousePVec, isMouseDown, selectedBody, mouseJoint, jointEffect, clickedObjCenter,startBtn, pauseBtn, unPauseBtn, menuBtn,testBtn,
 menuTween, nextLvlBtn, restartLvlBtn,muteBtn, backBtn;
 var touches = [];
@@ -58,7 +63,7 @@ var colors = {
 	'brown' 	: 	['#795548','#451F14'],
 	'black' 	: 	['#4D4D4D','#151515']
 };
-tempLvl = 1;
+tempLvl = 5;
 var TEST = false;
 
 var PTM = 30;
@@ -154,25 +159,27 @@ function GameControl(io) {
 	if(	localStorage["muted"] == 'true'){
 		muted = true;
 	}
-	if(localStorage["muted"] == 'false') {
-		sound.play(function(id){
-			bgMusicID = id;
-		});
+	if(localStorage["muted"] == 'false' || !localStorage["muted"]) {
+		sound.play();
 		muted = false;
 	}
 
 intro(io);
-	//createWorld(io,tempLvl);
+//createWorld(io,tempLvl);
 
-  //io.context.scale(0.6,0.6);
-	//io.context.translate(150, 200);
+//endCredits(io);
+
+  if(TEST && 1==2){
+
+      io.context.scale(0.4,0.4);
+    	io.context.translate(pxConv(250,false), pxConv(300,false));
 
 
-  if(TEST){
-    var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
-    io.addObj(grid);
+
   }
 
+  var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
+//  io.addObj(grid);
 
   if(CocoonJS.nativeExtensionObjectAvailable){
   fullscreen1Params = {
@@ -414,7 +421,11 @@ intro(io);
       menuBtn = undefined;
       testBtn = undefined;
       restartLvlBtn = undefined;
-      createWorld(io, currentLvl);
+          newPos = null;//Stop clicking though to level
+      setTimeout(function(){
+        createWorld(io, currentLvl);
+      },0)
+
     }
     if(nextLvlBtn && nextLvlBtn.contains(newPos)){
 
@@ -422,10 +433,10 @@ intro(io);
        fullscreen1.showFullScreen();
       }
 
-      if(currentLvl <= MAX_LEVELS)
+      if(currentLvl <= MAX_LEVELS - 1)
         createWorld(io, currentLvl+1);
       else
-        createWorld(io, currentLvl);
+        endCredits(io);
     }
     if(menuBtn && menuBtn.contains(newPos)){
       createWorld(io);
@@ -444,6 +455,14 @@ intro(io);
           }
         }
       }
+    }
+    if(backBtn && backBtn.contains(newPos)){
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
+      restartLvlBtn = undefined;
+      backBtn = undefined;
+      intro(io);
     }
 
 
@@ -605,18 +624,22 @@ intro(io);
       menuBtn = undefined;
       testBtn = undefined;
       restartLvlBtn = undefined;
-			createWorld(io, currentLvl);
-		}
+      newPos = null;
+      setTimeout(function(){
+        createWorld(io, currentLvl);
+      },10);
+
+    }
 		if(nextLvlBtn && nextLvlBtn.contains(newPos)){
 
       if(adReady){
        fullscreen1.showFullScreen();
       }
 
-			if(currentLvl <= MAX_LEVELS)
+			if(currentLvl <= MAX_LEVELS - 1)
 				createWorld(io, currentLvl+1);
 			else
-				createWorld(io, currentLvl);
+				endCredits(io, currentLvl);
 		}
 		if(menuBtn && menuBtn.contains(newPos)){
 			createWorld(io);
@@ -638,6 +661,15 @@ intro(io);
   		}
 		}
 
+
+    if(backBtn && backBtn.contains(newPos)){
+      muteBtn = undefined;
+      menuBtn = undefined;
+      testBtn = undefined;
+      restartLvlBtn = undefined;
+      backBtn = undefined;
+      intro(io);
+    }
 
 		if(gameOn && level.backBtn){
 			if(level.backBtn && level.backBtn.contains(newPos)){
@@ -670,6 +702,13 @@ intro(io);
 };
 
 function pause(io){
+
+if(tutorialTween){
+  tutorialTween.stop();
+}
+
+
+  level.tween.stop();
 
 	//grey screen
 	io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, io.canvas.width , io.canvas.height)
@@ -733,6 +772,10 @@ restartLvlBtn.addObj(new iio.Rect().addImage('img/restartBtn.png')
 		//console.log(io);
 }
 function resume(io){
+if(tutorialTween)
+  tutorialTween.start();
+
+  level.tween.start();
 
 	gameoverText = null;
 	unPauseBtn.pos.x = pxConv(-50);
@@ -764,6 +807,7 @@ function winGame(io){
 
 
 	gameOn = false;
+  level.tween.stop();
 
  	if (supports_html5_storage() != false) {
  		var saveLvl = currentLvl + 1;
@@ -895,7 +939,6 @@ function intro(io){
 	io.rmvAll();
 
 
-
 	world = new b2World(new b2Vec2(0, 20*PIXEL_RATIO),true); //make into function
 
 	io.addB2World(world);
@@ -903,9 +946,13 @@ function intro(io){
 
 	io.addToGroup('BACKGROUND',new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2),pxConv(GAMEWIDTH),pxConv(GAMEHEIGHT)).addImage('img/mountain.png',function() {console.log('bgLoad');loadResources++}),-30);
 
+//Show credits BTN
+  creditsBtn = io.addToGroup('MENU',new iio.Rect(io.canvas.width - pxConv(30), io.canvas.height - pxConv(15), pxConv(50), pxConv(15))
+  .addImage('img/credits-btn.png').setAlpha('0.8')
+  ,20);
 
 	//SHOW LOGO
-	var logo = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, -100, pxConv(207), pxConv(153))
+	var logo = io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, pxConv(-100), pxConv(207), pxConv(153))
 		.addImage('img/logo.png',function() {console.log('logoLoad'); loadResources++})
 		,20);
 
@@ -915,7 +962,7 @@ function intro(io){
 		,20);
 
 
-	new TWEEN.Tween( { x:io.canvas.width/2, y: 0 } )
+	new TWEEN.Tween( { x:io.canvas.width/2, y: logo.pos.y } )
 		.to( { x: io.canvas.width/2,y: io.canvas.height/2 - logo.height/2}, 1000 )
 		.easing( TWEEN.Easing.Elastic.Out)
 		.onUpdate( function () {
@@ -949,18 +996,18 @@ function intro(io){
 
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(1,true));
+	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(0,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH/2,true),pxConv(GAMEHEIGHT,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['red'][0]);
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(GAMEHEIGHT/2,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT/2,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['yellow'][0]);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(GAMEHEIGHT/2,true));
+	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(GAMEHEIGHT/2,true));
 	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['green'][0]);
 
@@ -979,22 +1026,55 @@ function intro(io){
 }
 function createWorld(io,levelNumber){
 	//DO INTRO ANIMATION
-	gameOn = true;
+
+  gameOn = true;
+
+  io.canvas.width = GAMEWIDTH;
+  io.canvas.height = GAMEHEIGHT;
+/*
+
+  var gradient=io.context.createLinearGradient(0,0,io.canvas.width/2,0);
+
+  gradient.addColorStop("0","#333");
+  gradient.addColorStop("1.0","transparent");
+
+  var curtainIn = io.addToGroup('Stuff',(new iio.Rect(io.canvas.width/2,io.canvas.height/2,io.canvas.width,io.canvas.height))
+    .setFillStyle(gradient),20);*/
+
+if(level){
+  level.tween = null;
+  level.tweenBack = null;
+  //Stop weird glitch
+}
 
 
-	io.canvas.width = GAMEWIDTH;
-	io.canvas.height = GAMEHEIGHT;
 
 	if ( world != null )
 		world = null;
 
-	io.rmvAll();
+
+  io.rmvAll(); //clean the world
+
 	startBtn = restartLvlBtn = nextLvlBtn = backBtn = nextBtn = undefined;
     //create the box2d world
 	world = io.addB2World(new b2World(
     new b2Vec2(0, 25*PIXEL_RATIO)    //gravity
    	,true                 //allow sleep
 	));
+
+
+    var gradient=io.context.createLinearGradient(0,0,io.canvas.width/2,0);
+
+    gradient.addColorStop("0","#333");
+    gradient.addColorStop("1.0","transparent");
+
+  /*  var curtain = io.addToGroup('derp',(new iio.Rect(io.canvas.width,io.canvas.height/2,io.canvas.width*2,io.canvas.height))
+      .setFillStyle(gradient),20);*/
+
+      //Pause for transition anim
+      io.pauseB2World(true);
+      io.pauseFramerate(true);
+
 
 	if(levelNumber){
 		currentLvl = levelNumber;
@@ -1005,21 +1085,43 @@ function createWorld(io,levelNumber){
 
     if(levelNumber == 1){
       tutorial(io);
+    }else{
+      tutorialTween = null;
     }
+
 	}else{
 		level = io.activateLevelSelect(io);
 	}
 
+
 	world.SetContactListener(listener);
-	if(level)
-		level.setup();
-	else
-		level = null;
+
+	if(level){
+    level.setup();
+    /*new TWEEN.Tween( {x: io.canvas.width } )
+      .to( { x:io.canvas.width*2}, 1000 )
+      .easing( TWEEN.Easing.Bounce.Out)
+      .onUpdate( function () {
+        curtain.pos.x = this.x;
+      } )
+      .onComplete(function(){
+        io.pauseB2World(false);
+      	io.pauseFramerate(false);
+      })
+      .delay(500)
+      .start();*/
+      io.pauseB2World(false);
+      io.pauseFramerate(false);
+
+  }else{
+    level = null;
+  }
+
+
 
 	gameIntro = false;
 
-	io.pauseB2World(false);
-	io.pauseFramerate(false);
+
 
 
 
@@ -1031,28 +1133,40 @@ function createWorld(io,levelNumber){
 	io.canvas.style.height = window.innerHeight + 'px';
 
 
+
+
+
+/*
 	console.log('io.canvas W/H = ' + io.canvas.width+'/'+io.canvas.height);
 	console.log('css canvas W/H = ' + io.canvas.style.width+'/'+io.canvas.style.height)
 	console.log('screen W/H = ' +  window.innerWidth+'/'+window.innerHeight);
 	console.log('scale X = ' +  scaleX +' Y = '+scaleY);
 	console.log('pixel_ratio = ' + PIXEL_RATIO);
-
+*/
 }
 function tutorial(io){
-  var finger = io.addObj(new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2), pxConv(80), pxConv(80)).addImage('img/Point.png').setImgSize(pxConv(90)).setAlpha(0.8));
+  var finger = io.addObj(new iio.Rect(pxConv(GAMEWIDTH/2 + 100),pxConv(450), pxConv(80), pxConv(80)).addImage('img/Point.png').setImgSize(pxConv(90)).setAlpha(0.8));
+  var destination = {};
+  if(GAMEHEIGHT == 480){
+    destinationBlock = {x:  pxConv(60), y: pxConv(460) }
+    destinationGoal = {x: pxConv(GAMEWIDTH/2), y: pxConv(100) }
 
+  }else{
+    destinationBlock = {x: pxConv(60), y: pxConv(560) }
+    destinationGoal = {x: pxConv(GAMEWIDTH/2), y: pxConv(170) }
+  }
 
   //Move Finger to first block
-  new TWEEN.Tween( {x: finger.pos.x , y: finger.pos.y } )
-   .to( { x:pxConv(90), y: pxConv(540)}, 2000 )
+   tutorialTween = new TWEEN.Tween( {x: finger.pos.x , y: finger.pos.y } )
+   .to( { x:destinationBlock.x, y:destinationBlock.y}, 2000 )
    .easing( TWEEN.Easing.Quadratic.In)
    .onUpdate( function () {
      finger.pos.x = this.x;
      finger.pos.y = this.y;
    })
-   .delay(0)
+   .delay(100)
    .onComplete(function() {
-     jointEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(pxConv(80), pxConv(520),0).setFillStyle('rgba(255,255,255,0.4)'),10);
+     fakeEffect = io.addToGroup('MOUSEJOINT', new iio.Circle(finger.pos.x ,finger.pos.y,0).setFillStyle('rgba(255,255,255,0.4)'),10);
      touchSound.play();
      finger.addImage('img/Press_Hold.png').setImgSize(pxConv(90));
 
@@ -1060,28 +1174,41 @@ function tutorial(io){
       .to( { x:pxConv(50)}, 1000 )
       .easing( TWEEN.Easing.Back.Out)
       .onUpdate( function () {
-        jointEffect.radius = this.x;
+        fakeEffect.radius = this.x;
       })
       .onComplete(function(){
-        new TWEEN.Tween( {fx: finger.pos.x, fy: finger.pos.y,jx: jointEffect.pos.x, jy:jointEffect.pos.y} )
-         .to( { fx: pxConv(170), fy: pxConv(280),jx: pxConv(150), jy:pxConv(260)}, 1000 )
+        new TWEEN.Tween( {fx: finger.pos.x, fy: finger.pos.y,jx: fakeEffect.pos.x, jy:fakeEffect.pos.y} )
+         .to( { fx: destinationGoal.x, fy: destinationGoal.y,jx: destinationGoal.x, jy: destinationGoal.y}, 1500 )
          .easing( TWEEN.Easing.Quadratic.In)
          .onUpdate( function () {
 
            finger.pos.x = this.fx;
            finger.pos.y = this.fy;
-            jointEffect.pos.x = this.jx;
-            jointEffect.pos.y = this.jy;
+            fakeEffect.pos.x = this.jx;
+            fakeEffect.pos.y = this.jy;
          })
         .delay(100)
         .onComplete(function(){
           finger.addImage('img/Point.png').setImgSize(pxConv(90));
-          io.rmvObj(jointEffect);
-          setTimeout(function(){
-          io.rmvObj(finger);
+          io.rmvObj(fakeEffect);
 
+          //io.rmvObj(finger);
 
-          },1000)
+          new TWEEN.Tween( {opacity: 1} )
+           .to( { opacity: 0}, 1000 )
+           .easing( TWEEN.Easing.Quadratic.In)
+           .onUpdate( function () {
+
+              finger.setAlpha(this.opacity);
+            //  console.log(this.opacity);
+
+           })
+          .onComplete(function(){
+            io.rmvObj(finger);
+          })
+          .delay(0)
+          .start();
+
 
         })
 
@@ -1092,16 +1219,136 @@ function tutorial(io){
 
       .start();
 
-   })
-   .start();
+   });
 
 
 
-
-
+tutorialTween.delay(1000);
+tutorialTween.start();
 
 
 }
+
+function endCredits(io){
+
+	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
+	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
+	gameIntro = false;
+	gameOn = false;
+
+	if ( world != null )
+		world = null;
+
+	io.rmvAll();
+
+	world = new b2World(new b2Vec2(0, 20*PIXEL_RATIO),true); //make into function
+
+	io.addB2World(world);
+
+
+  io.pauseB2World(false);
+	io.pauseFramerate(false);
+
+
+	io.addToGroup('BACKGROUND',new iio.Rect(pxConv(GAMEWIDTH/2),pxConv(GAMEHEIGHT/2),pxConv(GAMEWIDTH),pxConv(GAMEHEIGHT)).addImage('img/mountain.png',function() {console.log('bgLoad');loadResources++}),-30);
+
+
+    	var fixDef = new b2FixtureDef;
+    	fixDef.friction = 1;
+    	fixDef.restitution = 0.5;
+
+    	var bodyDef = new b2BodyDef;
+    	bodyDef.type = b2Body.b2_staticBody;
+
+var padding = 0;
+
+if(GAMEHEIGHT > 480){
+  padding = 19;
+
+}
+
+    	//GROUND
+    	fixDef.shape = new b2PolygonShape;
+    	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(padding,true));
+    	bodyDef.position.Set(pxConv(GAMEWIDTH/2,true),pxConv(GAMEHEIGHT,true));
+    	prepShape(bodyDef, fixDef);
+
+    	//BASIN WALLS
+    	fixDef.shape = new b2PolygonShape;
+    	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(GAMEHEIGHT/2,true));
+    	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT/2,true));
+    	prepShape(bodyDef, fixDef).setFillStyle(colors['yellow'][0]);
+
+    	fixDef.shape = new b2PolygonShape;
+    	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(GAMEHEIGHT/2,true));
+    	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT/2,true));
+    	prepShape(bodyDef, fixDef).setFillStyle(colors['green'][0]);
+
+
+
+      	//SHAPES!
+      	bodyDef = new b2BodyDef;
+      	fixDef = new b2FixtureDef;
+      	fixDef.friction = 0.5;
+      	fixDef.restitution = 0.3;
+      	fixDef.density = 5;
+      	bodyDef.type = b2Body.b2_dynamicBody;
+      	fixDef.shape = new b2PolygonShape;
+
+
+setTimeout(function(){
+        fixDef.shape.SetAsBox(pxConv(150 ,true),pxConv(20,true));
+      	bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-30 ,true));
+      	prepShape(bodyDef, fixDef).addImage('img/credits-name.png');},0);
+setTimeout(function(){
+      bodyDef.angle = -0.5;
+      fixDef.shape.SetAsBox(pxConv(120 ,true),pxConv(25,true));
+      bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-60 ,true));
+      prepShape(bodyDef, fixDef).addImage('img/credits-by.png');},100);
+setTimeout(function(){
+  bodyDef.angle = 0;
+
+  fixDef.shape.SetAsBox(pxConv(140 ,true),pxConv(35,true));
+bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-160 ,true));
+prepShape(bodyDef, fixDef).addImage('img/credits-playing.png');},1300);
+setTimeout(function(){        fixDef.shape.SetAsBox(pxConv(50 ,true),pxConv(25,true));
+        bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-200 ,true));
+        prepShape(bodyDef, fixDef).addImage('img/credits-for.png');},1010);
+setTimeout(function(){        fixDef.shape.SetAsBox(pxConv(150 ,true),pxConv(35,true));
+        bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-260 ,true));
+        prepShape(bodyDef, fixDef).addImage('img/credits-thanks.png');},1200);
+setTimeout(function(){    fixDef.shape.SetAsBox(pxConv(150 ,true),pxConv(100,true));
+    bodyDef.position.Set(pxConv(GAMEWIDTH/2 ,true),pxConv(-1060 ,true));
+    prepShape(bodyDef, fixDef).addImage('img/logo.png');
+
+
+  },2000);
+
+setTimeout(function(){
+  backBtn = io.addToGroup('MENU',new iio.Rect(pxConv(35),pxConv(30), pxConv(35), pxConv(35)).addImage('img/backBtn.png'),20);
+
+
+
+},3200);
+
+
+
+
+
+
+
+
+	io.canvas.width = GAMEWIDTH*PIXEL_RATIO;
+	io.canvas.height = GAMEHEIGHT*PIXEL_RATIO;
+
+
+
+	io.canvas.style.width = window.innerWidth + 'px';
+	io.canvas.style.height = window.innerHeight + 'px';
+
+
+}
+
 function soundControl(bool){
 	if(muted == true){
 		muted = false;

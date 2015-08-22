@@ -3,9 +3,11 @@ imgPath = 'img/';
 levelBuilder = {
 	setup : function(stage,level,platformWidth,goalOffset){
 
+		stage.tween = stage.tweenBack = false;
+		stage.position = {rotate: 0.6};
 
 	stage.io.addToGroup('BACKGROUND',
-		new iio.Rect(pxConv(stage.cWidth/2),pxConv(stage.cHeight/2),
+			new iio.Rect(pxConv(stage.cWidth/2),pxConv(stage.cHeight/2),
 			pxConv(stage.cWidth),pxConv(stage.cHeight))
 	.addImage(imgPath+level+'.png'),-30);
 
@@ -16,19 +18,18 @@ levelBuilder = {
 
 
 	if(!goalOffset){
-		stage.goalPos = new iio.Vec(stage.cWidth/2, GAMEAREA.pos.y-(GAMEAREA.height/2));
+		stage.goalPos = new iio.Vec(GAMEWIDTH/2, GAMEAREA.pos.y-(GAMEAREA.height/2));
 	}else{
 		stage.goalPos = new iio.Vec(goalOffset, GAMEAREA.pos.y-(GAMEAREA.height/2));
 	}
 
-	stage.platformPos = new iio.Vec(stage.cWidth/2, GAMEAREA.pos.y+(GAMEAREA.height/2) - pxConv(10));
+	stage.platformPos = new iio.Vec(GAMEWIDTH/2, GAMEAREA.pos.y+(GAMEAREA.height/2) - pxConv(10));
 	if(!platformWidth){
 		platformWidth = pxConv(stage.cWidth/5.1,true);
 		platformFriction = 1;
 	}else{
 		platformFriction = 0.2;
 	}
-
 
 
 	var fixDef = new b2FixtureDef;
@@ -40,19 +41,19 @@ levelBuilder = {
 
 	//GROUND
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(stage.cWidth/2,true),pxConv(0,true));
-	bodyDef.position.Set(pxConv(stage.cWidth/2,true),pxConv(stage.cHeight,true));
-	prepShape(bodyDef, fixDef).setFillStyle('red');
+	fixDef.shape.SetAsBox(pxConv(GAMEWIDTH/2,true),pxConv(1,true));
+	bodyDef.position.Set(pxConv(GAMEWIDTH/2,true),pxConv(GAMEHEIGHT,true));
+	prepShape(bodyDef, fixDef);
 
 	//BASIN WALLS
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
-	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(stage.cHeight - 70,true));
+	bodyDef.position.Set(pxConv(0 - 0,true),pxConv(GAMEHEIGHT - 70,true));
 	prepShape(bodyDef, fixDef);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(150/2,true));
-	bodyDef.position.Set(pxConv(stage.cWidth - 0,true),pxConv(stage.cHeight - 70,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(150/2,true));
+	bodyDef.position.Set(pxConv(GAMEWIDTH - 0,true),pxConv(GAMEHEIGHT- 70,true));
 	prepShape(bodyDef, fixDef);
 
 	//WORLD BOUNDRIES
@@ -60,27 +61,42 @@ levelBuilder = {
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(201,true));
 	bodyDef.angle=-Math.PI/6;
-	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(stage.cHeight - 320,true));
+	bodyDef.position.Set(pxConv(0 - 100,true),pxConv(GAMEHEIGHT - 320,true));
 	prepShape(bodyDef, fixDef);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(200,true));
-	bodyDef.angle=Math.PI/6;
-	bodyDef.position.Set(pxConv(stage.cWidth + 100,true),pxConv(stage.cHeight - 320,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(200,true));
+	bodyDef.angle=(Math.PI/6);
+	bodyDef.position.Set(pxConv(GAMEWIDTH + 100,true),pxConv(GAMEHEIGHT - 320,true));
 	prepShape(bodyDef, fixDef);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(210,true));
 	bodyDef.angle=-Math.PI/3;
-	bodyDef.position.Set(pxConv(stage.cWidth + 30,true),pxConv(-110,true));
+	bodyDef.position.Set(pxConv(GAMEWIDTH + 20,true),pxConv(-120,true));
 	prepShape(bodyDef, fixDef);
 
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(pxConv(0,true),pxConv(210,true));
+	fixDef.shape.SetAsBox(pxConv(1,true),pxConv(210,true));
 	bodyDef.angle=Math.PI/3;
-	bodyDef.position.Set(pxConv(-30,true),pxConv(-110,true));
+	bodyDef.position.Set(pxConv(-20,true),pxConv(-120,true));
 	prepShape(bodyDef, fixDef);
 
+	//IF RETINA
+	if(PIXEL_RATIO > 1){
+		fixDef.shape = new b2PolygonShape;
+		fixDef.shape.SetAsBox(pxConv(1,true),pxConv(200,true));
+		bodyDef.angle= 0;
+		bodyDef.position.Set(pxConv(-140,true),pxConv(-0,true));
+		prepShape(bodyDef, fixDef).setFillStyle('green');
+
+		fixDef.shape = new b2PolygonShape;
+		fixDef.shape.SetAsBox(pxConv(1,true),pxConv(200,true));
+		bodyDef.angle= 0;
+		bodyDef.position.Set(pxConv(460,true),pxConv(-0,true));
+		prepShape(bodyDef, fixDef).setFillStyle('green');
+
+	}
 	//PLATFORM
 	fixDef.friction = platformFriction;
 	bodyDef.angle = 0;
@@ -128,6 +144,37 @@ levelBuilder = {
 				.setFillStyle(colors['orange'][0])
 				.setStrokeStyle(colors['orange'][1],pxConv(2));
 
+		//Animate goal
+if(!stage.tween){
+	stage.tween = new TWEEN.Tween( 	stage.position )
+		.to( { rotate: 0.9}, 1500 )
+		.easing( TWEEN.Easing.Linear.None)
+		.onUpdate( function () {
+			update(this.rotate);
+	 });
+		stage.tweenBack = new TWEEN.Tween( 	stage.position)
+		 .to( { rotate: 0.4}, 1500 )
+		 .easing( TWEEN.Easing.Linear.None)
+		 .onUpdate( function () {
+			 update(this.rotate);
+	 });
+
+			 	stage.tween.chain(stage.tweenBack);
+			 	stage.tweenBack.chain(stage.tween);
+				//stage.tween.delay(1000);
+
+			 	stage.tween.start();
+
+console.log('----In it----');
+}
+
+
+		function update(rotate){
+			goalObj.GetBody().SetAngle(rotate);
+		}
+
+
+
 
 	},
 	tick : 0,
@@ -141,7 +188,8 @@ levelBuilder = {
 
 	if(stage.gameEnd == true){
 	}
-
+	if(stage.paused){
+	}
 	if(stage.goalTouchTime >= stage.goalTime){
 		var fixDef = new b2FixtureDef;
 		var bodyDef = new b2BodyDef;
@@ -167,7 +215,7 @@ levelBuilder = {
 			world.DestroyBody(lio.goal.GetBody());
 		}
 
-        stage.gameWinAnim = true;
+    stage.gameWinAnim = true;
 		setTimeout(function(){
 		  lio.gameWin = true;
 		}, 1000)
@@ -216,7 +264,6 @@ levelBuilder = {
 					blocksList[i].vertexs[index].x =  pxConv(blocksList[i].vertexs[index].x);
 					blocksList[i].vertexs[index].y =  pxConv(blocksList[i].vertexs[index].y);
 				}
-
 				fixDef.shape.SetAsArray(blocksList[i].vertexs);
 				bodyDef.position.Set(0,0);
 				prepShape(bodyDef, fixDef).setFillStyle(blocksList[i].color[0]).setStrokeStyle(blocksList[i].color[1],2);

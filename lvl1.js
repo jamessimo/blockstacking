@@ -17,46 +17,15 @@ function lvl1(io){
 	this.gameEnd = false;
 
 
+
 }; iio.lvl1 = lvl1;
 
 lvl1.prototype.setup = function(){
 
 	levelBuilder.setup(this,'lvl1');
+	levelBuilder.blockBuilder([{"vertexs":[{"x":7,"y":8.5},{"x":7,"y":11.5},{"x":3.5,"y":11.5},{"x":3.5,"y":8.5}],"numberEdges":4,"color":colors['red'],"pos":{"x":0.8406879096291959,"y":0}},{"vertexs":[{"x":6.5,"y":8.5},{"x":4,"y":8.5},{"x":4,"y":6},{"x":6.5,"y":6}],"numberEdges":4,"color":["#A61D4C","#720D37"],"pos":{"x":-5.8901550830341876,"y":0}},{"vertexs":[{"x":6,"y":6},{"x":4.5,"y":6},{"x":4.5,"y":4},{"x":6,"y":4}],"numberEdges":4,"color":["#65B045","#4F8742"],"pos":{"x":-1.6983758048154414,"y":0}},{"vertexs":[{"x":2.5,"y":13},{"x":2.5,"y":14.5},{"x":1,"y":14.5},{"x":1,"y":13}],"numberEdges":4,"color":["#3F5CA9","#34318A"],"pos":{"x":-3.586430002003908,"y":0}}]
+	);
 
-	//SHAPES!
-	bodyDef = new b2BodyDef;
-	fixDef = new b2FixtureDef;
-	fixDef.friction = 0.5;
-	fixDef.restitution = 0.3;
-	fixDef.density = 5;
-	bodyDef.type = b2Body.b2_dynamicBody;
-	fixDef.shape = new b2PolygonShape;
-
-	fixDef.shape.SetAsBox(pxConv(1),pxConv(1));
-	bodyDef.position.Set(pxConv(this.cWidth/2 ,true),pxConv(this.cHeight/2 ,true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['navy'][0]).setStrokeStyle(colors['navy'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(0.7),pxConv(0.7));
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (2 * PTM) ,true),pxConv(this.cHeight - (1 * PTM) ,true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['sunset'][0]).setStrokeStyle(colors['sunset'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(1.5));
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (4 * PTM),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['blue'][0]).setStrokeStyle(colors['blue'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
-	bodyDef.position.Set(pxConv(this.cWidth/2 - (25),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['red'][0]).setStrokeStyle(colors['red'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(1.2));
-	bodyDef.angle = -0.5;
-	bodyDef.position.Set(pxConv(this.cWidth/2 - (80),true),pxConv(this.cHeight - (45),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['turquoise'][0]).setStrokeStyle(colors['turquoise'][1],pxConv(2));
-
-	fixDef.shape.SetAsBox(pxConv(1),pxConv(1));
-	bodyDef.angle = 0;
-	bodyDef.position.Set(pxConv(this.cWidth/2 + (25),true),pxConv(this.cHeight - (25),true));
-	prepShape(bodyDef, fixDef).setFillStyle(colors['purple'][0]).setStrokeStyle(colors['purple'][1],pxConv(2));
 
 
 
