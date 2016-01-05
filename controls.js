@@ -269,7 +269,7 @@ intro(io);
 		if(isMouseDown && (!mouseJoint) && world) {
 		  var body = getB2BodyAt(mouseX,mouseY);
 
-		  if(body) {
+		  if(body && !tutorialTween) {
 		     var md = new b2MouseJointDef();
 		     md.bodyA = world.GetGroundBody();
 		     md.bodyB = body;
@@ -1201,6 +1201,8 @@ function tutorial(io){
 
               finger.setAlpha(this.opacity);
             //  console.log(this.opacity);
+            tutorialTween = null;
+
 
            })
           .onComplete(function(){
