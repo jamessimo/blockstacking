@@ -174,8 +174,6 @@ intro(io);
       io.context.scale(0.4,0.4);
     	io.context.translate(pxConv(250,false), pxConv(300,false));
 
-
-
   }
 
   var grid = new iio.Grid(0,0,GAMEWIDTH,GAMEHEIGHT,pxConv(PTM/2));
@@ -236,9 +234,6 @@ intro(io);
 		        	bgBlocks++;
 		        }
 		    }else if(level.gameWin==true){
-
-
-
 
 		    }
 		}
@@ -342,8 +337,6 @@ intro(io);
 
 		//	console.log(+mouseX.toFixed(1));
 
-
-
 			if(TEST){
 				recMouseX = Math.round(mouseX * 2) / 2;
 				recMouseY = Math.round(mouseY * 2) / 2;
@@ -356,8 +349,6 @@ intro(io);
 			io.addToGroup('EDITOREDGE', new iio.Circle(recMouseX*PTM, recMouseY*PTM,3).setFillStyle('rgba(255,255,255,1)'));
 
 			newBlock.vertexs.push( new b2Vec2(recMouseX ,recMouseY));
-
-
     	}
 
        mouseMove(e);
@@ -429,7 +420,7 @@ intro(io);
     }
     if(nextLvlBtn && nextLvlBtn.contains(newPos)){
 
-      if(adReady){
+      if(adReady && currentLvl % 2 === 0){
        fullscreen1.showFullScreen();
       }
 
