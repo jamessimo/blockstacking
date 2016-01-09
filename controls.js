@@ -630,7 +630,6 @@ intro(io);
   		}
 		}
 
-
     if(backBtn && backBtn.contains(newPos)){
       clearBtns();
       intro(io);
@@ -652,8 +651,8 @@ intro(io);
 
 		if(testBtn && testBtn.contains(newPos)){
 
-		    console.log(localStorage);
-		    if(PIXEL_RATIO == 1.5)
+		  console.log(localStorage);
+		  if(PIXEL_RATIO == 1.5)
 		    	PIXEL_RATIO = 1;
 			else
 				PIXEL_RATIO = 1.5;
@@ -668,12 +667,13 @@ intro(io);
 
 function pause(io){
 
-if(tutorialTween){
-  tutorialTween.stop();
+  if(tutorialTween){
+    tutorialTween.stop();
+  }
+if(level.tween){
+    level.tween.stop();
 }
 
-
-  level.tween.stop();
 
 	//grey screen
 	io.addToGroup('MENU',new iio.Rect(io.canvas.width/2, io.canvas.height/2, io.canvas.width , io.canvas.height)
@@ -737,11 +737,14 @@ restartLvlBtn.addObj(new iio.Rect().addImage('img/restartBtn.png')
 		//console.log(io);
 }
 function resume(io){
-if(tutorialTween)
+if(tutorialTween){
   tutorialTween.start();
 
-  level.tween.start();
+}
 
+  if(level.tween){
+  level.tween.start();
+}
 	gameoverText = null;
 	unPauseBtn.pos.x = pxConv(-50);
 	io.rmvFromGroup('MENU');
