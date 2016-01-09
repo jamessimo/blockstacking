@@ -387,11 +387,8 @@ intro(io);
 
      if (startBtn && startBtn.contains(newPos)){
 
-      unPauseBtn = undefined; //To remove its POS
-      menuBtn = undefined;
-      testBtn = undefined;
-       muteBtn = undefined;
-       restartLvlBtn = undefined;
+       clearBtns();
+
        setTimeout(function(){
           createWorld(io);
        },100);
@@ -402,16 +399,11 @@ intro(io);
      }
     if(unPauseBtn && unPauseBtn.contains(newPos)){
       resume(io);
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
     }
     if(restartLvlBtn && restartLvlBtn.contains(newPos)){
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
+
           newPos = null;//Stop clicking though to level
       setTimeout(function(){
         createWorld(io, currentLvl);
@@ -431,10 +423,8 @@ intro(io);
     }
     if(menuBtn && menuBtn.contains(newPos)){
       createWorld(io);
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
+
     }else{ //HAD TO IGNORE IF IN MENU
       if (gameOn && level.lvlButtons) {
          for(var i = 1; i < level.lvlButtons.length ; i++){
@@ -448,21 +438,19 @@ intro(io);
       }
     }
     if(backBtn && backBtn.contains(newPos)){
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
-      backBtn = undefined;
+      clearBtns();
       intro(io);
+    }
+    if(creditsBtn && creditsBtn.contains(newPos)){
+      clearBtns();
+      endCredits(io);
     }
 
 
     if(gameOn && level.backBtn){
       if(level.backBtn && level.backBtn.contains(newPos)){
-        unPauseBtn = undefined; //To remove its POS
-        muteBtn = undefined;
-        menuBtn = undefined;
-        testBtn = undefined;
+        clearBtns();
+
         intro(io);
       }
     }
@@ -588,11 +576,8 @@ intro(io);
 		newPos.y = pxConv(io.getEventPosition(e).y)*scaleY;
     if (startBtn && startBtn.contains(newPos)){
 
-    	unPauseBtn = undefined; //To remove its POS
-			muteBtn = undefined;
-			menuBtn = undefined;
-			testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
+
       setTimeout(function(){
         	createWorld(io);
       },100);
@@ -605,16 +590,12 @@ intro(io);
     }
 		if(unPauseBtn && unPauseBtn.contains(newPos)){
 			resume(io);
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
+
 		}
 		if(restartLvlBtn && restartLvlBtn.contains(newPos)){
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
+
       newPos = null;
       setTimeout(function(){
         createWorld(io, currentLvl);
@@ -630,14 +611,11 @@ intro(io);
 			if(currentLvl <= MAX_LEVELS - 1)
 				createWorld(io, currentLvl+1);
 			else
-				endCredits(io, currentLvl);
+				endCredits(io);
 		}
 		if(menuBtn && menuBtn.contains(newPos)){
 			createWorld(io);
-			muteBtn = undefined;
-			menuBtn = undefined;
-			testBtn = undefined;
-      restartLvlBtn = undefined;
+      clearBtns();
 		}else{ //HAD TO IGNORE IF IN MENU
 			if (gameOn && level.lvlButtons) {
         for(var i = 1; i < level.lvlButtons.length ; i++){
@@ -654,21 +632,17 @@ intro(io);
 
 
     if(backBtn && backBtn.contains(newPos)){
-      muteBtn = undefined;
-      menuBtn = undefined;
-      testBtn = undefined;
-      restartLvlBtn = undefined;
-      backBtn = undefined;
+      clearBtns();
       intro(io);
+    }
+    if(creditsBtn && creditsBtn.contains(newPos)){
+      clearBtns();
+      endCredits(io);
     }
 
 		if(gameOn && level.backBtn){
 			if(level.backBtn && level.backBtn.contains(newPos)){
-				unPauseBtn = undefined; //To remove its POS
-				muteBtn = undefined;
-				menuBtn = undefined;
-				testBtn = undefined;
-        restartLvlBtn = undefined;
+		    clearBtns();
 				intro(io);
 			}
 		}
@@ -773,10 +747,7 @@ if(tutorialTween)
 	io.rmvFromGroup('MENU');
 
 
-	unPauseBtn = undefined; //To remove its POS
-	muteBtn = undefined;
-	menuBtn = undefined;
-	testBtn = undefined;
+ clearBtns()
 
 	pauseBtn.pos.x = pxConv(25); //show pause button
 
@@ -1425,11 +1396,19 @@ function createBlock(io){
 }
 function getColor(iGet){
 	var j = -1;
-		for(index in colors){
-			j++
-			if(iGet == j)
-				return colors[index];
-		}
+	for(index in colors){
+		j++
+		if(iGet == j)
+			return colors[index];
+	}
+}
+function clearBtns(){
+  muteBtn = undefined;
+  menuBtn = undefined;
+  testBtn = undefined;
+  restartLvlBtn = undefined;
+  backBtn = undefined;
+  creditsBtn = undefined;
 
 }
 
