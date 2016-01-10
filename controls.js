@@ -120,7 +120,7 @@ function GameControl(io) {
 
 
 	if(PIXEL_RATIO > 1){
-		PIXEL_RATIO = 1.5;
+		PIXEL_RATIO = 2;
 	}else{
 		PIXEL_RATIO = 1;
 	}

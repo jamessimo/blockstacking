@@ -38,6 +38,16 @@ lvl2.prototype.setup = function(){
 	bodyDef.position.Set(pxConv(this.cWidth/2 ,true),pxConv(this.cHeight/2 ,true));
 	prepShape(bodyDef, fixDef).setFillStyle(colors['navy'][0]).setStrokeStyle(colors['navy'][1],pxConv(2));
 
+/*lol*/
+	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
+	bodyDef.position.Set(pxConv(this.cWidth/2 + (2 * PTM),true),pxConv(this.cHeight - (45),true));
+	prepShape(bodyDef, fixDef).setFillStyle(colors['red'][0]).setStrokeStyle(colors['red'][1],pxConv(2));
+
+	/*lol*/
+		fixDef.shape.SetAsBox(pxConv(0.8),pxConv(0.8));
+		bodyDef.position.Set(pxConv(0.8,true),pxConv(this.cHeight - (45),true));
+		prepShape(bodyDef, fixDef).setFillStyle(colors['green'][0]).setStrokeStyle(colors['green'][1],pxConv(2));
+
 
 
 	fixDef.shape.SetAsBox(pxConv(0.8),pxConv(1.5));

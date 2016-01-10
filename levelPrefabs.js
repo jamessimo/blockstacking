@@ -224,7 +224,7 @@ console.log('----In it----');
 
 	if(stage.goalTouch){
 		if(stage.goalTouch.GetBody() != selectedBody && stage.goalTouchTime <= stage.goalTime){
-			stage.goalEffect.radius = stage.goalTouchTime;
+			stage.goalEffect.radius = pxConv(stage.goalTouchTime);
 			stage.goalTouchTime++;
 		}else{
 			stage.goalTouchTime = 0;
