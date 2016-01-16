@@ -120,7 +120,7 @@ function GameControl(io) {
 
 
 	if(PIXEL_RATIO > 1){
-		PIXEL_RATIO = 2;
+		PIXEL_RATIO = 1.5;
 	}else{
 		PIXEL_RATIO = 1;
 	}
@@ -670,9 +670,9 @@ function pause(io){
   if(tutorialTween){
     tutorialTween.stop();
   }
-if(level.tween){
+  if(level.tween){
     level.tween.stop();
-}
+  }
 
 
 	//grey screen
@@ -772,7 +772,11 @@ function winGame(io){
 
 
 	gameOn = false;
-  level.tween.stop();
+  if(level.tween){
+    level.tween.stop();
+    level.tween = undefined;
+
+  }
 
  	if (supports_html5_storage() != false) {
  		var saveLvl = currentLvl + 1;

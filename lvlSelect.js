@@ -64,13 +64,25 @@ lvlSelect.prototype.setup = function(){
 	for(var i = 1 ; i < this.lvlButtons.length ; i++){
 
 		if(localStorage["level." + i] == "true"){
-			this.lvlButtons[i].addObj(new iio.Text(i).setFont(pxConv(40)+'px KGWhattheTeacherWants')
+
+
+			var btnText = new iio.Text(i)
+			.setFont(pxConv(40)+'px KGWhattheTeacherWants')
 			.setTextAlign('center')
 			.setFillStyle(this.lvlButtons[i].styles.strokeStyle)
-		.setStrokeStyle('rgba(0,0,0,0.3)',pxConv(2)));
+			.setStrokeStyle('rgba(0,0,0,0.3)',pxConv(2))
+
+
+
+
+
+			this.lvlButtons[i].addObj(btnText);
+
 
 			var btnPos = new iio.Vec(this.lvlButtons[i].pos);
-			btnPos.y += pxConv(13);
+
+			btnPos.y += pxConv(10);
+
 			this.lvlButtons[i].objs[0].pos = btnPos;
 		}else{
 			this.lvlButtons[i].addObj(new iio.Rect().addImage('img/lock.png')
