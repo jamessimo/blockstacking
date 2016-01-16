@@ -826,7 +826,7 @@ function winGame(io){
 			if(nextLvlBtn){
 				nextLvlBtn.pos.y = this.y+50;
 				nextLvlBtn.text.pos.y = this.y+50;
-				nextLvlBtn.text.pos.y = nextLvlBtn.pos.y + pxConv(8);
+				nextLvlBtn.text.pos.y = nextLvlBtn.pos.y + pxConv(5);
 			}
 		} )
 		.delay(1000)
