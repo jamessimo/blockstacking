@@ -73,9 +73,6 @@ lvlSelect.prototype.setup = function(){
 			.setStrokeStyle('rgba(0,0,0,0.3)',pxConv(2))
 
 
-
-
-
 			this.lvlButtons[i].addObj(btnText);
 
 
@@ -93,6 +90,20 @@ lvlSelect.prototype.setup = function(){
 
 		}
 
+	}
+
+	muteBtn = this.io.addToGroup('MENU',new iio.Rect(this.io.canvas.width - pxConv(30), pxConv(30), pxConv(30), pxConv(30))
+		.setRoundingRadius(pxConv(2))
+		.setFillStyle(colors['orange'][0])
+		.setStrokeStyle(colors['orange'][1],pxConv(2)),20);
+
+	muteBtn.addObj(new iio.Rect().addImage('img/sound.png')
+		.setImgSize(pxConv(20),pxConv(20)));
+
+	if(muted){
+		muteBtn.objs[0].setAlpha(0.3);
+	}else{
+		muteBtn.objs[0].setAlpha(1);
 	}
 
 }

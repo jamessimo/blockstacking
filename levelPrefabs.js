@@ -3,6 +3,7 @@ imgPath = 'img/';
 levelBuilder = {
   setup: function(stage, level, platformWidth, goalOffset) {
 
+    clearBtns();
     stage.tween = stage.tweenBack = false;
     stage.position = {
       rotate: 0.6
@@ -107,7 +108,6 @@ levelBuilder = {
     fixDef.shape.SetAsBox(platformWidth, pxConv(5, true));
     prepShape(bodyDef, fixDef).setFillStyle(colors['brown'][0]);
 
-
     //GOAL
     var goalBodyDef = new b2BodyDef;
     goalBodyDef.type = b2Body.b2_kinematicBody;
@@ -166,30 +166,17 @@ levelBuilder = {
 
       stage.tween.chain(stage.tweenBack);
       stage.tweenBack.chain(stage.tween);
-      //stage.tween.delay(1000);
-
       stage.tween.start();
-
-      console.log('----In it----');
     }
-
 
     function update(rotate) {
       goalObj.GetBody().SetAngle(rotate);
     }
 
-
-
-
   },
   tick: 0,
   step: function(stage) {
     var lio = stage;
-
-
-    //console.log(Math.round(levelBuilder.tick));
-    //console.log(goalObj.GetBody().GetAngle());
-    //goalObj.GetBody().SetAngle(levelBuilder.tick);
 
     if (stage.gameEnd == true) {}
     if (stage.paused) {}

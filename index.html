@@ -1,10 +1,16 @@
 <!doctype html>
 <html>
 <head>
-<style>
+<style type="text/css">
 	body {
 		overflow:hidden !important;
 	}
+
+	@font-face {
+	    font-family: "KGWhattheTeacherWants";
+	    src: url(KGWhattheTeacherWants.ttf) format("truetype");
+	}
+
 </style>
 </head>
 <body>
@@ -13,13 +19,15 @@
 <script type="text/javascript" src="iioEngine.js"></script>
 <!-- Load applications -->
 
-<script type="text/javascript">  
+<script type="text/javascript">
 	window.onload = function() {
 	    iio.start(GameControl);
 	};
 </script>
+
 <script type="text/javascript" src="howler.js"></script>
 <script type="text/javascript" src="tween.min.js"></script>
+<script type="text/javascript" src="ua-parser.min.js"></script>
 
 <script type="text/javascript" src="CocoonJS.js"></script>
 <script type="text/javascript" src="CocoonJS_Ad.js"></script>
